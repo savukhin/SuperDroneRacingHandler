@@ -9,6 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "electron": "^18.0.1"
+    "axios": "^0.26.1",
+    "electron": "^18.0.1",
+    "local-devices": "^3.0.0"
+  },
+  "devDependencies": {
+    "electron-packager": "^15.4.0"
   }
 }
