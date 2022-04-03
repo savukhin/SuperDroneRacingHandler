@@ -1,25 +1,19 @@
 const find = require('local-devices');
-const http = require('http')
 const axios = require('axios')
-const {Gate, Color} = require('./gate.js')
+const {Gate, Color} = require('./js/gate')
 
-var gateways = []
-//var gatewaysNumbers = {}
-let gates = {}
-//let gateDivs = {}
-//var websockets = {};
+var gateways = [];
+let gates = {};
 
 window.addEventListener('load', onLoad);
 function onLoad(event) {
 }
 
 function makeWebSocket(ip) {
-    //console.log('Trying to open a WebSocket connection...');
     var socket = new WebSocket(`ws://${ip}/ws`);
     socket.onopen = onOpen;
     socket.onclose = onClose;
-    socket.onmessage = onMessage; // <-- add this line
-    //websockets[ip] = socket
+    socket.onmessage = onMessage;
     return socket
 }
 function onOpen(event) {
@@ -40,7 +34,7 @@ function onMessage(event) {
     else {
         state = "OFF";
     }
-    document.getElementById(`state${number + 1}`).innerHTML = state;
+    document.getElementById(`state${number}`).innerHTML = state;
 }
 
 function makeGateDiv(number, ip) {
@@ -51,11 +45,10 @@ function makeGateDiv(number, ip) {
         <p><input id="red${number}" min=0 max=255 type="range" onload="changeRangeColor(event, this.value, 'red')" oninput="changeRangeColor(event, this.value, 'red')"/></p>
         <p><input id="blue${number}" min=0 max=255 type="range" onload="changeRangeColor(event, this.value, 'blue')" oninput="changeRangeColor(event, this.value, 'blue')"/></p>
         <p><input id="green${number}" min=0 max=255 type="range" onload="changeRangeColor(event, this.value, 'green')" oninput="changeRangeColor(event, this.value, 'green')"/></p>
-        <p><button id="button${number}" class="button">Toggle ${number + 1}</button></p>
+        <p><button id="button${number}" class="button" onClick="toggle(${number})">Toggle ${number + 1}</button></p>
     </div>`
     var newDiv = document.createElement("div");
         newDiv.innerHTML = code
-    gateDivs[ip] = newDiv
 
     document.getElementById('content').appendChild(newDiv);
 
@@ -67,34 +60,29 @@ async function checkIsGate(ip, port) {
     const response = await axios
         .get(`http://${ip}:${port}/DOYOUGATE`)
         .then(res => {
-            console.log(`statusCode: ${res.status}`)
-            console.log(res)
             isGate = true
         })
         .catch(error => {
-            console.error("Error = " + error)
             isGate = false
         })
     return isGate
 }
 
 function deleteGate(number) {
-    console.log(`Deleting number ${number}`)
     var ip = gateways[number]
-    var div = gateDivs[ip]
 
-    console.log("Starting deleting")
-
-    gateways.splice(index, 1);
     gates[ip].erase()
+    gateways.splice(number, 1);
     delete gates[ip]
 }
 
 function refresh() {
-    var check_gateways = new Set()
+    var check_gateways = new Set();
     gateways.forEach(elem => {
-        check_gateways.add(elem)
-    })
+        check_gateways.add(elem);
+    });
+
+    refresh_button.disabled = true
 
     find().then(devices => {
         devices.forEach(device => {
@@ -104,22 +92,25 @@ function refresh() {
                 return
             }
 
-            var isGate = checkIsGate(ip, 80).then(isGate => {
+            checkIsGate(ip, 80).then(isGate => {
                 if (!isGate)
                     return
                 
                 var number = gateways.length
                 gateways.push(ip)
-                gates[ip] = Gate(ip, makeWebSocket(ip), number, makeGateDiv(number, ip), Color())
+                var div = makeGateDiv(number, ip)
+                gates[ip] = new Gate(ip, makeWebSocket(ip), number, new Color(), div)
             })
         })
 
         check_gateways.forEach(elem => {
             deleteGate(gateways.indexOf(elem))
         })
+        refresh_button.disabled = false
     })
 }
 
 function toggle(number) {
-    websockets[gateways[number]].send('toggle');
+    var ip = gateways[number]
+    gates[ip].websocket.send('toggle');
 }

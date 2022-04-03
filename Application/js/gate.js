@@ -1,14 +1,8 @@
 class Color {
-    constructor(r, g, b) {
+    constructor(r=255, g=0, b=0) {
         this.red = r
         this.green = g
         this.blue = b
-    }
-
-    constructor() {
-        this.red = 255
-        this.green = 0
-        this.blue = 0
     }
 }
 
@@ -22,11 +16,9 @@ class Gate {
     }
 
     erase() {
-        this.div.parentNode.removeChild(div)
-        console.log("Closing websocket")
+        this.div.parentNode.removeChild(this.div)
         this.websocket.close()
-        console.log("Closed")
     }
 }
 
-module.exports = Gate, Color
+module.exports = { Gate, Color }
