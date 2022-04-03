@@ -9,6 +9,11 @@ const char* password = "saveliythebest";
 bool ledState = 0;
 const int ledPin = 2;
 
+int redCount = 255;
+int blueCount = 255;
+int greenCount = 255;
+
+
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
@@ -117,7 +122,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     var state;
     if (event.data == "1"){
       state = "ON";
-    }
+    } 
     else{
       state = "OFF";
     }
@@ -139,17 +144,63 @@ const char index_html[] PROGMEM = R"rawliteral(
 )rawliteral";
 
 void notifyClients() {
-  ws.textAll(String(ledState));
+  ws.textAll(String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount)));
+}
+
+bool isColor(uint8_t *data) {
+  if (data[0] != '#') {
+    return false;
+  }
+  for (int i = 1; i < 7; i++) {
+    if ('0' <= data[i] && data[i] <= '9')
+      continue;
+    if ('a' <= data[i] && data[i] <= 'f')
+      continue;
+    return false;
+  }
+  return true;
+}
+
+int hexToDec(uint8_t data) {
+  if ('0' <= data && data <= '9')
+    return data - '0';
+  if ('a' <= data && data <= 'f')
+    return data - 'a' + 10;
+  return -1;
+}
+
+String decToHex(int number) {
+  if (number < 0 || number > 255)
+    return "00";
+  int a = number / 16;
+  int b = number % 16;
+  String answer = "ab";
+  if (a < 10)
+    answer[0] = '0' + a;
+  else
+    answer[0] = 'a' + a - 10;
+
+  if (b < 10)
+    answer[1] = '0' + b;
+  else
+    answer[1] = 'a' + b - 10;
+
+  return answer;
 }
 
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
   AwsFrameInfo *info = (AwsFrameInfo*)arg;
   if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
     data[len] = 0;
-    if (strcmp((char*)data, "toggle") == 0) {
-      ledState = !ledState;
-      notifyClients();
+
+    if (!isColor(data)) {
+      return;
     }
+
+    redCount = hexToDec(data[1]) * 16 + hexToDec(data[2]);
+    greenCount = hexToDec(data[3]) * 16 + hexToDec(data[4]);
+    blueCount = hexToDec(data[5]) * 16 + hexToDec(data[6]); 
+    notifyClients();
   }
 }
 
@@ -209,7 +260,7 @@ void setup(){
   initWebSocket();
 
   // Route for root / web page
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/html", index_html, processor);
   });
 

@@ -28,11 +28,12 @@ function onMessage(event) {
     var number = gateways.indexOf(address)
 
     var state;
+    console.log(`Got data ${event.data} to ${number}`)
     if (event.data == "1") {
         state = "ON";
     }
     else {
-        state = "OFF";
+        state = event.data;
     }
     document.getElementById(`state${number}`).innerHTML = state;
 }
@@ -112,5 +113,15 @@ function refresh() {
 
 function toggle(number) {
     var ip = gateways[number]
-    gates[ip].websocket.send('toggle');
+    
+    var red = parseInt(document.getElementById(`red${number}`).value).toString(16)
+    var blue = parseInt(document.getElementById(`blue${number}`).value).toString(16)
+    var green = parseInt(document.getElementById(`green${number}`).value).toString(16)
+    if (red.length == 1) red = '0' + red
+    if (green.length == 1) green = '0' + green
+    if (blue.length == 1) blue = '0' + blue
+    
+    var message = '#' + red + blue + green
+
+    gates[ip].websocket.send(message);
 }
