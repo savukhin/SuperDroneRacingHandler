@@ -43,8 +43,8 @@ function makeGateDiv(number, ip) {
         <div id="color_display${number}" class="color-display"></div>
         <br>
     `
-    var colors = ['red', 'green', 'blue', 'yellow', 'aqua', 
-    'magenta', 'white', 'black', 'cyan', 'pink']
+    var colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '00ffff', 
+    '#ff00ff', '#ffffff', '#000000', '#00ffff', '#ffc0cb']
     for (var i = 0; i < colors.length / 2; i++) {
         code += generateColorPickCode(colors[i])
     }
@@ -133,7 +133,7 @@ function send(number, message) {
 }
 
 function toggle(number) {
-    send(number, getFinalColor(number))
+    send(number, getDisplayColor(number))
 }
 
 function blink(number, count=3) {

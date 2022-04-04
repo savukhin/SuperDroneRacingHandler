@@ -8,16 +8,30 @@ function rgbToHex(r, g, b) {
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
-function getFinalColor(number) {
-    var red = parseInt(document.getElementById(`red${number}`).value).toString(16)
-    var blue = parseInt(document.getElementById(`blue${number}`).value).toString(16)
-    var green = parseInt(document.getElementById(`green${number}`).value).toString(16)
+function parseColors(red, green, blue) {
+    var red = parseInt(red).toString(16)
+    var green = parseInt(green).toString(16)
+    var blue = parseInt(blue).toString(16)
+    
     if (red.length == 1) red = '0' + red
     if (green.length == 1) green = '0' + green
     if (blue.length == 1) blue = '0' + blue
     
     var color = '#' + red + green + blue
     return color
+}
+
+function getDisplayColor(number) {
+    var raw_rgb = document.getElementById(`color_display${number}`).style.backgroundColor
+    var rgb = raw_rgb.replace(/^(rgb|rgba)\(/,'').replace(/\)$/,'').replace(/\s/g,'').split(',');
+
+    return parseColors(rgb[0], rgb[1], rgb[2])
+}
+
+function getSlidersColor(number) {
+    return parseColors(document.getElementById(`red${number}`).value,
+        document.getElementById(`blue${number}`).value,
+        document.getElementById(`green${number}`).value)
 }
 
 function changeColorDisplay(number, color) {
@@ -46,5 +60,5 @@ function changeRangeColor(target, number, value, color) {
 
     element.style.setProperty('--background', final_color)
 
-    changeColorDisplay(number,  getFinalColor(number))
+    changeColorDisplay(number, getSlidersColor(number))
 }
