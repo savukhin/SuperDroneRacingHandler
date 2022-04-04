@@ -48,8 +48,11 @@ function makeGateDiv(number, ip) {
         <p><input id="green${number}" min=0 max=255 type="range" onload="changeRangeColor(event, this.value, 'green')" oninput="changeRangeColor(event, this.value, 'green')"/></p>
         <p><button id="button${number}" class="button" onClick="toggle(${number})">Toggle ${number + 1}</button></p>
     </div>`
+
     var newDiv = document.createElement("div");
-        newDiv.innerHTML = code
+    newDiv.className = "outer-card"
+    newDiv.id = `outer_card${number}`
+    newDiv.innerHTML = code
 
     document.getElementById('content').appendChild(newDiv);
 
