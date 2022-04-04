@@ -17,10 +17,23 @@ h2 {
 .topnav {
     overflow: hidden;
     background-color: #143642;
+    position: fixed;
+    text-align: center;
+    top: 32px;
+    left: 0;
+    width: 100%;
+}
+
+.topnav-element {
+    display: inline-block;
+    text-align: center;
+    padding: 14px 16px;
 }
 
 body {
     margin: 0;
+    border: 1px solid #48545c;
+    overflow-y: hidden;
 }
 
 .content {
@@ -55,7 +68,7 @@ body {
 }
 
 .outer-card {
-    width: 400px;
+    width: 350px;
     display: inline-block;
 }
 
@@ -73,7 +86,7 @@ body {
 }
 
 .button {
-    padding: 15px 50px;
+    /*padding: 15px 50px;*/
     font-size: 24px;
     text-align: center;
     outline: none;

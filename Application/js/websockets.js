@@ -54,7 +54,7 @@ function makeGateDiv(number, ip) {
 
     var code = `<ul></ul>
     <div id="card${number}" class="card">
-        <h2>Output - GPIO 2</h2>
+        <h2>Gate ${number}</h2>
         <div id="color_display${number}" class="color-display"></div>
         <br>
     `
@@ -73,7 +73,7 @@ function makeGateDiv(number, ip) {
         code += `<p><input id="${color}${number}" min=0 max=255 value=0 type="range" oninput="changeRangeColor(event.target, ${number}, this.value, '${color}')"/></p>`
     })
 
-    code += `<p><button id="button${number}" class="button" onClick="toggle(${number})">Toggle ${number + 1}</button></p>`
+    code += `<p><button id="button${number}" class="button" onClick="toggle(${number})">Send</button></p>`
 
     var newDiv = document.createElement("div");
     newDiv.className = "outer-card"

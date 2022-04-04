@@ -1,51 +1,26 @@
 const path = require('path')
 const url = require('url')
-const {app, BrowserWindow} = require('electron');
-const { create } = require('domain');
-//var fs = require('fs');
+const { app, BrowserWindow } = require('electron');
 
-function getNetConnections() {
+let win
 
-    fs.readFile('/proc/net/arp', function(err, data) {
-        if (!!err) return done(err, null);
-
-        var output = [];
-        var devices = data.toString().split('\n');
-        devices.splice(0,1);
-
-        for (i = 0; i < devices.length; i++) {
-            var cols = devices[i].replace(/ [ ]*/g, ' ').split(' ');
-
-            if ((cols.length > 3) && (cols[0].length !== 0) && (cols[3].length !== 0) && cols[3] !== '00:00:00:00:00:00') {
-                output.push({
-                    ip: cols[0],
-                    mac: cols[3]
-                });
-            }
-        }
-
-        console.log(output);
-        return output;
-    });
-
-}
-
-
-let win;
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 1000, 
+        width: 1000,
         height: 1000,
-        //frame: false,
+        minWidth: 800,
+        minHeight: 400,
+        frame: false,
+        backgroundColor: '#FFF',
         webPreferences: {
             nodeIntegration: true,
+            enableRemoteModule: true,
             contextIsolation: false,
         }
     })
 
     win.loadURL(url.format({
-        //pathname: path.join(__dirname, "index.html"),
         pathname: path.join(__dirname, "websocket.html"),
         protocol: 'file:',
         slashes: true
@@ -55,9 +30,26 @@ function createWindow() {
     win.setMenuBarVisibility(false);
     win.setMenu(null)
 
+    require('@electron/remote/main').initialize()
+    require("@electron/remote/main").enable(win.webContents)
+
     win.on('closed', () => {
         win = null
     })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+    createWindow()
+})
+
+app.on('window-all-closed', function () {
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
+});
+
+app.on('activate', function () {
+    if (mainWindow === null) {
+        createWindow();
+    }
+});
