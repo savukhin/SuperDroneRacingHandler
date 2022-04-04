@@ -30,47 +30,6 @@ function onMessage(event) {
     console.log(`Got data ${event.data} to ${number}`)
 }
 
-function makeGateDiv(number, ip) {
-    var generateColorPickCode = function(color) {
-        return `<div class="outer-color-pick">
-        <div class='color-pick' style="background: ${color}" onclick="colorPick(${number}, event.target.style.background)"></div>
-        </div>`
-    }
-
-    var code = `<ul></ul>
-    <div id="card${number}" class="card">
-        <h2>Gate ${number}</h2>
-        <div id="color_display${number}" class="color-display"></div>
-        <br>
-    `
-    var colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '00ffff', 
-    '#ff00ff', '#ffffff', '#000000', '#00ffff', '#ffc0cb']
-    for (var i = 0; i < colors.length / 2; i++) {
-        code += generateColorPickCode(colors[i])
-    }
-    code += '<br>'
-    for (var i = colors.length / 2; i < colors.length; i++) {
-        code += generateColorPickCode(colors[i])
-    }
-
-    var fadersColors = ['red', 'blue', 'green']
-    fadersColors.forEach(color => {
-        code += `<p><input id="${color}${number}" min=0 max=255 value=0 type="range" oninput="changeRangeColor(event.target, ${number}, this.value, '${color}')"/></p>`
-    })
-
-    code += `<p><button id="button_toggle${number}" class="button" onClick="toggle(${number})">Send</button></p>`
-    code += `<p><button id="button_blink${number}" class="button" onClick="blink(${number})">Blink 3 times</button></p>`
-
-    var newDiv = document.createElement("div");
-    newDiv.className = "outer-card"
-    newDiv.id = `outer_card${number}`
-    newDiv.innerHTML = code
-
-    document.getElementById('content').appendChild(newDiv);
-
-    return newDiv
-}
-
 async function checkIsGate(ip, port) {
     var isGate = false
     const response = await axios

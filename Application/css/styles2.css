@@ -132,7 +132,8 @@ input[type=range] {
 }
 
 input[type=range]::-webkit-slider-runnable-track {
-    background: #fafafa;
+    /*background: #fafafa;*/
+    background: var(--slider-color, #fafafa);
     border: 0.2px solid #010101;
     border-radius: 1.3px;
     width: 100%;
@@ -150,8 +151,4 @@ input[type=range]::-webkit-slider-thumb {
     border-radius: 100%;
     cursor: pointer;
     -webkit-appearance: none;
-}
-
-#blue_zalupa::-webkit-slider-thumb {
-    background: #007000;
 }

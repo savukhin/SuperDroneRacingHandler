@@ -8,9 +8,9 @@ let win
 function createWindow() {
     win = new BrowserWindow({
         width: 1000,
-        height: 1000,
-        minWidth: 800,
-        minHeight: 400,
+        height: 800,
+        minWidth: 810,
+        minHeight: 410,
         frame: false,
         backgroundColor: '#FFF',
         webPreferences: {
@@ -26,7 +26,7 @@ function createWindow() {
         slashes: true
     }))
 
-    win.webContents.openDevTools();
+   win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
     win.setMenu(null)
 
