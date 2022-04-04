@@ -7,13 +7,6 @@ let gates = {};
 
 window.addEventListener('load', onLoad);
 function onLoad(event) {
-    makeGateDiv(3, "3")
-    makeGateDiv(4, "3")
-    makeGateDiv(4, "3")
-    makeGateDiv(4, "3")
-    makeGateDiv(4, "3")
-    makeGateDiv(4, "3")
-    makeGateDiv(4, "3")
 }
 
 function makeWebSocket(ip) {
@@ -34,15 +27,7 @@ function onMessage(event) {
     var address = event.origin.slice(5)
     var number = gateways.indexOf(address)
 
-    var state;
     console.log(`Got data ${event.data} to ${number}`)
-    if (event.data == "1") {
-        state = "ON";
-    }
-    else {
-        state = event.data;
-    }
-    document.getElementById(`state${number}`).innerHTML = state;
 }
 
 function makeGateDiv(number, ip) {
@@ -73,7 +58,8 @@ function makeGateDiv(number, ip) {
         code += `<p><input id="${color}${number}" min=0 max=255 value=0 type="range" oninput="changeRangeColor(event.target, ${number}, this.value, '${color}')"/></p>`
     })
 
-    code += `<p><button id="button${number}" class="button" onClick="toggle(${number})">Send</button></p>`
+    code += `<p><button id="button_toggle${number}" class="button" onClick="toggle(${number})">Send</button></p>`
+    code += `<p><button id="button_blink${number}" class="button" onClick="blink(${number})">Blink 3 times</button></p>`
 
     var newDiv = document.createElement("div");
     newDiv.className = "outer-card"
@@ -140,18 +126,16 @@ function refresh() {
     })
 }
 
-function toggle(number) {
+function send(number, message) {
     var ip = gateways[number]
-    
-    /*var red = parseInt(document.getElementById(`red${number}`).value).toString(16)
-    var blue = parseInt(document.getElementById(`blue${number}`).value).toString(16)
-    var green = parseInt(document.getElementById(`green${number}`).value).toString(16)
-    if (red.length == 1) red = '0' + red
-    if (green.length == 1) green = '0' + green
-    if (blue.length == 1) blue = '0' + blue
-    
-    var message = '#' + red + blue + green*/
-    var message = getFinalColor(number)
-
+    console.log(`Sending ${message} to ${number} with ip ${ip}`)
     gates[ip].websocket.send(message);
+}
+
+function toggle(number) {
+    send(number, getFinalColor(number))
+}
+
+function blink(number, count=3) {
+    send(number, `blink-${count}`)
 }

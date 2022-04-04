@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
+#include "animations.h"
 
 #define corrector 10
 #define delayCorrection 300
@@ -10,8 +11,8 @@
 #define hDelay 2500
 #define baton 12
 #define outputRed 4
-#define outputGreen 3
-#define outputBlue 5
+#define outputGreen 5
+#define outputBlue 3
 
 
 // Replace with your network credentials
@@ -26,7 +27,6 @@ int redCount = 0;
 int blueCount = 0;
 int greenCount = 0;
 
-
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
@@ -35,8 +35,8 @@ void notifyClients() {
   ws.textAll(String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount)));
 }
 
-bool isColor(uint8_t *data) {
-  if (data[0] != '#') {
+bool isColor(uint8_t *data, int len) {
+  if (data[0] != '#' || len != 7) {
     return false;
   }
   for (int i = 1; i < 7; i++) {
@@ -78,10 +78,18 @@ String decToHex(int number) {
 
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
   AwsFrameInfo *info = (AwsFrameInfo*)arg;
-  if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
+  if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT && !blinking) {
     data[len] = 0;
 
-    if (!isColor(data)) {
+    int blink = isBlink(data, len);
+    if (blink != -1 ) {
+      startBlinking(blink, 1);
+      
+      //notifyClients();
+      return;
+   }
+
+   if (!isColor(data, len)) {
       return;
     }
 
@@ -148,8 +156,17 @@ void loop() {
 }
 
 void checkMode(){
-  analogWrite(outputRed, redCount);
-  analogWrite(outputGreen, greenCount);
-  analogWrite(outputBlue, blueCount);
+  if (blinking) {
+    float count = blinkFunctionColor();
+    //ws.textAll(String("blinking with count " + String(count) + " And millis() " + String(millis()) + " End time is " + String(animationEndTime) + " Speed is" + String(animationSpeed) + " Start time = " + String(startAnimationTime)));
+    analogWrite(outputRed, count);
+    analogWrite(outputGreen, count);
+    analogWrite(outputBlue, count);
+  } else {
+    analogWrite(outputRed, redCount);
+    analogWrite(outputGreen, greenCount);
+    analogWrite(outputBlue, blueCount);
+  }
+  checkAnimationEnd();
 }
  
