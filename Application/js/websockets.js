@@ -87,7 +87,6 @@ function refresh() {
 
 function send(number, message) {
     var ip = gateways[number]
-    console.log(`Sending ${message} to ${number} with ip ${ip}`)
     gates[ip].websocket.send(message);
 }
 

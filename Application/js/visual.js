@@ -46,7 +46,6 @@ function makeGateDiv(number, ip) {
 
 function componentToHex(c) {
     var hex = c.toString(16);
-    console.log(`hex = ${hex}`)
     return hex.length == 1 ? "0" + hex : hex;
 }
 
