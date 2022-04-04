@@ -7,6 +7,13 @@ let gates = {};
 
 window.addEventListener('load', onLoad);
 function onLoad(event) {
+    makeGateDiv(3, "3")
+    makeGateDiv(4, "3")
+    makeGateDiv(4, "3")
+    makeGateDiv(4, "3")
+    makeGateDiv(4, "3")
+    makeGateDiv(4, "3")
+    makeGateDiv(4, "3")
 }
 
 function makeWebSocket(ip) {
@@ -39,15 +46,34 @@ function onMessage(event) {
 }
 
 function makeGateDiv(number, ip) {
+    var generateColorPickCode = function(color) {
+        return `<div class="outer-color-pick">
+        <div class='color-pick' style="background: ${color}" onclick="colorPick(${number}, event.target.style.background)"></div>
+        </div>`
+    }
+
     var code = `<ul></ul>
     <div id="card${number}" class="card">
         <h2>Output - GPIO 2</h2>
-        <p class="state">state: <span id="state${number}">%STATE%</span></p>
-        <p><input id="red${number}" min=0 max=255 type="range" onload="changeRangeColor(event, this.value, 'red')" oninput="changeRangeColor(event, this.value, 'red')"/></p>
-        <p><input id="blue${number}" min=0 max=255 type="range" onload="changeRangeColor(event, this.value, 'blue')" oninput="changeRangeColor(event, this.value, 'blue')"/></p>
-        <p><input id="green${number}" min=0 max=255 type="range" onload="changeRangeColor(event, this.value, 'green')" oninput="changeRangeColor(event, this.value, 'green')"/></p>
-        <p><button id="button${number}" class="button" onClick="toggle(${number})">Toggle ${number + 1}</button></p>
-    </div>`
+        <div id="color_display${number}" class="color-display"></div>
+        <br>
+    `
+    var colors = ['red', 'green', 'blue', 'yellow', 'aqua', 
+    'magenta', 'white', 'black', 'cyan', 'pink']
+    for (var i = 0; i < colors.length / 2; i++) {
+        code += generateColorPickCode(colors[i])
+    }
+    code += '<br>'
+    for (var i = colors.length / 2; i < colors.length; i++) {
+        code += generateColorPickCode(colors[i])
+    }
+
+    var fadersColors = ['red', 'blue', 'green']
+    fadersColors.forEach(color => {
+        code += `<p><input id="${color}${number}" min=0 max=255 value=0 type="range" oninput="changeRangeColor(event.target, ${number}, this.value, '${color}')"/></p>`
+    })
+
+    code += `<p><button id="button${number}" class="button" onClick="toggle(${number})">Toggle ${number + 1}</button></p>`
 
     var newDiv = document.createElement("div");
     newDiv.className = "outer-card"
@@ -117,14 +143,15 @@ function refresh() {
 function toggle(number) {
     var ip = gateways[number]
     
-    var red = parseInt(document.getElementById(`red${number}`).value).toString(16)
+    /*var red = parseInt(document.getElementById(`red${number}`).value).toString(16)
     var blue = parseInt(document.getElementById(`blue${number}`).value).toString(16)
     var green = parseInt(document.getElementById(`green${number}`).value).toString(16)
     if (red.length == 1) red = '0' + red
     if (green.length == 1) green = '0' + green
     if (blue.length == 1) blue = '0' + blue
     
-    var message = '#' + red + blue + green
+    var message = '#' + red + blue + green*/
+    var message = getFinalColor(number)
 
     gates[ip].websocket.send(message);
 }
