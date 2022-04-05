@@ -10,7 +10,7 @@ function createWindow() {
         width: 1000,
         height: 800,
         minWidth: 810,
-        minHeight: 410,
+        minHeight: 550,
         frame: false,
         backgroundColor: '#FFF',
         webPreferences: {
@@ -26,7 +26,7 @@ function createWindow() {
         slashes: true
     }))
 
-   win.webContents.openDevTools();
+    win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
     win.setMenu(null)
 
