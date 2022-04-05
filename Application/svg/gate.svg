@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (b8e25be833, 2022-02-05)"
+   sodipodi:docname="gate.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#999999"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:zoom="0.18507471"
+     inkscape:cx="-56.733847"
+     inkscape:cy="891.53188"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       id="path259"
+       style="fill:#ffff00;fill-rule:evenodd;stroke-width:0.868784"
+       inkscape:transform-center-y="-1.647736e-06"
+       d="M 399.83789 127.74609 L 20.310547 346.86719 L 20.310547 785.10938 L 399.83789 1004.2305 L 779.36719 785.10938 L 779.36719 346.86719 L 399.83789 127.74609 z M 399.83789 183.12891 L 731.4043 374.55859 L 731.4043 757.41797 L 399.83789 948.8457 L 68.273438 757.41797 L 68.273438 374.55859 L 399.83789 183.12891 z "
+       transform="scale(0.26458333)" />
+  </g>
+</svg>

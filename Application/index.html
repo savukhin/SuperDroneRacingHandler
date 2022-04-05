@@ -7,7 +7,8 @@
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/frame.css">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/redesign.css" </head>
+  <link rel="stylesheet" href="css/redesign.css">
+</head>
 
 <body>
   <header id="titlebar">
@@ -61,6 +62,11 @@
         <div id="map_box" class="box">
           <div class="block">
             <div id="map_line"></div>
+            <div class="map-element">
+              <div class="block" style="background-color: #aaaaaa; z-index:inherit">
+                <div class="gate-element"></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -132,9 +138,9 @@
               </div>
               <div id="pickerBoxContainer">
                 <div id="pickerBox">
-                  <p><input id="red"  min=0 max=255 value=0 type="range" class="red-slider"/></p>
-                  <p><input id="blue"  min=0 max=255 value=0 type="range" class="blue-slider"/></p>
-                  <p><input id="green"  min=0 max=255 value=0 type="range" class="green-slider"/></p>
+                  <p><input id="red" min=0 max=255 value=0 type="range" class="red-slider" /></p>
+                  <p><input id="blue" min=0 max=255 value=0 type="range" class="blue-slider" /></p>
+                  <p><input id="green" min=0 max=255 value=0 type="range" class="green-slider" /></p>
                   <button class="button" onclicke="handleColorPicker(event)">OK</button>
                 </div>
               </div>
