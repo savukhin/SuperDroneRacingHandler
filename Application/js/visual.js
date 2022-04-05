@@ -1,5 +1,5 @@
 function makeGateDiv(number, ip) {
-    var generateColorPickCode = function(color) {
+    var generateColorPickCode = function (color) {
         return `<div class="outer-color-pick">
         <div class='color-pick' style="background: ${color}" onclick="colorPick(${number}, event.target.style.background)"></div>
         </div>`
@@ -11,8 +11,8 @@ function makeGateDiv(number, ip) {
         <div id="color_display${number}" class="color-display"></div>
         <br>
     `
-    var colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '00ffff', 
-    '#ff00ff', '#ffffff', '#000000', '#00ffff', '#ffc0cb']
+    var colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '00ffff',
+        '#ff00ff', '#ffffff', '#000000', '#00ffff', '#ffc0cb']
     for (var i = 0; i < colors.length / 2; i++) {
         code += generateColorPickCode(colors[i])
     }
@@ -57,18 +57,18 @@ function parseColors(red, green, blue) {
     var red = parseInt(red).toString(16)
     var green = parseInt(green).toString(16)
     var blue = parseInt(blue).toString(16)
-    
+
     if (red.length == 1) red = '0' + red
     if (green.length == 1) green = '0' + green
     if (blue.length == 1) blue = '0' + blue
-    
+
     var color = '#' + red + green + blue
     return color
 }
 
 function getDisplayColor(number) {
     var raw_rgb = document.getElementById(`color_display${number}`).style.backgroundColor
-    var rgb = raw_rgb.replace(/^(rgb|rgba)\(/,'').replace(/\)$/,'').replace(/\s/g,'').split(',');
+    var rgb = raw_rgb.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
 
     return parseColors(rgb[0], rgb[1], rgb[2])
 }
@@ -106,4 +106,27 @@ function changeRangeColor(target, number, value, color) {
     element.style.setProperty('--background', final_color)
 
     changeColorDisplay(number, getSlidersColor(number))
+}
+
+function changeTab(event, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    document.getElementById(tabName).style.display = "block"
+}
+
+var colorPicker = document.getElementById("pickerBoxContainer");
+
+function openColorPicker(event) {
+    if (colorPicker.style.display != 'block')
+        colorPicker.style.display = 'block'
+    else
+        colorPicker.style.display = 'none'
+}
+
+function handleColorPicker(event) {
+    colorPicker.style.display = 'none'
 }

@@ -56,15 +56,99 @@
     <br><br><br>
 
     <div id="content" class="content">
-      <div class="wrapper">
+      <div class="content-wrapper">
+
         <div id="map_box" class="box">
-          <div class="block"></div>
+          <div class="block">
+            <div id="map_line"></div>
+          </div>
         </div>
+
         <div id="table_box" class="box">
-          <div class="block"></div>
+          <div class="block">
+            <table style="table-layout:fixed; width:100%">
+              <tr>
+                <td>GATE</td>
+                <td>FLAG</td>
+                <td>MARKER</td>
+                <td>LOAD</td>
+              </tr>
+              <tr>
+                <td class="table-wrapper">
+                  <div style="border: black solid 1px">Im</div>
+                  <div style="border: black solid 1px">1</div>
+                  <div style="border: black solid 1px">Col</div>
+                </td>
+                <td>FLAG</td>
+                <td>MARKER</td>
+                <td>LOAD</td>
+              </tr>
+            </table>
+          </div>
         </div>
+
         <div id="action_box" class="box">
-          <div class="block"></div>
+          <div class="block">
+            <div id="action_tabs" class="grid-2col">
+              <button class="button" onclick="changeTab(event, 'action_colors')">Color</button>
+              <button class="button" onclick="changeTab(event, 'action_animations')">Anim</button>
+            </div>
+            <div id="action_display" class="grid-2col">
+              <div class="button">Befor</div>
+              <div class="button">After</div>
+            </div>
+            <br>
+            <div class="tabcontent" id="action_colors">
+              <div class="outer-color-pick">
+                <div class='color-pick' style="background: red"></div>
+              </div>
+              <div class="outer-color-pick">
+                <div class='color-pick' style="background: blue"></div>
+              </div>
+              <div class="outer-color-pick">
+                <div class='color-pick' style="background: lime"></div>
+              </div>
+              <div class="outer-color-pick">
+                <div class='color-pick' style="background: yellow"></div>
+              </div>
+              <div class="outer-color-pick">
+                <div class='color-pick' style="background: magenta"></div>
+              </div>
+              <br>
+              <div class="outer-color-pick">
+                <div class='color-pick' style="background: cyan"></div>
+              </div>
+              <div class="outer-color-pick">
+                <div class='color-pick' style="background: white"></div>
+              </div>
+              <div class="outer-color-pick">
+                <div class='color-pick' style="background: black"></div>
+              </div>
+              <div class="outer-color-pick">
+                <div class='color-pick' style="background: #dddddd"></div>
+              </div>
+              <div class="outer-color-pick" onclick="openColorPicker(event)">
+                <div class='color-pick' style="background: #bbbbbb"></div>
+              </div>
+              <div id="pickerBoxContainer">
+                <div id="pickerBox">
+                  <p><input id="red"  min=0 max=255 value=0 type="range" class="red-slider"/></p>
+                  <p><input id="blue"  min=0 max=255 value=0 type="range" class="blue-slider"/></p>
+                  <p><input id="green"  min=0 max=255 value=0 type="range" class="green-slider"/></p>
+                  <button class="button" onclicke="handleColorPicker(event)">OK</button>
+                </div>
+              </div>
+            </div>
+            <div style="display:none" class="tabcontent" id="action_animations">
+              <label for="animation_select">Animation:</label>
+              <select id="animation_select">
+                <option>Blink</option>
+                <option>Nothing</option>
+              </select>
+            </div>
+            <br>
+            <button class="button">Send</button>
+          </div>
         </div>
       </div>
     </div>
