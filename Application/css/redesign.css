@@ -16,7 +16,7 @@
 
 .table-wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 80px 80px auto;
 }
 
 .box {
@@ -99,14 +99,44 @@
     z-index: 10;
     left: var('--left', 0px);
 }
+
+.facility-element {
+    height: 100px;
+    width: 100px;
+    z-index: 10;
+}
+
+.overlay {
+    position: relative;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    cursor: pointer;
+}
+
+.overlay:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
 .gate-element {
     height: 100%;
     width: 100%;
     background-color: blue;
-    z-index: inherit ;
     -webkit-mask-box-image: url(../img/gates/Gate-1000-blacked.png);
 }
 
-td {
+#table_box td {
     background-color: tomato;
+    height: 80px;
+}
+
+.grid-cell {}
+
+#table_box .facility-element {
+    z-index: 1;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    left: calc(50% - 40px);
 }

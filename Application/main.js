@@ -26,7 +26,7 @@ function createWindow() {
         slashes: true
     }))
 
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
     win.setMenu(null)
 

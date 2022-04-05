@@ -72,22 +72,8 @@
 
         <div id="table_box" class="box">
           <div class="block">
-            <table style="table-layout:fixed; width:100%">
+            <table id="main_table" style="table-layout:fixed; width:100%">
               <tr>
-                <td>GATE</td>
-                <td>FLAG</td>
-                <td>MARKER</td>
-                <td>LOAD</td>
-              </tr>
-              <tr>
-                <td class="table-wrapper">
-                  <div style="border: black solid 1px">Im</div>
-                  <div style="border: black solid 1px">1</div>
-                  <div style="border: black solid 1px">Col</div>
-                </td>
-                <td>FLAG</td>
-                <td>MARKER</td>
-                <td>LOAD</td>
               </tr>
             </table>
           </div>
@@ -160,9 +146,14 @@
     </div>
   </div>
 
+  <script>window.$ = window.jQuery = require('jquery');</script>
   <script>
     require('./render.js')
   </script>
+  <script type="text/javascript" src="js/facility.js"> </script>
+  <script type="text/javascript" src="js/table-visual.js"> </script>
+  <script type="text/javascript" src="js/map-visual.js"> </script>
+  <script type="text/javascript" src="js/action-visual.js"> </script>
   <script type="text/javascript" src="js/visual.js"> </script>
   <script type="text/javascript" src="js/websockets.js"> </script>
 </body>

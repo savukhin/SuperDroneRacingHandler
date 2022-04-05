@@ -1,9 +1,9 @@
 const find = require('local-devices');
 const axios = require('axios')
-const {Gate, Color} = require('./js/gate')
+// const {Facility, Color} = require('./js/gate')
 
 var gateways = [];
-let gates = {};
+let facilities = {};
 
 window.addEventListener('load', onLoad);
 function onLoad(event) {
@@ -30,25 +30,25 @@ function onMessage(event) {
     console.log(`Got data ${event.data} to ${number}`)
 }
 
-async function checkIsGate(ip, port) {
-    var isGate = false
+async function checkIsFacility(ip, port) {
+    var isFacility = false
     const response = await axios
         .get(`http://${ip}:${port}/DOYOUGATE`)
         .then(res => {
-            isGate = true
+            isFacility = true
         })
         .catch(error => {
-            isGate = false
+            isFacility = false
         })
-    return isGate
+    return isFacility
 }
 
-function deleteGate(number) {
+function deleteFacility(number) {
     var ip = gateways[number]
 
-    gates[ip].erase()
+    facilities[ip].erase()
     gateways.splice(number, 1);
-    delete gates[ip]
+    delete facilities[ip]
 }
 
 function refresh() {
@@ -67,19 +67,19 @@ function refresh() {
                 return
             }
 
-            checkIsGate(ip, 80).then(isGate => {
-                if (!isGate)
+            checkIsFacility(ip, 80).then(isFacility => {
+                if (!isFacility)
                     return
                 
                 var number = gateways.length
                 gateways.push(ip)
-                var div = makeGateDiv(number, ip)
-                gates[ip] = new Gate(ip, makeWebSocket(ip), number, new Color(), div)
+                var div = makeFacilityDiv(number, ip)
+                facilities[ip] = new Facility(ip, makeWebSocket(ip), number, new Color(), div)
             })
         })
 
         check_gateways.forEach(elem => {
-            deleteGate(gateways.indexOf(elem))
+            deleteFacility(gateways.indexOf(elem))
         })
         refresh_button.disabled = false
     })
@@ -87,7 +87,7 @@ function refresh() {
 
 function send(number, message) {
     var ip = gateways[number]
-    gates[ip].websocket.send(message);
+    facilities[ip].websocket.send(message);
 }
 
 function toggle(number) {

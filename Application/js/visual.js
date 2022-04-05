@@ -108,25 +108,11 @@ function changeRangeColor(target, number, value, color) {
     changeColorDisplay(number, getSlidersColor(number))
 }
 
-function changeTab(event, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-
-    document.getElementById(tabName).style.display = "block"
-}
-
-var colorPicker = document.getElementById("pickerBoxContainer");
-
-function openColorPicker(event) {
-    if (colorPicker.style.display != 'block')
-        colorPicker.style.display = 'block'
-    else
-        colorPicker.style.display = 'none'
-}
-
-function handleColorPicker(event) {
-    colorPicker.style.display = 'none'
+function generateFacilityElem(facility) {
+    var code = `
+    <div class="block facility-element">
+        <div class="${facility.type}-element" style="background-color: ${facility.color}"></div>
+    </div>
+    `
+    return code;
 }

@@ -12,6 +12,7 @@
     "@electron/remote": "^2.0.8",
     "axios": "^0.26.1",
     "electron": "^18.0.1",
+    "jquery": "^3.6.0",
     "local-devices": "^3.0.0"
   },
   "devDependencies": {
