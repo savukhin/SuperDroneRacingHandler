@@ -50,7 +50,7 @@
     left: 5%;
     width: 90%;
     height: 10px;
-    z-index: 0  ;
+    z-index: 0;
     background-color: red;
 }
 
@@ -62,7 +62,7 @@
 
 #action_tabs {
     height: 80px;
-    background-color: blue;
+    /* background-color: blue; */
 }
 
 #action_tabs>button {
@@ -71,10 +71,10 @@
 
 #action_display {
     height: 180px;
-    background-color: red;
+    /* background-color: red; */
 }
 
-#action_display>.button {
+#action_display>.state_display {
     margin: 10px;
 }
 
@@ -139,4 +139,24 @@
     width: 80px;
     height: 80px;
     left: calc(50% - 40px);
+}
+
+.state_display {
+    text-align: center;
+    outline: none;
+    position: relative;
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.state_display .facility-element {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

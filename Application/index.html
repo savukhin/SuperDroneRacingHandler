@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Super Neon Genesis DroneRacing Program X</title>
+  <title>Super Tengen Toppa Neon Genesis DroneRacing Program X</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/frame.css">
@@ -82,16 +82,16 @@
         <div id="action_box" class="box">
           <div class="block">
             <div id="action_tabs" class="grid-2col">
-              <button class="button" onclick="changeTab(event, 'action_colors')">Color</button>
-              <button class="button" onclick="changeTab(event, 'action_animations')">Anim</button>
+              <button class="button" onclick="Action.changeTab(event, 'action_colors')">Color</button>
+              <button class="button" onclick="Action.changeTab(event, 'action_animations')">Anim</button>
             </div>
             <div id="action_display" class="grid-2col">
-              <div class="button">Befor</div>
-              <div class="button">After</div>
+              <div id="state_display_before" class="state_display"></div>
+              <div id="state_display_after" class="state_display"></div>
             </div>
             <br>
             <div class="tabcontent" id="action_colors">
-              <div class="outer-color-pick">
+              <!--<div class="outer-color-pick">
                 <div class='color-pick' style="background: red"></div>
               </div>
               <div class="outer-color-pick">
@@ -119,15 +119,15 @@
               <div class="outer-color-pick">
                 <div class='color-pick' style="background: #dddddd"></div>
               </div>
-              <div class="outer-color-pick" onclick="openColorPicker(event)">
+              <div class="outer-color-pick" onclick="Action.openColorPicker(event)">
                 <div class='color-pick' style="background: #bbbbbb"></div>
-              </div>
+              </div>-->
               <div id="pickerBoxContainer">
                 <div id="pickerBox">
                   <p><input id="red" min=0 max=255 value=0 type="range" class="red-slider" /></p>
                   <p><input id="blue" min=0 max=255 value=0 type="range" class="blue-slider" /></p>
                   <p><input id="green" min=0 max=255 value=0 type="range" class="green-slider" /></p>
-                  <button class="button" onclicke="handleColorPicker(event)">OK</button>
+                  <button class="button" onclicke="Action.handleColorPicker(event)">OK</button>
                 </div>
               </div>
             </div>

@@ -1,10 +1,10 @@
-(function (table, $, undefined) {
+(function (Table, $, undefined) {
     var columns = [];
     var rows = [];
     var maxRows = 0;
 
-    table.load = function () {
-        table.addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
+    Table.load = function () {
+        // Table.addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
     }
 
     function createColumn(type) {
@@ -20,8 +20,6 @@
             row++;
         });
 
-        console.log(`columns is ${columns.length} type is ${type}`);
-
         columns.push(type);
         rows.push(0);
     }
@@ -30,7 +28,6 @@
         var code = `<div class="table-wrapper">`;
 
         var img = generateFacilityElem(facility);
-
         if (NonNumerableFacilities.has(facility.type))
             code += `<div class="grid-cell" style="border: black solid 1px; grid-column-start: 1; grid-column-end: 3;">${img}</div>`;
         else
@@ -38,8 +35,7 @@
             <div class="grid-cell" style="border: black solid 1px">${facility.number}</div>`;
 
         code += ` <div class="grid-cell" style="border: black solid 1px; background: ${facility.color}"></div>
-        </div>
-        <div class="overlay" onclick="chooseElement(event, ${facility})"></div>`;
+        </div>`
 
         return code;
     }
@@ -60,7 +56,7 @@
         return $(`#td_col_${col}_row_${row}`)
     }
 
-    table.addFacility = function(facility) {
+    Table.addFacility = function(facility) {
         var col = columns.indexOf(facility.type);
         if (col == -1) {
             createColumn(facility.type);
@@ -68,16 +64,22 @@
         }
         
         var row = rows[col];
-        console.log(`col ${col} row ${row}`);
 
         while (maxRows < row + 1)
             createRow();
         
-        var code = generateCell(facility);
-        
-        getCell(col, row).append(code)
+        var cellDiv = generateCell(facility);
+        getCell(col, row).append(cellDiv);
+
+        var overlay = document.createElement('div');
+        overlay.className = "overlay";
+        overlay.onclick = function(event) {
+            Action.chooseElement(event, facility);
+        }
+
+        getCell(col, row).append(overlay);
     }
 
-}(window.table = window.table || {}, jQuery));
+}(window.Table = window.Table || {}, jQuery));
 
-window.addEventListener('load', table.load);
+window.addEventListener('load', Table.load);

@@ -7,7 +7,9 @@ let win
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 1000,
+        // width: 1000,
+        // height: 800,
+        width: 1900,
         height: 800,
         minWidth: 810,
         minHeight: 550,
@@ -26,7 +28,7 @@ function createWindow() {
         slashes: true
     }))
 
-    // win.webContents.openDevTools();
+    win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
     win.setMenu(null)
 
