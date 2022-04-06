@@ -23,6 +23,16 @@ int V = 0;
 int cells = 0;
 bool offFlag = 0;
 
+enum FacilityType {
+  GATE = 'g',
+  FLAG = 'f',
+  MARKER = 'm',
+  RECEIVER = 'r',
+  MAT = 't'
+};
+
+FacilityType facilityType = FacilityType::GATE;
+
 int redCount = 0;
 int blueCount = 0;
 int greenCount = 0;
@@ -31,8 +41,13 @@ int greenCount = 0;
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
 
+String getFinalColor() {
+  return String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount));
+}
+
 void notifyClients() {
-  ws.textAll(String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount)));
+  //ws.textAll(String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount)));
+  ws.textAll(getFinalColor());
 }
 
 bool isColor(uint8_t *data, int len) {
@@ -141,7 +156,11 @@ void setup(){
   initWebSocket();
  
   server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/html", "YES");
+    request->send(200, "text/html", String(char(facilityType)));
+  });
+  
+  server.on("/STATE", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(200, "text/html", getFinalColor());
   });
 
   // Start server

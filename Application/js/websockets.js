@@ -3,11 +3,18 @@ const axios = require('axios');
 // const {Facility, Color} = require('./js/gate')
 
 
-(function ( Websockets, $, undefined ) {
+(function (Websockets, $, undefined) {
     var gateways = [];
     let facilities = new Set();
+    const convertation = {
+        'g': FacilityTypes.GATE,
+        'f' : FacilityTypes.FLAG,
+        'm' : FacilityTypes.MARKER,
+        'r' : FacilityTypes.RECEIVER,
+        't' : FacilityTypes.MAT,
+    }
 
-    Websockets.onLoad = function(event) {
+    Websockets.onLoad = function (event) {
         // addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
         // addFacility(new Facility("2", null, 2, '#00ff00', null, 'gate'));
     }
@@ -28,7 +35,7 @@ const axios = require('axios');
     function onOpen(event) {
         console.log('Connection opened');
     }
-    
+
     function onClose(event) {
         console.log('Connection closed');
     }
@@ -36,7 +43,7 @@ const axios = require('axios');
     function onMessage(event) {
         var address = event.origin.slice(5)
         var number = gateways.indexOf(address)
-    
+
         console.log(`Got data ${event.data} to ${number}`)
     }
 
@@ -46,10 +53,11 @@ const axios = require('axios');
             .get(`http://${ip}:${port}/DOYOUGATE`)
             .then(res => {
                 console.log(`Res is ${res.data}`);
-                if (res.data == 'YES')
-                    isFacility = 'gate';
-                else
-                    isFacility = 'flag';
+                var conv = convertation[res.data];
+                console.log(`conv is ${conv}`);
+                if (conv != undefined)
+                    isFacility = conv;
+                
             })
             .catch(error => {
                 isFacility = false;
@@ -60,20 +68,20 @@ const axios = require('axios');
 
     function deleteFacility(number) {
         var ip = gateways[number]
-    
+
         facilities[ip].erase()
         gateways.splice(number, 1);
         delete facilities[ip]
     }
-    
-    Websockets.refresh = function() {
+
+    Websockets.refresh = function () {
         var check_gateways = new Set();
         gateways.forEach(elem => {
             check_gateways.add(elem);
         });
-    
+
         refresh_button.disabled = true
-    
+
         find().then(devices => {
             devices.forEach(device => {
                 var ip = device.ip
@@ -81,47 +89,45 @@ const axios = require('axios');
                     check_gateways.delete(ip)
                     return
                 }
-    
+
                 checkFacility(ip, 80).then(isFacility => {
                     if (!isFacility)
                         return
-                    
+
                     var number = gateways.length;
                     gateways.push(ip);
                     var socket = makeWebSocket(ip);
                     console.log(`socket is ${socket}`);
-                    //var div = makeFacilityDiv(number, ip)
-                    addFacility(new Facility(ip, socket, number, 
+                    addFacility(new Facility(ip, socket, number,
                         new Color(), undefined, isFacility));
-                    // facilities[ip] = new Facility(ip, makeWebSocket(ip), number, new Color(), undefined)
                 })
             })
-    
+
             check_gateways.forEach(elem => {
                 Websockets.deleteFacility(gateways.indexOf(elem))
             })
             refresh_button.disabled = false
         })
     }
-    
+
     function send(number, message) {
         var ip = gateways[number]
         facilities[ip].websocket.send(message);
     }
-    
+
     // Websockets.toggle = function(number) {
     //     send(number, getDisplayColor(number))
     // }
 
-    Websockets.toggle = function(facility, message) {
+    Websockets.toggle = function (facility, message) {
         // send(number, getDisplayColor(number))
         facility.websocket.send(message);
     }
-    
-    Websockets.blink = function(number, count=3) {
+
+    Websockets.blink = function (number, count = 3) {
         send(number, `blink-${count}`)
     }
 
-}(window.Websockets = window.Websockets || {}, jQuery ));
+}(window.Websockets = window.Websockets || {}, jQuery));
 
 window.addEventListener('load', Websockets.onLoad);

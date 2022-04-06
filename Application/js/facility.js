@@ -7,7 +7,7 @@ class Color {
 }
 
 const FacilityTypes = {
-    GATE : "red",
+    GATE : "gate",
     FLAG : "flag",
     MARKER : "marker",
     RECEIVER : "receiver",
