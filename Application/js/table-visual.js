@@ -4,7 +4,6 @@
     var maxRows = 0;
 
     Table.load = function () {
-        // Table.addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
     }
 
     function createColumn(type) {

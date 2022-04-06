@@ -4,7 +4,6 @@
     background: #bbb;
     border-radius: 5px;
     box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
-    overflow: hidden;
 }
 
 .content-wrapper {
@@ -62,7 +61,6 @@
 
 #action_tabs {
     height: 80px;
-    /* background-color: blue; */
 }
 
 #action_tabs>button {
@@ -80,15 +78,18 @@
 
 #pickerBoxContainer {
     display: none;
-    position: relative;
-    left: 50%;
+    /* position: relative; */
+    /* left: 50%; */
 }
 
 #pickerBox {
-    z-index: 1;
+    z-index: 10;
+    padding: 20px;
     position: absolute;
+    top: 300px;
+    right: 70px;
     width: 200px;
-    height: 200px;
+    height: 270px;
     transform: translate(-50%);
     background: #333;
 }

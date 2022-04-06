@@ -4,7 +4,7 @@
     Action.colorPick = function (color) {
         if (chosen == null)
             return;
-        
+
         $(`#state_display_after`).children().children().css(`background-color`, `${color}`);
     }
 
@@ -23,7 +23,6 @@
                     onclickCallback(event);
             }
 
-            // div.innerHTML = `<div class='color-pick' style="background: ${color}" onclick></div>`;
             div.append(pick);
 
             return div;
@@ -38,8 +37,8 @@
         }
 
         var lastColor = generateColorPickDiv(colors[parseInt(colors.length / 2 - 1)]);
-        lastColor.id = "last_color";
-        // $(lastColor).children().id = "last_color";
+        $(lastColor).children().attr("id", "prev_color");
+
         div.append(lastColor);
 
         div.append(document.createElement('br'));
@@ -47,14 +46,14 @@
             div.append(generateColorPickDiv(colors[i]));
         }
 
-        div.append(
-            generateColorPickDiv(colors[colors.length - 1],
-                function (event) { Action.openColorPicker() })
-        );
+        var customColor = generateColorPickDiv(colors[colors.length - 1],
+            function (event) { Action.openColorPicker() });
+
+        $(customColor).children().attr("id", "custom_color");
+
+        div.append(customColor);
 
         $(`#action_colors`).prepend(div);
-
-        // $(`#action_colors`).append(code);
     }
 
     Action.onLoad = function () {
@@ -95,6 +94,42 @@
         );
 
         chosen = facility;
+    }
+
+
+
+    Action.changeRangeColor = function (event, colorType, value) {
+        const element = event.target
+        var final_color = ""
+        var value = parseInt(value)
+        switch (colorType) {
+            case 'red':
+                final_color = rgbToHex(value, 0, 0)
+                break;
+            case 'lime':
+                final_color = rgbToHex(0, value, 0)
+                break;
+            default:
+                final_color = rgbToHex(0, 0, value)
+                break;
+        }
+
+        element.style.setProperty('--background', final_color)
+
+        // changeColorDisplay(number, getSlidersColor(number))
+        $(`prev_color`).css("background-color", final_color);
+    }
+
+    function getFinalColor() {
+        var raw_rgb = $(`#state_display_after`).children().children().css(`background-color`);
+        var rgb = raw_rgb.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
+
+        return parseColors(rgb[0], rgb[1], rgb[2])
+    }
+
+    Action.toggle = function (event) {
+        var color = getFinalColor();
+        Websockets.toggle(chosen, color);
     }
 
 }(window.Action = window.Action || {}, jQuery));

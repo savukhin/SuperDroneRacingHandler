@@ -8,7 +8,7 @@ const axios = require('axios');
     let facilities = new Set();
 
     Websockets.onLoad = function(event) {
-        addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
+        // addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
     }
 
     function addFacility(facility) {
@@ -38,17 +38,21 @@ const axios = require('axios');
         console.log(`Got data ${event.data} to ${number}`)
     }
 
-    async function checkIsFacility(ip, port) {
-        var isFacility = false
+    async function checkFacility(ip, port) {
+        var isFacility = false;
         const response = await axios
             .get(`http://${ip}:${port}/DOYOUGATE`)
             .then(res => {
-                isFacility = true
+                console.log(`Res is ${res.data}`);
+                if (res.data == 'YES')
+                    isFacility = 'gate';
+                else
+                    isFacility = 'flag';
             })
             .catch(error => {
-                isFacility = false
+                isFacility = false;
             })
-        return isFacility
+        return isFacility;
     }
 
 
@@ -76,19 +80,23 @@ const axios = require('axios');
                     return
                 }
     
-                checkIsFacility(ip, 80).then(isFacility => {
+                checkFacility(ip, 80).then(isFacility => {
                     if (!isFacility)
                         return
                     
-                    var number = gateways.length
-                    gateways.push(ip)
-                    var div = makeFacilityDiv(number, ip)
-                    facilities[ip] = new Facility(ip, makeWebSocket(ip), number, new Color(), div)
+                    var number = gateways.length;
+                    gateways.push(ip);
+                    var socket = makeWebSocket(ip);
+                    console.log(`socket is ${socket}`);
+                    //var div = makeFacilityDiv(number, ip)
+                    addFacility(new Facility(ip, socket, number, 
+                        new Color(), undefined, isFacility));
+                    // facilities[ip] = new Facility(ip, makeWebSocket(ip), number, new Color(), undefined)
                 })
             })
     
             check_gateways.forEach(elem => {
-                deleteFacility(gateways.indexOf(elem))
+                Websockets.deleteFacility(gateways.indexOf(elem))
             })
             refresh_button.disabled = false
         })
@@ -99,8 +107,13 @@ const axios = require('axios');
         facilities[ip].websocket.send(message);
     }
     
-    Websockets.toggle = function(number) {
-        send(number, getDisplayColor(number))
+    // Websockets.toggle = function(number) {
+    //     send(number, getDisplayColor(number))
+    // }
+
+    Websockets.toggle = function(facility, message) {
+        // send(number, getDisplayColor(number))
+        facility.websocket.send(message);
     }
     
     Websockets.blink = function(number, count=3) {

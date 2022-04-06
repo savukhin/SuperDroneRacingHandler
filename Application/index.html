@@ -52,7 +52,7 @@
 
     <div class="topnav">
       <button class="button topnav-element" id="settings_button" onclick="settings()"> Settings </button>
-      <button class="button topnav-element" id="refresh_button" onclick="refresh()"> Refresh </button>
+      <button class="button topnav-element" id="refresh_button" onclick="Websockets.refresh()"> Refresh </button>
     </div>
     <br><br><br>
 
@@ -124,7 +124,8 @@
               </div>-->
               <div id="pickerBoxContainer">
                 <div id="pickerBox">
-                  <p><input id="red" min=0 max=255 value=0 type="range" class="red-slider" /></p>
+                  <div id="color_display${number}" class="color-display"></div>
+                  <p><input id="red" min=0 max=255 value=0 type="range" class="red-slider" oninput="Action.changeRangeColor(event, 'red', this.value)" /></p>
                   <p><input id="blue" min=0 max=255 value=0 type="range" class="blue-slider" /></p>
                   <p><input id="green" min=0 max=255 value=0 type="range" class="green-slider" /></p>
                   <button class="button" onclicke="Action.handleColorPicker(event)">OK</button>
@@ -139,7 +140,7 @@
               </select>
             </div>
             <br>
-            <button class="button">Send</button>
+            <button class="button" onClick="Action.toggle(event)">Send</button>
           </div>
         </div>
       </div>
