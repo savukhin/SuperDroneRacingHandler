@@ -1,3 +1,5 @@
+const { cp } = require("original-fs");
+
 (function (Table, $, undefined) {
     var columns = [];
     var rows = [];
@@ -69,6 +71,7 @@
         
         var cellDiv = generateCell(facility);
         getCell(col, row).append(cellDiv);
+        rows[col]++;
 
         var overlay = document.createElement('div');
         overlay.className = "overlay";
