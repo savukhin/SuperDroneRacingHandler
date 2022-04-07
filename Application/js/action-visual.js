@@ -142,6 +142,11 @@
         Websockets.toggle(chosen, color);
     }
 
+    Action.blink = function (event) {
+        // var color = getFinalColor();
+        Websockets.blink(chosen);
+    }
+
 }(window.Action = window.Action || {}, jQuery));
 
 window.addEventListener('load', Action.onLoad);

@@ -120,22 +120,13 @@ const axios = require('axios');
         })
     }
 
-    function send(number, message) {
-        var ip = gateways[number]
-        facilities[ip].websocket.send(message);
-    }
-
-    // Websockets.toggle = function(number) {
-    //     send(number, getDisplayColor(number))
-    // }
-
     Websockets.toggle = function (facility, message) {
         // send(number, getDisplayColor(number))
         facility.websocket.send(message);
     }
 
-    Websockets.blink = function (number, count = 3) {
-        send(number, `blink-${count}`)
+    Websockets.blink = function (facility, count = 3) {
+        facility.websocket.send(`blink-${count}`);
     }
 
 }(window.Websockets = window.Websockets || {}, jQuery));
