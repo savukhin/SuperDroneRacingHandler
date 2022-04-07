@@ -66,13 +66,13 @@ const { cp } = require("original-fs");
         }
 
         var row = rows[col];
-        console.log(`Adding to row ${row} col ${col}`);
+        // console.log(`Adding to row ${row} col ${col}`);
 
         while (maxRows < row + 1)
             createRow();
         
         var cellDiv = generateCell(facility);
-        console.log(`cell = ${cellDiv}`);
+        // console.log(`cell = ${cellDiv}`);
         getCell(col, row).append(cellDiv);
         rows[col]++;
 

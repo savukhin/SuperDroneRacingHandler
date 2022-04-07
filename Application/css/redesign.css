@@ -53,6 +53,20 @@
     background-color: red;
 }
 
+.map-row {
+    position: relative;
+    top: 50%;
+    left: 5%;
+    width: 90%;
+    height: 10px;
+    z-index: 0;
+    /* background-color: blue; */
+}
+
+#row_3 {
+    top: 75%;
+}
+
 .grid-2col {
     width: 100%;
     display: grid;
