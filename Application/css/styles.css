@@ -16,7 +16,8 @@ h2 {
 
 .topnav {
     overflow: hidden;
-    background-color: #143642;
+    /* background-color: #143642; */
+    background-color: var(--second-bg-color);
     position: fixed;
     text-align: center;
     top: 32px;
@@ -91,7 +92,8 @@ body {
     text-align: center;
     outline: none;
     color: #fff;
-    background-color: #0f8b8d;
+    /* background-color: #0f8b8d; */
+    background-color: var(--additional-color);
     border: none;
     border-radius: 5px;
     -webkit-touch-callout: none;
@@ -103,16 +105,22 @@ body {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.button:hover:enabled {
+    background-color: var(--block-color);
+}
+
 .button:active:enabled {
-    background-color: #0f8b8d;
+    /* background-color: #0f8b8d; */
+    background-color: var(--frame-color);
     box-shadow: 2 2px #CDCDCD;
     transform: translateY(2px);
 }
 
 button:disabled,
 button[disabled] {
-    border: 1px solid #999999;
-    background-color: #cccccc;
+    border: none;
+    /* background-color: #cccccc; */
+    background-color: var(--main-bg-color);
     color: #666666;
 }
 

@@ -14,7 +14,7 @@ const { cp } = require("original-fs");
         $('#main_table').find('tr').each(function () {
             var trow = $(this);
             if (trow.index() === 0) {
-                trow.append(`<td>${type}</td>`);
+                trow.append(`<th>${type}</th>`);
             } else {
                 trow.append(`<td id="td_col_${col}_row_${row}"></td>`);
                 row++;
@@ -29,13 +29,13 @@ const { cp } = require("original-fs");
         var code = `<div class="table-wrapper">`;
 
         var img = generateFacilityElem(facility);
-        code += `<div class="grid-cell" style="border: black solid 1px">${img}</div>`;           
+        code += `<div class="grid-cell">${img}</div>`;           
             
         if (NonNumerableFacilities.has(facility.type))
-            code += ` <div class="grid-cell" style="border: black solid 1px; grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
+            code += ` <div class="grid-cell" style="grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
         else
-            code += ` <div class="grid-cell" style="border: black solid 1px">${facility.number}</div>
-                <div class="grid-cell" style="border: black solid 1px; background: ${facility.color}"></div>`;
+            code += ` <div class="grid-cell">${facility.number}</div>
+                <div class="grid-cell" style="background: ${facility.color}"></div>`;
 
         code += `</div>`;
 
