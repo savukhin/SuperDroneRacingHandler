@@ -136,6 +136,34 @@
     -webkit-mask-box-image: url(../img/gates/Gate-1000-blacked.png);
 }
 
+.flag-element {
+    height: 100%;
+    width: 100%;
+    background-color: blue;
+    -webkit-mask-box-image: url(../img/gates/Flag-1000-blacked.png);
+}
+
+.marker-element {
+    height: 100%;
+    width: 100%;
+    background-color: blue;
+    -webkit-mask-box-image: url(../img/gates/Marker-1000-blacked.png);
+}
+
+.mat-element {
+    height: 100%;
+    width: 100%;
+    background-color: blue;
+    -webkit-mask-box-image: url(../img/gates/Mat-1000-blacked.png);
+}
+
+.receiver-element {
+    height: 100%;
+    width: 100%;
+    background-color: blue;
+    -webkit-mask-box-image: url(../img/gates/Receiver-1000-blacked.png);
+}
+
 #table_box td {
     background-color: tomato;
     height: 80px;

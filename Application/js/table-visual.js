@@ -17,8 +17,8 @@ const { cp } = require("original-fs");
                 trow.append(`<td>${type}</td>`);
             } else {
                 trow.append(`<td id="td_col_${col}_row_${row}"></td>`);
+                row++;
             }
-            row++;
         });
 
         columns.push(type);
@@ -29,27 +29,28 @@ const { cp } = require("original-fs");
         var code = `<div class="table-wrapper">`;
 
         var img = generateFacilityElem(facility);
+        code += `<div class="grid-cell" style="border: black solid 1px">${img}</div>`;           
+            
         if (NonNumerableFacilities.has(facility.type))
-            code += `<div class="grid-cell" style="border: black solid 1px; grid-column-start: 1; grid-column-end: 3;">${img}</div>`;
+            code += ` <div class="grid-cell" style="border: black solid 1px; grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
         else
-            code += `<div class="grid-cell" style="border: black solid 1px">${img}</div>
-            <div class="grid-cell" style="border: black solid 1px">${facility.number}</div>`;
+            code += ` <div class="grid-cell" style="border: black solid 1px">${facility.number}</div>
+                <div class="grid-cell" style="border: black solid 1px; background: ${facility.color}"></div>`;
 
-        code += ` <div class="grid-cell" style="border: black solid 1px; background: ${facility.color}"></div>
-        </div>`
+        code += `</div>`;
 
         return code;
     }
 
     function createRow() {
         var cols = columns.length;
-        maxRows++;
         
-        var code = `<tr id="tr_row_${rows}">`;
+        var code = `<tr id="tr_row_${maxRows}">`;
         for (var i = 0; i < cols; i++)
-            code += `<td id="td_col_${i}_row_${rows}"></td>`;
+            code += `<td id="td_col_${i}_row_${maxRows}"></td>`;
         code += `</tr>`;
-
+        
+        maxRows++;
         $('#main_table').append(code);
     }
 
@@ -63,13 +64,15 @@ const { cp } = require("original-fs");
             createColumn(facility.type);
             col = columns.indexOf(facility.type);
         }
-        
+
         var row = rows[col];
+        console.log(`Adding to row ${row} col ${col}`);
 
         while (maxRows < row + 1)
             createRow();
         
         var cellDiv = generateCell(facility);
+        console.log(`cell = ${cellDiv}`);
         getCell(col, row).append(cellDiv);
         rows[col]++;
 

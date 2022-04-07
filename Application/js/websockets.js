@@ -15,8 +15,10 @@ const axios = require('axios');
     }
 
     Websockets.onLoad = function (event) {
-        // addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
-        // addFacility(new Facility("2", null, 2, '#00ff00', null, 'gate'));
+        addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
+        addFacility(new Facility("2", null, 2, '#00ff00', null, 'flag'));
+        addFacility(new Facility("3", null, 3, '#0000ff', null, 'receiver'));
+        addFacility(new Facility("4", null, 4, '#00ffff', null, 'mat'));
     }
 
     function addFacility(facility) {
