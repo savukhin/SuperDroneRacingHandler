@@ -81,28 +81,51 @@
 
 #map_line {
     position: relative;
-    top: 25%;
-    left: 5%;
-    width: 90%;
+    top: calc(50% - 10px);
     height: 10px;
     z-index: 0;
     background-color: var(--additional-color);
+    grid-row-start: 1;
+    grid-column-start: 1;
+}
+
+#map_grid {
+    display: grid;
+    height: 100%;
+    /* grid-template-columns: auto 400px; */
+    grid-template-rows: 1fr 1fr 1fr;
+    /* border: solid 1px; */
+}
+
+.drag-zone {
+    height: 100%;
+    position: absolute;
+    pointer-events: none;
+    top: 0px;
+    /* background-color: red; */
+    z-index: 11;
 }
 
 .map-row {
     position: relative;
-    top: 25%;
-    left: 5%;
-    height: 10px;
+    height: 50px;
     z-index: 0;
+    /* background-color: blue; */
+}
+
+#row_1 {
+    grid-row-start: 1;
+    grid-column-start: 1;
 }
 
 #row_2 {
-    top: 50%;
+    grid-row-start: 2;
+    grid-column-start: 1;
 }
 
 #row_3 {
-    top: 75%;
+    grid-row-start: 3;
+    grid-column-start: 1;
 }
 
 .grid-2col {
@@ -144,10 +167,26 @@
 }
 
 .map-element {
-    display: table-cell;
     z-index: 10;
-    width: 100px;
-    transform: translateY(-50%);
+    height: 100%;
+    /* background-color: lime; */
+    display: inline-block;
+    position: relative;
+}
+
+.map-element .hold {
+    border: solid 4px;
+}
+
+.drag-line {
+    width: 10px;
+    height: 100%;
+    background-color: green;
+    position: absolute;
+}
+
+.invisible {
+    display: none;
 }
 
 .map-element .facility-element {
@@ -155,7 +194,9 @@
     width: 50px;
     position: absolute;
     left: 50%;
+    top: 50%;
     transform: translate(-50%, -50%);
+    /* top:0px; */
 }
 
 .facility-element {

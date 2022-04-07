@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Super Tengen Toppa Neon Genesis DroneRacing Program X</title>
+  <title>Steiner's Super Tengen Toppa Neon Genesis DroneRacing Program X</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/var-colors.css">
@@ -61,11 +61,13 @@
       <div class="content-wrapper">
 
         <div id="map_box" class="box">
-          <div class="block scrollable scrollable-x">
-            <div id="map_line"></div>
-            <!-- <div id="row_1" class="map-row"></div> -->
-            <div id="row_2" class="map-row"></div>
-            <div id="row_3" class="map-row"></div>
+          <div class="block scrollable scrollable-x scrollable-y" style="padding: 10px">
+            <div id="map_grid">
+              <div id="map_line" style="position: relative; grid-row-start: 1; grid-column-start: 1"></div>
+              <div id="row_1" class="map-row"></div>
+              <div id="row_2" style="grid-row-start: 2; grid-column-start: 1" class="map-row"></div>
+              <div id="row_3" style="grid-row-start: 3; grid-column-start: 1" class="map-row"></div>
+            </div>
           </div>
         </div>
 
@@ -93,9 +95,12 @@
               <div id="pickerBoxContainer">
                 <div id="pickerBox">
                   <div id="color_display" class="color-display"></div>
-                  <p><input id="red" min=0 max=255 value=0 type="range" class="red-slider" oninput="Action.changeRangeColor(event, 'red', this.value)"/></p>
-                  <p><input id="lime" min=0 max=255 value=0 type="range" class="lime-slider" oninput="Action.changeRangeColor(event, 'lime', this.value)"/></p>
-                  <p><input id="blue" min=0 max=255 value=0 type="range" class="blue-slider" oninput="Action.changeRangeColor(event, 'blue', this.value)"/></p>
+                  <p><input id="red" min=0 max=255 value=0 type="range" class="red-slider"
+                      oninput="Action.changeRangeColor(event, 'red', this.value)" /></p>
+                  <p><input id="lime" min=0 max=255 value=0 type="range" class="lime-slider"
+                      oninput="Action.changeRangeColor(event, 'lime', this.value)" /></p>
+                  <p><input id="blue" min=0 max=255 value=0 type="range" class="blue-slider"
+                      oninput="Action.changeRangeColor(event, 'blue', this.value)" /></p>
                   <button class="button" onclick="Action.handleColorPicker(event, false)">Cancel</button>
                   <button class="button" onclick="Action.handleColorPicker(event, true)">OK</button>
                 </div>

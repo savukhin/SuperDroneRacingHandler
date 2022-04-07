@@ -14,7 +14,7 @@ const axios = require('axios');
         't' : FacilityTypes.MAT,
     }
 
-    Websockets.onLoad = function (event) {
+    function testAdd() {
         addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
         addFacility(new Facility("2", null, 2, '#00ff00', null, 'flag'));
         addFacility(new Facility("3", null, 3, '#000000', null, 'marker'));
@@ -26,7 +26,14 @@ const axios = require('axios');
         addFacility(new Facility("3", null, 3, '#ffffff', null, 'marker'));
 
         addFacility(new Facility("6", null, 6, '#0000ff', null, 'receiver'));
+        addFacility(new Facility("16", null, 16, '#ff0000', null, 'receiver'));
+        addFacility(new Facility("26", null, 26, '#000000', null, 'receiver'));
+        addFacility(new Facility("36", null, 36, '#ff00ff', null, 'receiver'));
         addFacility(new Facility("7", null, 7, '#00ffff', null, 'mat'));
+    }
+
+    Websockets.onLoad = function (event) {
+        testAdd();
     }
 
     function addFacility(facility) {
