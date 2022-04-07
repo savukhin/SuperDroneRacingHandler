@@ -62,11 +62,6 @@
         <div id="map_box" class="box">
           <div class="block">
             <div id="map_line"></div>
-            <!-- <div class="map-element">
-              <div class="block" style="background-color: #aaaaaa; z-index:inherit">
-                <div class="gate-element"></div>
-              </div>
-            </div> -->
           </div>
         </div>
 
@@ -91,44 +86,14 @@
             </div>
             <br>
             <div class="tabcontent" id="action_colors">
-              <!--<div class="outer-color-pick">
-                <div class='color-pick' style="background: red"></div>
-              </div>
-              <div class="outer-color-pick">
-                <div class='color-pick' style="background: blue"></div>
-              </div>
-              <div class="outer-color-pick">
-                <div class='color-pick' style="background: lime"></div>
-              </div>
-              <div class="outer-color-pick">
-                <div class='color-pick' style="background: yellow"></div>
-              </div>
-              <div class="outer-color-pick">
-                <div class='color-pick' style="background: magenta"></div>
-              </div>
-              <br>
-              <div class="outer-color-pick">
-                <div class='color-pick' style="background: cyan"></div>
-              </div>
-              <div class="outer-color-pick">
-                <div class='color-pick' style="background: white"></div>
-              </div>
-              <div class="outer-color-pick">
-                <div class='color-pick' style="background: black"></div>
-              </div>
-              <div class="outer-color-pick">
-                <div class='color-pick' style="background: #dddddd"></div>
-              </div>
-              <div class="outer-color-pick" onclick="Action.openColorPicker(event)">
-                <div class='color-pick' style="background: #bbbbbb"></div>
-              </div>-->
               <div id="pickerBoxContainer">
                 <div id="pickerBox">
-                  <div id="color_display${number}" class="color-display"></div>
-                  <p><input id="red" min=0 max=255 value=0 type="range" class="red-slider" oninput="Action.changeRangeColor(event, 'red', this.value)" /></p>
-                  <p><input id="blue" min=0 max=255 value=0 type="range" class="blue-slider" /></p>
-                  <p><input id="green" min=0 max=255 value=0 type="range" class="green-slider" /></p>
-                  <button class="button" onclicke="Action.handleColorPicker(event)">OK</button>
+                  <div id="color_display" class="color-display"></div>
+                  <p><input id="red" min=0 max=255 value=0 type="range" class="red-slider" oninput="Action.changeRangeColor(event, 'red', this.value)"/></p>
+                  <p><input id="lime" min=0 max=255 value=0 type="range" class="lime-slider" oninput="Action.changeRangeColor(event, 'lime', this.value)"/></p>
+                  <p><input id="blue" min=0 max=255 value=0 type="range" class="blue-slider" oninput="Action.changeRangeColor(event, 'blue', this.value)"/></p>
+                  <button class="button" onclick="Action.handleColorPicker(event, false)">Cancel</button>
+                  <button class="button" onclick="Action.handleColorPicker(event, true)">OK</button>
                 </div>
               </div>
             </div>

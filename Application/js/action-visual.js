@@ -73,13 +73,18 @@
     var colorPicker = document.getElementById("pickerBoxContainer");
 
     Action.openColorPicker = function (event) {
+        var customColor = $('custom_color').css("background-color");
+        $(`#color_display`).css("background-color", customColor);
+
         if (colorPicker.style.display != 'block')
             colorPicker.style.display = 'block';
         else
             colorPicker.style.display = 'none';
     }
 
-    Action.handleColorPicker = function (event) {
+    Action.handleColorPicker = function (event, accept) {
+        if (accept)
+                $(`#custom_color`).css("background-color", getSlidersColor);
         colorPicker.style.display = 'none';
     }
 
@@ -96,7 +101,11 @@
         chosen = facility;
     }
 
-
+    function getSlidersColor() {
+        return parseColors(document.getElementById(`red`).value,
+            document.getElementById(`lime`).value,
+            document.getElementById(`blue`).value)
+    }
 
     Action.changeRangeColor = function (event, colorType, value) {
         const element = event.target
@@ -117,7 +126,8 @@
         element.style.setProperty('--background', final_color)
 
         // changeColorDisplay(number, getSlidersColor(number))
-        $(`prev_color`).css("background-color", final_color);
+        $(`#color_display`).css("background-color", getSlidersColor());
+        // $(`prev_color`).css("background-color", final_color);
     }
 
     function getFinalColor() {
