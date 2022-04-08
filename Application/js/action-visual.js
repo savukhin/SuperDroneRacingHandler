@@ -128,7 +128,6 @@
         } else {
             $(reset_button).css("display", "none");
         }
-        // console.log()
     }
 
     function getSlidersColor() {
@@ -155,9 +154,7 @@
 
         element.style.setProperty('--background', final_color)
 
-        // changeColorDisplay(number, getSlidersColor(number))
         $(`#color_display`).css("background-color", getSlidersColor());
-        // $(`prev_color`).css("background-color", final_color);
     }
 
     function getFinalColor() {

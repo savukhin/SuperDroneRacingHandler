@@ -79,9 +79,7 @@ const axios = require('axios');
         }
 
         if (facility.type == FacilityTypes.RECEIVER) {
-            // console.log(`Number is ${event.data.slice(9)}`);
             var count = parseInt(event.data.slice(8));
-            console.log(`find res = ${$(facility.descrDiv).find('p').html()} count = ${count} slice=${event.data.slice(8)}`);
             $(facility.descrDiv).find('p').html(count);
         }
 
@@ -112,7 +110,6 @@ const axios = require('axios');
                     return isFacility;
                 }
 
-
                 console.log(`Res is ${res.data}`);
                 var conv = convertation[res.data[0]];
                 var color = res.data.slice(1, );
@@ -142,7 +139,6 @@ const axios = require('axios');
         });
 
         refresh_button.disabled = true
-console.log("START REFRESH");
         find().then(devices => {
             devices.forEach(device => {
                 var ip = device.ip
@@ -155,10 +151,9 @@ console.log("START REFRESH");
                     if (!isFacility[0])
                         return
 
-                    var number = gateways.length;
+                    var number = gateways.length + 1;
                     gateways.push(ip);
                     var socket = makeWebSocket(ip);
-                    console.log(`socket is ${socket} isFacility ${isFacility}`);
                     addFacility(new Facility(ip, socket, number,
                         isFacility[1], undefined, isFacility[0]));
                 })
@@ -168,13 +163,10 @@ console.log("START REFRESH");
                 Websockets.deleteFacility(gateways.indexOf(elem))
             })
             refresh_button.disabled = false;
-            console.log("ENABLE");
         })
-        console.log("END REFRESH");
     }
 
     Websockets.toggle = function (facility, message) {
-        // send(number, getDisplayColor(number))
         facility.websocket.send(message);
     }
 

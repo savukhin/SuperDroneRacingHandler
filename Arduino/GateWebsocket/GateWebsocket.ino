@@ -14,7 +14,8 @@ enum FacilityType {
   MAT = 't'
 };
 
-FacilityType facilityType = FacilityType::RECEIVER;
+//FacilityType facilityType = FacilityType::RECEIVER;
+FacilityType facilityType = FacilityType::FLAG;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -154,7 +155,7 @@ void setup(){
   // Start server
   server.begin();
 
-  if (facilityType = FacilityType::RECEIVER) {
+  if (facilityType == FacilityType::RECEIVER) {
     receiverSetup();
   } else {
     buttonSetup();
@@ -165,7 +166,7 @@ void setup(){
 
 void loop() {
   bool updated = false;
-  if (facilityType = FacilityType::RECEIVER) {
+  if (facilityType == FacilityType::RECEIVER) {
     updated = receiverLoop();
   } else {
     updated = buttonLoop();

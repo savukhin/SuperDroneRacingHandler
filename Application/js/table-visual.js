@@ -15,6 +15,16 @@ const { cp } = require("original-fs");
             var trow = $(this);
             if (trow.index() === 0) {
                 trow.append(`<th>${type}</th>`);
+            } else if (trow.index() == 1) {
+                var code = `<div class="table-wrapper">`;
+                code += `<div class="grid-cell">Type</div>`;
+                if (NonDescriptionalFacilities.has(type))
+                    code += ` <div class="grid-cell" style="grid-column-start: 2; grid-column-end: 4;"> Color </div>`;
+                else
+                    code += ` <div class="grid-cell">${FacilityDesciptions[type]}</div>
+                        <div class="grid-cell indicator">Color</div>`;
+                code += `</div>`;
+                trow.append(`<th>${code}</th>`);
             } else {
                 trow.append(`<td id="td_col_${col}_row_${row}"></td>`);
                 row++;

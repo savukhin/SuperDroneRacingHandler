@@ -14,6 +14,13 @@ const FacilityTypes = {
     MAT : "mat",
 };
 
+const FacilityDesciptions = {
+    "gate" : 'Number',
+    "flag" : 'Number',
+    "marker" : 'Number',
+    "receiver" : 'Count',
+}
+
 const NonDescriptionalFacilities = new Set([
     FacilityTypes.MAT,
 ]);
