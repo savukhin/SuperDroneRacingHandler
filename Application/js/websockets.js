@@ -64,14 +64,28 @@ const axios = require('axios');
         var address = event.origin.slice(5)
         // var number = gateways.indexOf(address)
         console.log(`Got data ${event.data} address ${address}`)
-        if (event.data.match('^' + colorRegexp + '$').length != 1) {
+        var facility = facilities[address];
+        if (facility == undefined)
+            return false;
+        
+        var regexp = '^' + colorRegexp;
+        if (facility.type == FacilityTypes.RECEIVER)
+            regexp += '-\\d*';
+        regexp += '$';
+
+        var match = event.data.match(regexp);
+        console.log(`match is ${match} regexp is ${regexp}`)
+        if (match == null || match.length != 1) {
             console.log("Decline");
-            return;
+            return false;
         }
 
-        var newColor = event.data;
+        if (facility.type == FacilityTypes.RECEIVER) {
+            console.log(`Number is ${event.data.slice(9)}`);
+        }
+
+        var newColor = event.data.slice(0, 7);
         
-        var facility = facilities[address];
         var map = $(facility.mapDiv);
         $(facility.mapDiv).css('background-color', newColor);
         $(facility.tableDiv).css('background-color', newColor);

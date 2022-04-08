@@ -3,28 +3,8 @@
 #include <ESPAsyncWebServer.h>
 #include "animations.h"
 #include "button_actions.h"
-#include "colors.h"
-
-/*
-#define corrector 10
-#define delayCorrection 300
-#define debug false  //true for debug
-#define CapLoss 20
-#define bDelay 50
-#define hDelay 2500
-#define baton 12*/
-
-
-// Replace with your network credentials
-const char* ssid = "HonorView10";
-const char* password = "saveliythebest";
-
-//const char* ssid = "WS_Lab7";
-//const char* password = "ws2020ws";
-
-//int V = 0;
-//int cells = 0;
-//bool offFlag = 0;
+#include "receiver.h"
+#include "global_variables.h"
 
 enum FacilityType {
   GATE = 'g',
@@ -34,7 +14,7 @@ enum FacilityType {
   MAT = 't'
 };
 
-FacilityType facilityType = FacilityType::GATE;
+FacilityType facilityType = FacilityType::RECEIVER;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -46,7 +26,10 @@ String getFinalColor() {
 
 void notifyClients() {
   //ws.textAll(String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount)));
-  ws.textAll(getFinalColor());
+  String answer = getFinalColor();
+   if (facilityType == FacilityType::RECEIVER)
+    answer += "-" + String(num);
+  ws.textAll(answer);
 }
 
 bool isColor(uint8_t *data, int len) {
@@ -139,7 +122,6 @@ void setup(){
   pinMode(outputRed, OUTPUT);
   pinMode(outputGreen, OUTPUT);
   pinMode(outputBlue, OUTPUT);
-  buttonSetup();
 //  checkMode();
 
   //pinMode(A0, INPUT);
@@ -166,11 +148,22 @@ void setup(){
   // Start server
   server.begin();
 
+  if (facilityType = FacilityType::RECEIVER) {
+    receiverSetup();
+  } else {
+    buttonSetup();
+  }
+
   startBlinking(5, 3);
 }
 
 void loop() {
-  bool updated = buttonLoop();
+  bool updated = false;
+  if (facilityType = FacilityType::RECEIVER) {
+    updated = receiverLoop();
+  } else {
+    updated = buttonLoop();
+  }
   if (updated)
     notifyClients();
   if (offFlag != 1)

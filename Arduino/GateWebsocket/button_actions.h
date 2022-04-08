@@ -1,63 +1,18 @@
 #ifndef BUTTON_ACTIONS_H
 #define BUTTON_ACTIONS_H
 
-#include "colors.h"
-
-#define corrector 10
-#define delayCorrection 300
-#define debug false  //true for debug
-#define CapLoss 20
-#define bDelay 50
-#define hDelay 1250
-#define baton 12
-#define output5 5
-#define output4 4
-#define output0 3
-#define buttonPin 12
-
-String output5State = "off";
-String output4State = "off";
-String output0State = "off";
-
-int buttonState = 0;
-int lastButtonState = 0;
-short V = 0;
-short maxVal = 0;
-short minVal = 1000;
-//int V2 = 0;
-//int V3 = 0;
-int cells = 0;
-bool offFlag = 0;
-
-unsigned long currentTime = millis();
-unsigned long previousTime = 0;
-const long timeoutTime = 500;
+#include "global_variables.h"
 
 int workMode = 0;
 int buttstate = 0;
 int a = 0;
 
-byte lastMode = 0;
-bool flagBlock = true;
-bool holdBlock = true;
-bool holdFlag = false;
-bool bLast = 0;
-bool flag = 0;
-bool bState = 0;
-unsigned long disLastTime = 0;
-unsigned long trigTime = 0;
-unsigned long upTime = 0;
+
 
 //Setup***************************************
 
 void buttonSetup() {
-  pinMode(output5, OUTPUT);
-  pinMode(output4, OUTPUT);
-  pinMode(output0, OUTPUT);
   pinMode(buttonPin, INPUT);
-//  digitalWrite(output5, LOW);
-//  digitalWrite(output4, LOW);
-//  digitalWrite(output0, LOW);
 
   if (debug == 1) Serial.begin(9600);
   pinMode(A0, INPUT);
@@ -171,6 +126,18 @@ void telemetryOut(){
   if (offFlag == 1 && debug == 1) Serial.print("Flag triggered");
 }
 
+void cellOffAnim(int index) {
+    digitalWrite(outputGreen, LOW);
+    digitalWrite(outputRed, HIGH);
+    digitalWrite(outputBlue, LOW);
+    
+    delay(500);
+    digitalWrite(outputGreen, LOW);
+    digitalWrite(outputRed, LOW);
+    digitalWrite(outputBlue, LOW);
+    delay(500);
+}
+
 bool buttonLoop() {
   bool updated = checkButtonMode();
   
@@ -186,17 +153,9 @@ bool buttonLoop() {
   }
 
   if (offFlag == 1) {
-      for (a; a < cells; a++) {
-        digitalWrite(outputGreen, LOW);
-        digitalWrite(outputRed, HIGH);
-        digitalWrite(outputBlue, LOW);
-        
-        delay(500);
-        digitalWrite(outputGreen, LOW);
-        digitalWrite(outputRed, LOW);
-        digitalWrite(outputBlue, LOW);
-        delay(500);
-     }
+    for (a; a < cells; a++) {
+      cellOffAnim(a);
+    }
   }
   return updated;
 }
