@@ -2,17 +2,17 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include "animations.h"
+#include "button_actions.h"
+#include "colors.h"
 
+/*
 #define corrector 10
 #define delayCorrection 300
 #define debug false  //true for debug
 #define CapLoss 20
 #define bDelay 50
 #define hDelay 2500
-#define baton 12
-#define outputRed 4
-#define outputGreen 5
-#define outputBlue 3
+#define baton 12*/
 
 
 // Replace with your network credentials
@@ -22,9 +22,9 @@ const char* password = "saveliythebest";
 //const char* ssid = "WS_Lab7";
 //const char* password = "ws2020ws";
 
-int V = 0;
-int cells = 0;
-bool offFlag = 0;
+//int V = 0;
+//int cells = 0;
+//bool offFlag = 0;
 
 enum FacilityType {
   GATE = 'g',
@@ -35,10 +35,6 @@ enum FacilityType {
 };
 
 FacilityType facilityType = FacilityType::GATE;
-
-int redCount = 0;
-int blueCount = 0;
-int greenCount = 0;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -143,7 +139,8 @@ void setup(){
   pinMode(outputRed, OUTPUT);
   pinMode(outputGreen, OUTPUT);
   pinMode(outputBlue, OUTPUT);
-  checkMode();
+  buttonSetup();
+//  checkMode();
 
   //pinMode(A0, INPUT);
   
@@ -168,9 +165,14 @@ void setup(){
 
   // Start server
   server.begin();
+
+  startBlinking(5, 3);
 }
 
 void loop() {
+  bool updated = buttonLoop();
+  if (updated)
+    notifyClients();
   if (offFlag != 1)
     checkMode();
       
