@@ -31,10 +31,10 @@ const { cp } = require("original-fs");
         var img = generateFacilityElem(facility);
         code += `<div class="grid-cell">${img}</div>`;           
             
-        if (NonNumerableFacilities.has(facility.type))
+        if (NonDescriptionalFacilities.has(facility.type))
             code += ` <div class="grid-cell indicator" style="grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
         else
-            code += ` <div class="grid-cell">${facility.number}</div>
+            code += ` <div class="grid-cell description"><p>${facility.number}</p></div>
                 <div class="grid-cell indicator" style="background: ${facility.color}"></div>`;
 
         code += `</div>`;
@@ -83,7 +83,10 @@ const { cp } = require("original-fs");
 
         query = $(getCell(col, row)).find('.indicator');
         facility.indicatorDiv = query;
-        // facility.tableDiv = elem;
+
+        query = $(getCell(col, row)).find('.description');
+        facility.descrDiv = query;
+
         rows[col]++;
 
         var overlay = document.createElement('div');

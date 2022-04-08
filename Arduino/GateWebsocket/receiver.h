@@ -47,7 +47,8 @@ bool tensShowFlag = false;
 //-------------------------------------------------End of Indicator Var
 
 //-------------------------------------------------------------------------------------------------------------Indicator Custom Functions
-void checkNum() {
+bool checkNum() {
+  bool updated = false;
   bState = digitalRead(Baton);
 
   if (bState != flag && bState != bLast) {
@@ -65,11 +66,13 @@ void checkNum() {
     else if (holdFlag == false) {
       holdBlock = true;
       num ++; //for press
+      updated = true;
       //if(debug)Serial.println("Press");
       //if(debug)Serial.println(num);
     }
     else holdFlag = false;
   }
+  return updated;
 }
 
 //
@@ -346,6 +349,7 @@ bool checkReceiverMode() {
     holdFlagMode = true;
     tensFlag = false;
     num = 0; //Annulate workmode
+    updated = true;
   }
 
   return updated;
@@ -383,7 +387,7 @@ bool receiverLoop() {
 
 
   //------------------------------------------------------------------------------------------------------------Indicator Loop Code
-  checkNum();
+  updated = updated + checkNum();
   if (num != lastNum) {
     if (num <= 9) {
       updateIndRegState(num);

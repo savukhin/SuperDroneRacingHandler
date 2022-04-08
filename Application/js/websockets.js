@@ -62,8 +62,6 @@ const axios = require('axios');
 
     function onMessage(event) {
         var address = event.origin.slice(5)
-        // var number = gateways.indexOf(address)
-        console.log(`Got data ${event.data} address ${address}`)
         var facility = facilities[address];
         if (facility == undefined)
             return false;
@@ -81,7 +79,10 @@ const axios = require('axios');
         }
 
         if (facility.type == FacilityTypes.RECEIVER) {
-            console.log(`Number is ${event.data.slice(9)}`);
+            // console.log(`Number is ${event.data.slice(9)}`);
+            var count = parseInt(event.data.slice(8));
+            console.log(`find res = ${$(facility.descrDiv).find('p').html()} count = ${count} slice=${event.data.slice(8)}`);
+            $(facility.descrDiv).find('p').html(count);
         }
 
         var newColor = event.data.slice(0, 7);
@@ -179,6 +180,10 @@ console.log("START REFRESH");
 
     Websockets.blink = function (facility, count = 3) {
         facility.websocket.send(`blink-${count}`);
+    }
+
+    Websockets.reset = function (facility) {
+        facility.websocket.send(`reset`);
     }
 
 }(window.Websockets = window.Websockets || {}, jQuery));

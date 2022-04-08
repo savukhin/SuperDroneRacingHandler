@@ -1,3 +1,5 @@
+// const { Facility } = require("./facility");
+
 (function (Action, $, undefined) {
     var chosen = null;
 
@@ -121,6 +123,11 @@
 
         Action.chosen = facility;
         console.log(`choose element ${facility}`);
+        if (facility.type == FacilityTypes.RECEIVER) {
+            $(reset_button).css("display", "inline-block");
+        } else {
+            $(reset_button).css("display", "none");
+        }
         // console.log()
     }
 
@@ -169,6 +176,10 @@
     Action.blink = function (event) {
         // var color = getFinalColor();
         Websockets.blink(Action.chosen);
+    }
+
+    Action.reset = function (event) {
+        Websockets.reset(Action.chosen);
     }
 
 }(window.Action = window.Action || {}, jQuery));

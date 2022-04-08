@@ -14,8 +14,7 @@ const FacilityTypes = {
     MAT : "mat",
 };
 
-const NonNumerableFacilities = new Set([
-    FacilityTypes.RECEIVER,
+const NonDescriptionalFacilities = new Set([
     FacilityTypes.MAT,
 ]);
 
@@ -38,6 +37,7 @@ class Facility {
         this.mapDiv = null;
         this.tableDiv = null;
         this.indicatorDiv = null;
+        this.descrDiv = null;
     }
 
     erase() {

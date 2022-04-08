@@ -82,13 +82,19 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
     if (blink != -1 ) {
       startBlinking(blink, 1);
       
-      //notifyClients();
       return;
    }
 
-   if (!isColor(data, len)) {
+   if (facilityType == FacilityType::RECEIVER && strcmp((char*)data, "reset") == 0) {
+      num = 0;
+      notifyClients();
       return;
     }
+
+    if (!isColor(data, len)) {
+      return;
+    }
+    
 
     redCount = hexToDec(data[1]) * 16 + hexToDec(data[2]);
     greenCount = hexToDec(data[3]) * 16 + hexToDec(data[4]);

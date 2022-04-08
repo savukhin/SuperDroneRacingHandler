@@ -52,7 +52,7 @@
   <div id="main">
 
     <div class="topnav">
-      <button class="button topnav-element" id="settings_button" onclick="settings()"> Settings </button>
+      <!-- <button class="button topnav-element" id="settings_button" onclick="settings()"> Settings </button> -->
       <button class="button topnav-element" id="refresh_button" onclick="Websockets.refresh()"> Refresh </button>
     </div>
     <br><br><br>
@@ -119,8 +119,10 @@
               </select>
             </div>
             <br>
-            <button class="button" onClick="Action.toggle(event)">Send</button>
-            <button class="button" onClick="Action.blink(event)">Blink</button>
+            <button id="send_button" class="button" onClick="Action.toggle(event)">Send</button>
+            <button id="blink_button" class="button" onClick="Action.blink(event)">Blink</button>
+            <br><br>
+            <button id="reset_button" class="button" onClick="Action.reset(event)">Reset</button>
           </div>
         </div>
       </div>
