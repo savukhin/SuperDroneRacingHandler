@@ -19,6 +19,9 @@
 const char* ssid = "HonorView10";
 const char* password = "saveliythebest";
 
+//const char* ssid = "WS_Lab7";
+//const char* password = "ws2020ws";
+
 int V = 0;
 int cells = 0;
 bool offFlag = 0;
@@ -156,7 +159,7 @@ void setup(){
   initWebSocket();
  
   server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/html", String(char(facilityType)));
+    request->send(200, "text/html", String(char(facilityType)) + getFinalColor());
   });
   
   server.on("/STATE", HTTP_GET, [](AsyncWebServerRequest *request){

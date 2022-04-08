@@ -33,7 +33,7 @@ const axios = require('axios');
     }
 
     Websockets.onLoad = function (event) {
-        testAdd();
+        // testAdd();
     }
 
     function addFacility(facility) {
@@ -66,15 +66,26 @@ const axios = require('axios');
 
     async function checkFacility(ip, port) {
         var isFacility = false;
+        var regexp = `^[`
+        for (const [key, value] of Object.entries(convertation)) {
+            regexp += key + ',';
+        }
+        regexp += ']#[a-fA-F0-9]{6}$';
+
         const response = await axios
             .get(`http://${ip}:${port}/DOYOUGATE`)
             .then(res => {
+                if (res.data.match(regexp).length != 1) {
+                    return isFacility;
+                }
+
+
                 console.log(`Res is ${res.data}`);
-                var conv = convertation[res.data];
+                var conv = convertation[res.data[0]];
+                var color = res.data.slice(1, );
                 console.log(`conv is ${conv}`);
                 if (conv != undefined)
-                    isFacility = conv;
-                
+                    isFacility = [conv, color];
             })
             .catch(error => {
                 isFacility = false;
@@ -98,7 +109,7 @@ const axios = require('axios');
         });
 
         refresh_button.disabled = true
-
+console.log("START REFRESH");
         find().then(devices => {
             devices.forEach(device => {
                 var ip = device.ip
@@ -108,23 +119,25 @@ const axios = require('axios');
                 }
 
                 checkFacility(ip, 80).then(isFacility => {
-                    if (!isFacility)
+                    if (!isFacility[0])
                         return
 
                     var number = gateways.length;
                     gateways.push(ip);
                     var socket = makeWebSocket(ip);
-                    console.log(`socket is ${socket}`);
+                    console.log(`socket is ${socket} isFacility ${isFacility}`);
                     addFacility(new Facility(ip, socket, number,
-                        new Color(), undefined, isFacility));
+                        isFacility[1], undefined, isFacility[0]));
                 })
             })
 
             check_gateways.forEach(elem => {
                 Websockets.deleteFacility(gateways.indexOf(elem))
             })
-            refresh_button.disabled = false
+            refresh_button.disabled = false;
+            console.log("ENABLE");
         })
+        console.log("END REFRESH");
     }
 
     Websockets.toggle = function (facility, message) {
