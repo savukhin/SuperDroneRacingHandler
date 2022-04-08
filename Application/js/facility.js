@@ -37,6 +37,7 @@ class Facility {
         this.type = type
         this.mapDiv = null;
         this.tableDiv = null;
+        this.indicatorDiv = null;
     }
 
     erase() {

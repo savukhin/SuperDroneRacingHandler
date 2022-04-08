@@ -78,7 +78,7 @@
             var overlay = document.createElement('div');
             overlay.className = "overlay";
             overlay.onclick = function (event) {
-                Action.chooseElement(event, facility);
+                Action.chooseElement(facility);
             }
     
             $(div).children().append(overlay);
@@ -127,6 +127,10 @@
 
             $(this.div).append(element);
             this.elements[index] = element;
+
+            var query = $(element).find('.facility-element').children().not('.overlay')
+            console.log(`map DIV!!! find ${query.attr('class')}`);
+            facility.mapDiv = query;
         }
 
         push_back(facility) {

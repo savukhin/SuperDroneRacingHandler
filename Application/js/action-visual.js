@@ -2,7 +2,7 @@
     var chosen = null;
 
     Action.colorPick = function (color) {
-        if (chosen == null)
+        if (Action.chosen == null)
             return;
 
         $(`#state_display_after`).children().children().css(`background-color`, `${color}`);
@@ -92,7 +92,12 @@
         colorPicker.style.display = 'none';
     }
 
-    Action.chooseElement = function (event, facility) {
+    Action.chooseElement = function (facility) {
+        if (Action.chosen != null) {
+            $(`#state_display_before`).html('');
+            $(`#state_display_after`).html('');
+        }
+
         var code = generateFacilityElem(facility);
 
         $(`#state_display_before`).html(
@@ -102,7 +107,9 @@
             code
         );
 
-        chosen = facility;
+        Action.chosen = facility;
+        console.log(`choose element ${facility}`);
+        // console.log()
     }
 
     function getSlidersColor() {
@@ -144,12 +151,12 @@
     Action.toggle = function (event) {
         var color = getFinalColor();
         $('#prev_color').css('background-color', color);
-        Websockets.toggle(chosen, color);
+        Websockets.toggle(Action.chosen, color);
     }
 
     Action.blink = function (event) {
         // var color = getFinalColor();
-        Websockets.blink(chosen);
+        Websockets.blink(Action.chosen);
     }
 
 }(window.Action = window.Action || {}, jQuery));

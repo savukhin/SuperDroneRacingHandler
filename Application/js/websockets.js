@@ -5,7 +5,9 @@ const axios = require('axios');
 
 (function (Websockets, $, undefined) {
     var gateways = [];
-    let facilities = new Set();
+    // let facilities = new Set();
+    let facilities = {};
+    var colorRegexp = '#[a-fA-F0-9]{6}';
     const convertation = {
         'g': FacilityTypes.GATE,
         'f' : FacilityTypes.FLAG,
@@ -39,7 +41,8 @@ const axios = require('axios');
     function addFacility(facility) {
         Table.addFacility(facility);
         Map.addFacility(facility);
-        facilities.add(facility);
+        // facilities.add(facility);
+        facilities[facility.ip] = facility;
     }
 
     function makeWebSocket(ip) {
@@ -59,9 +62,24 @@ const axios = require('axios');
 
     function onMessage(event) {
         var address = event.origin.slice(5)
-        var number = gateways.indexOf(address)
+        // var number = gateways.indexOf(address)
+        console.log(`Got data ${event.data} address ${address}`)
+        if (event.data.match('^' + colorRegexp + '$').length != 1) {
+            console.log("Decline");
+            return;
+        }
 
-        console.log(`Got data ${event.data} to ${number}`)
+        var newColor = event.data;
+        
+        var facility = facilities[address];
+        var map = $(facility.mapDiv);
+        $(facility.mapDiv).css('background-color', newColor);
+        $(facility.tableDiv).css('background-color', newColor);
+        $(facility.indicatorDiv).css('background-color', newColor);
+        facility.color = newColor;
+
+        if (Action.chosen == facility)
+            Action.chooseElement(facility);
     }
 
     async function checkFacility(ip, port) {
@@ -70,7 +88,7 @@ const axios = require('axios');
         for (const [key, value] of Object.entries(convertation)) {
             regexp += key + ',';
         }
-        regexp += ']#[a-fA-F0-9]{6}$';
+        regexp += ']' + colorRegexp + '$';
 
         const response = await axios
             .get(`http://${ip}:${port}/DOYOUGATE`)

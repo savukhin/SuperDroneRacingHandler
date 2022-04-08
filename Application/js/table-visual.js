@@ -32,10 +32,10 @@ const { cp } = require("original-fs");
         code += `<div class="grid-cell">${img}</div>`;           
             
         if (NonNumerableFacilities.has(facility.type))
-            code += ` <div class="grid-cell" style="grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
+            code += ` <div class="grid-cell indicator" style="grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
         else
             code += ` <div class="grid-cell">${facility.number}</div>
-                <div class="grid-cell" style="background: ${facility.color}"></div>`;
+                <div class="grid-cell indicator" style="background: ${facility.color}"></div>`;
 
         code += `</div>`;
 
@@ -74,12 +74,22 @@ const { cp } = require("original-fs");
         var cellDiv = generateCell(facility);
         // console.log(`cell = ${cellDiv}`);
         getCell(col, row).append(cellDiv);
+        // var elem = $(getCell(col, row)).children().children();
+        var query = $(getCell(col, row))
+            .find('.facility-element').children()
+            .not('.overlay').not('.drag-line').not('.drag-zone');
+
+        facility.tableDiv = query;
+
+        query = $(getCell(col, row)).find('.indicator');
+        facility.indicatorDiv = query;
+        // facility.tableDiv = elem;
         rows[col]++;
 
         var overlay = document.createElement('div');
         overlay.className = "overlay";
         overlay.onclick = function(event) {
-            Action.chooseElement(event, facility);
+            Action.chooseElement(facility);
         }
 
         getCell(col, row).append(overlay);
