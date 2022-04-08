@@ -154,6 +154,10 @@
     display: none;
 }
 
+.warning {
+    background-color: var(--warning-color);
+}
+
 #pickerBox {
     z-index: 10;
     padding: 20px;
