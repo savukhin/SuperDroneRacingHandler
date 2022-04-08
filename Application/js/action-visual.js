@@ -51,6 +51,9 @@
             function (event) { Action.openColorPicker() });
 
         $(customColor).children().attr("id", "custom_color");
+        $(customColor).append(`
+            <img id="picker_settting_img" src="img/icons/settings-black.png"/>
+        `);
 
         div.append(customColor);
 
@@ -85,8 +88,17 @@
 
     Action.handleColorPicker = function (event, accept) {
         if (accept) {
-            $(`#custom_color`).css("background-color", getSlidersColor());
-            Action.colorPick(getSlidersColor());
+            var color = getSlidersColor();
+            $(`#custom_color`).css("background-color", color);
+            Action.colorPick(color);
+
+            var res = hexToRgb(color);
+            var brightness = (res.r + res.g + res.b) / 3;
+
+            if (brightness < 125)
+                $(`#picker_settting_img`).attr('src', 'img/icons/settings-white.png');
+            else
+                $(`#picker_settting_img`).attr('src', 'img/icons/settings-black.png');
         }
 
         colorPicker.style.display = 'none';

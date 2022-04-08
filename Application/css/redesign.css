@@ -177,7 +177,16 @@
     font-size: 20px;
     margin: 5px;
     padding: 7px 20px;
+}
 
+#picker_settting_img {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
 }
 
 .map-element {

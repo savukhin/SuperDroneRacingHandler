@@ -47,6 +47,7 @@ body {
     height: 40px;
     padding: 2px;
     display: inline-block;
+    position: relative;
 }
 
 .color-pick {
