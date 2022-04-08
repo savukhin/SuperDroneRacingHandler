@@ -7,6 +7,7 @@
     }
 
     class Row {
+        facilities = []
         elements = [];
         dragZones = []
         lines = [];
@@ -120,17 +121,18 @@
         put(facility, index) {
             var element = this.generateElement(facility, index);
             $(element).css('width', this.singleWidth + 'px');
-            if (index == 0)
-                console.log("!!!!!!!!!!!!!!!!!")
-            console.log(`elements ${this.elements}`);
+            // if (index == 0)
+                // console.log("!!!!!!!!!!!!!!!!!")
+            // console.log(`elements ${this.elements}`);
             this.addZone(index + 1);
 
             $(this.div).append(element);
             this.elements[index] = element;
 
             var query = $(element).find('.facility-element').children().not('.overlay')
-            console.log(`map DIV!!! find ${query.attr('class')}`);
+            // console.log(`map DIV!!! find ${query.attr('class')}`);
             facility.mapDiv = query;
+            this.facilities[index] = facility;
         }
 
         push_back(facility) {
@@ -142,6 +144,29 @@
 
         getMaxLen() {
             return this.singleWidth * (this.elements.length + 1);
+        }
+
+        findFacility(facility) {
+            return this.facilities.indexOf(facility);
+        }
+
+        deleteFacility(facility) {
+            var index = this.findFacility(facility);
+            // console.log(`index is ${index} len is ${fa}`);
+            if (index == -1)
+                return false;
+            
+            // $(facility.mapDiv).parent().parent();
+            // .css("background-color", "blue");
+            // $(this.elements[index]).css("background-color", "blue");
+            // $(this.dragZones[index]).css("background-color", "red");
+            // $(this.lines[index]).css("background-color", "black");
+            $(this.elements[index]).remove();
+            $(this.dragZones[index]).remove();
+            $(this.lines[index]).remove();
+            delete this.elements[index];
+            delete this.dragZones[index];
+            delete this.lines[index];
         }
     }
 
@@ -170,6 +195,13 @@
     Map.addFacility = function (facility) {
         var row = typeToRow[facility.type];
         rows[row].push_back(facility);
+    }
+
+    Map.deleteFacility = function (facility) {
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].deleteFacility(facility) == true)
+                break;
+        }
     }
 
 }(window.Map = window.Map || {}, jQuery));

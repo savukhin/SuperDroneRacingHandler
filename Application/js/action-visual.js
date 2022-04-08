@@ -136,6 +136,10 @@
             document.getElementById(`blue`).value)
     }
 
+    Action.deleteFacility = function(facility) {
+
+    }
+
     Action.changeRangeColor = function (event, colorType, value) {
         const element = event.target
         var final_color = ""
