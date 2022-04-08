@@ -35,6 +35,8 @@ class Facility {
         this.color = color
         this.div = div
         this.type = type
+        this.mapDiv = null;
+        this.tableDiv = null;
     }
 
     erase() {

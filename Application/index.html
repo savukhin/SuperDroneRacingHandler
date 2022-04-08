@@ -16,7 +16,7 @@
     <div id="drag-region">
 
       <div id="window-title">
-        <span>Super Neon Genesis DroneRacing Program X</span>
+        <span>Steiner's Super Tengen Toppa Neon Genesis DroneRacing Program X</span>
       </div>
 
       <div id="window-controls">
@@ -82,9 +82,11 @@
 
         <div id="action_box" class="box">
           <div class="block">
-            <div id="action_tabs" class="grid-2col">
-              <button class="button" onclick="Action.changeTab(event, 'action_colors')">Color</button>
-              <button class="button" onclick="Action.changeTab(event, 'action_animations')">Anim</button>
+            <div id="action_tabs" style="height:50px; font-size: 30px;" class="grid-2col">
+              <!-- <button class="button" onclick="Action.changeTab(event, 'action_colors')">Color</button> -->
+              <!-- <button class="button" onclick="Action.changeTab(event, 'action_animations')">Anim</button> -->
+              <p>Before</p>
+              <p>After</p>
             </div>
             <div id="action_display" class="grid-2col">
               <div id="state_display_before" class="state_display"></div>
@@ -101,8 +103,11 @@
                       oninput="Action.changeRangeColor(event, 'lime', this.value)" /></p>
                   <p><input id="blue" min=0 max=255 value=0 type="range" class="blue-slider"
                       oninput="Action.changeRangeColor(event, 'blue', this.value)" /></p>
-                  <button class="button" onclick="Action.handleColorPicker(event, false)">Cancel</button>
-                  <button class="button" onclick="Action.handleColorPicker(event, true)">OK</button>
+                  <br>
+                  <div class="grid-2col" style="border: 1px solid white">
+                    <button style="grid-column-start: 1;" class="button" onclick="Action.handleColorPicker(event, false)">Cancel</button>
+                    <button style="grid-column-start: 2;" class="button" onclick="Action.handleColorPicker(event, true)">OK</button>
+                  </div>
                 </div>
               </div>
             </div>

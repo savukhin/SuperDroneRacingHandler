@@ -17,6 +17,7 @@
             pick.className = "color-pick";
             pick.style.background = `${color}`;
             pick.onclick = function (event) {
+                var color = $(this).css('background-color');
                 Action.colorPick(color);
 
                 if (onclickCallback != undefined)
@@ -83,8 +84,11 @@
     }
 
     Action.handleColorPicker = function (event, accept) {
-        if (accept)
-                $(`#custom_color`).css("background-color", getSlidersColor);
+        if (accept) {
+            $(`#custom_color`).css("background-color", getSlidersColor());
+            Action.colorPick(getSlidersColor());
+        }
+
         colorPicker.style.display = 'none';
     }
 
@@ -139,6 +143,7 @@
 
     Action.toggle = function (event) {
         var color = getFinalColor();
+        $('#prev_color').css('background-color', color);
         Websockets.toggle(chosen, color);
     }
 

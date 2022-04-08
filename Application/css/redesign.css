@@ -163,7 +163,17 @@
     width: 200px;
     height: 270px;
     transform: translate(-50%);
-    background: #333;
+    /* background: #333; */
+    background-color: var(--main-bg-color);
+    border: 1px solid var(--second-bg-color);
+    box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
+}
+
+#pickerBox .button {
+    font-size: 20px;
+    margin: 5px;
+    padding: 7px 20px;
+
 }
 
 .map-element {
