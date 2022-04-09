@@ -68,3 +68,15 @@
 #reset_button {
     display: none;
 }
+
+#red::-webkit-slider-runnable-track {
+    background: linear-gradient(0.25turn, #000, red);
+}
+
+#lime::-webkit-slider-runnable-track {
+    background: linear-gradient(0.25turn, #000, lime);
+}
+
+#blue::-webkit-slider-runnable-track {
+    background: linear-gradient(0.25turn, #000, blue);
+}

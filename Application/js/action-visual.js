@@ -166,16 +166,22 @@
     }
 
     Action.toggle = function (event) {
+        if (Action.chosen == null)
+            return;
         var color = getFinalColor();
         $('#prev_color').css('background-color', color);
         Websockets.toggle(Action.chosen, color);
     }
 
     Action.blink = function (event) {
+        if (Action.chosen == null)
+            return;
         Websockets.blink(Action.chosen);
     }
 
     Action.reset = function (event) {
+        if (Action.chosen == null)
+            return;
         Websockets.reset(Action.chosen);
     }
 

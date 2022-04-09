@@ -13,6 +13,7 @@ function createWindow() {
         minHeight: 700,
         frame: false,
         backgroundColor: '#FFF',
+        fullscreen : true,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true,
@@ -26,7 +27,7 @@ function createWindow() {
         slashes: true
     }))
 
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
     win.setMenu(null)
 

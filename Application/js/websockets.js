@@ -36,7 +36,6 @@ const axios = require('axios');
         for (const [key, value] of Object.entries(facilities)) {
             gateways.push(value.ip);
         }
-        console.log(`gateways is ${gateways}`);
     }
 
     Websockets.testDelete = function () {
@@ -46,7 +45,7 @@ const axios = require('axios');
     }
 
     Websockets.onLoad = function (event) {
-        testAdd();
+        // testAdd();
     }
 
     function addFacility(facility) {
