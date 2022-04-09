@@ -2,37 +2,42 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include "animations.h"
+#include "button_actions.h"
+#include "receiver.h"
+#include "global_variables.h"
 
-#define corrector 10
-#define delayCorrection 300
-#define debug false  //true for debug
-#define CapLoss 20
-#define bDelay 50
-#define hDelay 2500
-#define baton 12
-#define outputRed 4
-#define outputGreen 5
-#define outputBlue 3
+enum FacilityType {
+  GATE = 'g',
+  FLAG = 'f',
+  MARKER = 'm',
+  RECEIVER = 'r',
+  MAT = 't'
+};
 
-
-// Replace with your network credentials
-const char* ssid = "HonorView10";
-const char* password = "saveliythebest";
-
-int V = 0;
-int cells = 0;
-bool offFlag = 0;
-
-int redCount = 0;
-int blueCount = 0;
-int greenCount = 0;
+FacilityType facilityType = FacilityType::RECEIVER;
+//FacilityType facilityType = FacilityType::FLAG;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
 
+String getFinalColor() {
+  return String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount));
+}
+
+String getAnswer() {
+  String answer = getFinalColor();
+  if (facilityType == FacilityType::RECEIVER)
+    answer += "-" + String(num);
+  return answer;
+}
+
 void notifyClients() {
-  ws.textAll(String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount)));
+  //ws.textAll(String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount)));
+//  String answer = getFinalColor();
+//   if (facilityType == FacilityType::RECEIVER)
+//    answer += "-" + String(num);
+  ws.textAll(getAnswer());
 }
 
 bool isColor(uint8_t *data, int len) {
@@ -85,13 +90,19 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
     if (blink != -1 ) {
       startBlinking(blink, 1);
       
-      //notifyClients();
       return;
    }
 
-   if (!isColor(data, len)) {
+   if (facilityType == FacilityType::RECEIVER && strcmp((char*)data, "reset") == 0) {
+      num = 0;
+      notifyClients();
       return;
     }
+
+    if (!isColor(data, len)) {
+      return;
+    }
+    
 
     redCount = hexToDec(data[1]) * 16 + hexToDec(data[2]);
     greenCount = hexToDec(data[3]) * 16 + hexToDec(data[4]);
@@ -125,7 +136,7 @@ void setup(){
   pinMode(outputRed, OUTPUT);
   pinMode(outputGreen, OUTPUT);
   pinMode(outputBlue, OUTPUT);
-  checkMode();
+//  checkMode();
 
   //pinMode(A0, INPUT);
   
@@ -141,14 +152,36 @@ void setup(){
   initWebSocket();
  
   server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/html", "YES");
+//    request->send(200, "text/html", String(char(facilityType)) + getFinalColor());
+    request->send(200, "text/html", String(char(facilityType)) + getAnswer());
+  });
+  
+  server.on("/STATE", HTTP_GET, [](AsyncWebServerRequest *request){
+//    request->send(200, "text/html", getFinalColor());
+    request->send(200, "text/html", getAnswer());
   });
 
   // Start server
   server.begin();
+
+  if (facilityType == FacilityType::RECEIVER) {
+    receiverSetup();
+  } else {
+    buttonSetup();
+  }
+
+  startBlinking(5, 3);
 }
 
 void loop() {
+  bool updated = false;
+  if (facilityType == FacilityType::RECEIVER) {
+    updated = receiverLoop();
+  } else {
+    updated = buttonLoop();
+  }
+  if (updated)
+    notifyClients();
   if (offFlag != 1)
     checkMode();
       

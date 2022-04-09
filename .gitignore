@@ -43,6 +43,11 @@ build/Release
 # Dependency directories
 node_modules/
 application-win32-x64/
+application-win32-ia32/
+application-win32-arm64/
+application-linux-x64/
+application-linux-ia32/
+application-linux-arm64/
 jspm_packages/
 
 # Snowpack dependency directory (https://snowpack.dev/)

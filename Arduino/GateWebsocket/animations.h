@@ -1,3 +1,6 @@
+#ifndef ANIMATIONS_H
+#define ANIMATIONS_H
+
 bool blinking = false;
 float startAnimationTime = -1;
 float animationSpeed = 1;
@@ -44,3 +47,4 @@ void checkAnimationEnd() {
   }
 }
 
+#endif

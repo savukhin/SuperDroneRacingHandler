@@ -15,13 +15,13 @@ h2 {
 }
 
 .topnav {
-    overflow: hidden;
-    background-color: #143642;
+    background-color: var(--second-bg-color);
     position: fixed;
     text-align: center;
     top: 32px;
     left: 0;
     width: 100%;
+    z-index: 100;
 }
 
 .topnav-element {
@@ -37,9 +37,8 @@ body {
 }
 
 .content {
-    padding: 30px;
-    max-width: 100%;
-    margin: 0 auto;
+    width: 100%;
+    height: calc(100% - 100px);
 }
 
 .outer-color-pick {
@@ -47,6 +46,7 @@ body {
     height: 40px;
     padding: 2px;
     display: inline-block;
+    position: relative;
 }
 
 .color-pick {
@@ -92,7 +92,7 @@ body {
     text-align: center;
     outline: none;
     color: #fff;
-    background-color: #0f8b8d;
+    background-color: var(--additional-color);
     border: none;
     border-radius: 5px;
     -webkit-touch-callout: none;
@@ -104,16 +104,20 @@ body {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.button:hover:enabled {
+    background-color: var(--block-color);
+}
+
 .button:active:enabled {
-    background-color: #0f8b8d;
+    background-color: var(--frame-color);
     box-shadow: 2 2px #CDCDCD;
     transform: translateY(2px);
 }
 
 button:disabled,
 button[disabled] {
-    border: 1px solid #999999;
-    background-color: #cccccc;
+    border: none;
+    background-color: var(--main-bg-color);
     color: #666666;
 }
 
@@ -132,7 +136,6 @@ input[type=range] {
 }
 
 input[type=range]::-webkit-slider-runnable-track {
-    /*background: #fafafa;*/
     background: var(--slider-color, #fafafa);
     border: 0.2px solid #010101;
     border-radius: 1.3px;
