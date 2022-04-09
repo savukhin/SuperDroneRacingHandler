@@ -7,7 +7,7 @@ let win
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 900,
+        width: 1200,
         height: 800,
         minWidth: 810,
         minHeight: 700,
@@ -26,10 +26,10 @@ function createWindow() {
         slashes: true
     }))
 
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
     win.setMenu(null)
-    win.maximize();
+    // win.maximize();
 
     require('@electron/remote/main').initialize()
     require("@electron/remote/main").enable(win.webContents)

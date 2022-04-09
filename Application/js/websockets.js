@@ -1,11 +1,9 @@
 const find = require('local-devices');
 const axios = require('axios');
-// const {Facility, Color} = require('./js/gate')
 
 
 (function (Websockets, $, undefined) {
     var gateways = [];
-    // let facilities = new Set();
     let facilities = {};
     var colorRegexp = '#[a-fA-F0-9]{6}';
     const convertation = {
@@ -45,7 +43,7 @@ const axios = require('axios');
     }
 
     Websockets.onLoad = function (event) {
-        testAdd();
+        // testAdd();
     }
 
     function addFacility(facility) {
