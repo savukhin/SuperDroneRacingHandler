@@ -112,21 +112,34 @@ const axios = require('axios');
         for (const [key, value] of Object.entries(convertation)) {
             regexp += key + ',';
         }
-        regexp += ']' + colorRegexp + '$';
+        regexp += ']' + colorRegexp;
 
         const response = await axios
             .get(`http://${ip}:${port}/DOYOUGATE`)
             .then(res => {
+                if (res.data.length < 1)
+                    return false;
+                
+                if (res.data[0] == 'r')
+                    regexp += '-\\d*';
+                regexp += '$';
+
                 if (res.data.match(regexp).length != 1) {
                     return isFacility;
                 }
-
+                
                 console.log(`Res is ${res.data}`);
                 var conv = convertation[res.data[0]];
-                var color = res.data.slice(1,);
+                var color = res.data.slice(1,8);
                 console.log(`conv is ${conv}`);
-                if (conv != undefined)
-                    isFacility = [conv, color];
+                if (conv == undefined)
+                    return false;
+                
+                isFacility = [conv, color];
+                if (conv == FacilityTypes.RECEIVER) {
+                    isFacility.push(parseInt(res.data.slice(9, )));
+                    console.log("Res isfacility is " + isFacility);
+                }
             })
             .catch(error => {
                 isFacility = false;
@@ -183,8 +196,15 @@ const axios = require('axios');
                     var number = gateways.length + 1;
                     gateways.push(ip);
                     var socket = makeWebSocket(ip);
-                    addFacility(new Facility(ip, socket, number,
-                        isFacility[1], undefined, isFacility[0]));
+
+                    var facility = new Facility(ip, socket, number,
+                        isFacility[1], undefined, isFacility[0]);
+                    addFacility(facility);
+
+                    if (facility.type == FacilityTypes.RECEIVER) {
+                        var count = parseInt(isFacility[2]);
+                        $(facility.descrDiv).find('p').html(count);
+                    }
                 })
             })
 

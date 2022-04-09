@@ -14,8 +14,8 @@ enum FacilityType {
   MAT = 't'
 };
 
-//FacilityType facilityType = FacilityType::RECEIVER;
-FacilityType facilityType = FacilityType::FLAG;
+FacilityType facilityType = FacilityType::RECEIVER;
+//FacilityType facilityType = FacilityType::FLAG;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -25,12 +25,19 @@ String getFinalColor() {
   return String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount));
 }
 
+String getAnswer() {
+  String answer = getFinalColor();
+  if (facilityType == FacilityType::RECEIVER)
+    answer += "-" + String(num);
+  return answer;
+}
+
 void notifyClients() {
   //ws.textAll(String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount)));
-  String answer = getFinalColor();
-   if (facilityType == FacilityType::RECEIVER)
-    answer += "-" + String(num);
-  ws.textAll(answer);
+//  String answer = getFinalColor();
+//   if (facilityType == FacilityType::RECEIVER)
+//    answer += "-" + String(num);
+  ws.textAll(getAnswer());
 }
 
 bool isColor(uint8_t *data, int len) {
@@ -145,11 +152,13 @@ void setup(){
   initWebSocket();
  
   server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/html", String(char(facilityType)) + getFinalColor());
+//    request->send(200, "text/html", String(char(facilityType)) + getFinalColor());
+    request->send(200, "text/html", String(char(facilityType)) + getAnswer());
   });
   
   server.on("/STATE", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send(200, "text/html", getFinalColor());
+//    request->send(200, "text/html", getFinalColor());
+    request->send(200, "text/html", getAnswer());
   });
 
   // Start server

@@ -1,3 +1,20 @@
+window.addEventListener('load', visualLoad);
+
+function visualLoad(event) {
+    var dest = $('#helper').children();
+    for (var [key, value] of Object.entries(FacilityTypes)) {
+        var code = `
+        <div class="grid-2col" style="margin-bottom:10px">
+            <div class="block facility-element">
+              <div class="${value}-element"></div>
+            </div>
+            <div> ${value} </div>
+          </div>
+          `;
+        dest.append(code);
+    }
+}
+
 function makeGateDiv(number, ip) {
     var generateColorPickCode = function (color) {
         return `<div class="outer-color-pick">

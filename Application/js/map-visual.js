@@ -83,6 +83,15 @@
             overlay.onclick = function (event) {
                 Action.chooseElement(facility);
             }
+            overlay.onmouseenter = function(event){
+                $(div).css("z-index", "100");
+                var code = `<div class="map-hint">type:${facility.type} #${facility.number}</div>`;
+                $(this).append(code);
+            }
+            overlay.onmouseleave = function(event){
+                $(div).css("z-index", "10");
+                $(this).html('');
+            }
     
             $(div).children().append(overlay);
     

@@ -54,6 +54,12 @@
     <div class="topnav">
       <!-- <button class="button topnav-element" id="settings_button" onclick="settings()"> Settings </button> -->
       <button class="button topnav-element" id="refresh_button" onclick="Websockets.refresh()"> Refresh </button>
+      <div class="button topnav-element" onmouseleave="$(this).children().css('display', 'none');"
+        onmouseenter="$(this).children().css('display', 'block');" id="helper"> ?
+        <div>
+          
+        </div>
+      </div>
     </div>
     <br><br><br>
 
@@ -107,8 +113,10 @@
                       oninput="Action.changeRangeColor(event, 'blue', this.value)" /></p>
                   <br>
                   <div class="grid-2col" style="border: 1px solid white">
-                    <button style="grid-column-start: 1; grid-column-start: 1;" class="button" onclick="Action.handleColorPicker(event, true)">OK</button>
-                    <button style="grid-column-start: 2; grid-column-start: 2;" class="button warning" onclick="Action.handleColorPicker(event, false)">X</button>
+                    <button style="grid-column-start: 1; grid-column-start: 1;" class="button"
+                      onclick="Action.handleColorPicker(event, true)">OK</button>
+                    <button style="grid-column-start: 2; grid-column-start: 2;" class="button warning"
+                      onclick="Action.handleColorPicker(event, false)">X</button>
                   </div>
                 </div>
               </div>
@@ -125,7 +133,7 @@
             <button id="blink_button" class="button" onClick="Action.blink(event)">Blink</button>
             <br><br>
             <button id="reset_button" class="button" onClick="Action.reset(event)">Reset</button>
-            <!-- <button onClick="Websockets.testDelete()">DELETE!</button> -->
+            <button onClick="Websockets.testDelete()">DELETE!</button>
           </div>
         </div>
       </div>

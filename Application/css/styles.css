@@ -15,7 +15,7 @@ h2 {
 }
 
 .topnav {
-    overflow: hidden;
+    /* overflow: hidden; */
     /* background-color: #143642; */
     background-color: var(--second-bg-color);
     position: fixed;
@@ -23,6 +23,7 @@ h2 {
     top: 32px;
     left: 0;
     width: 100%;
+    z-index: 100;
 }
 
 .topnav-element {
