@@ -1,0 +1,26 @@
+#table_box td {
+    height: 80px;
+}
+#table_box td, #table_box th {
+    border: 1px solid var(--main-bg-color);
+}
+
+#main_table {
+    border-collapse:collapse;
+}
+
+.grid-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--second-bg-color);
+}
+
+#table_box .facility-element {
+    z-index: 1;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    left: calc(50% - 40px);
+}
+

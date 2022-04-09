@@ -1,0 +1,94 @@
+#map_line {
+    position: relative;
+    top: calc(50% - 10px);
+    height: 10px;
+    z-index: 0;
+    background-color: var(--additional-color);
+    grid-row-start: 1;
+    grid-column-start: 1;
+}
+
+#map_grid {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.drag-zone {
+    height: 100%;
+    position: absolute;
+    pointer-events:none;
+    top: 0px;
+    z-index: 11;
+}
+
+.map-row {
+    position: relative;
+    height: 50px;
+    z-index: 0;
+    display: flex;
+}
+
+#row_1 {
+    grid-row-start: 1;
+    grid-column-start: 1;
+}
+
+#row_2 {
+    grid-row-start: 2;
+    grid-column-start: 1;
+}
+
+#row_3 {
+    grid-row-start: 3;
+    grid-column-start: 1;
+}
+
+
+.map-element {
+    z-index: 10;
+    height: 100%;
+    display: inline-block;
+    position: relative;
+}
+
+.hold .facility-element {
+    border: solid 1px var(--frame-color);
+}
+
+.dragging * {
+    display: none;
+}
+
+.dragging .facility-element {
+    display: block;
+    background-color: var(--second-bg-color);
+    border: none;
+}
+
+.drag-line {
+    width: 5px;
+    height: 100%;
+    background-color: green;
+    position: absolute;
+}
+
+.map-element .facility-element {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.map-hint {
+    position: absolute;
+    width: auto;
+    height: auto;
+    background-color: var(--absolute-hint-color);
+    padding: 2px 3px;
+    border-radius: 10px;
+    z-index: 100;
+    box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
+}

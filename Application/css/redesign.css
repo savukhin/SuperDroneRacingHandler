@@ -78,52 +78,6 @@
     grid-row-end: 3;
 }
 
-#map_line {
-    position: relative;
-    top: calc(50% - 10px);
-    height: 10px;
-    z-index: 0;
-    background-color: var(--additional-color);
-    grid-row-start: 1;
-    grid-column-start: 1;
-}
-
-#map_grid {
-    display: grid;
-    height: 100%;
-    grid-template-rows: 1fr 1fr 1fr;
-}
-
-.drag-zone {
-    height: 100%;
-    position: absolute;
-    pointer-events:none;
-    top: 0px;
-    z-index: 11;
-}
-
-.map-row {
-    position: relative;
-    height: 50px;
-    z-index: 0;
-    display: flex;
-}
-
-#row_1 {
-    grid-row-start: 1;
-    grid-column-start: 1;
-}
-
-#row_2 {
-    grid-row-start: 2;
-    grid-column-start: 1;
-}
-
-#row_3 {
-    grid-row-start: 3;
-    grid-column-start: 1;
-}
-
 .grid-2col {
     width: 100%;
     display: grid;
@@ -134,94 +88,12 @@
     height: 80px;
 }
 
-#action_tabs>button {
-    margin: 10px;
-}
-
-#action_display {
-    height: 180px;
-}
-
-#action_display>.state_display {
-    margin: 10px;
-}
-
-#pickerBoxContainer {
-    display: none;
-}
-
 .warning {
     background-color: var(--warning-color);
 }
 
-#pickerBox {
-    z-index: 10;
-    padding: 20px;
-    position: absolute;
-    top: 300px;
-    right: 70px;
-    width: 200px;
-    height: 270px;
-    transform: translate(-50%);
-    background-color: var(--absolute-hint-color);
-    box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
-}
-
-#pickerBox .button {
-    font-size: 20px;
-    margin: 5px;
-    padding: 7px 20px;
-}
-
-#picker_settting_img {
-    position: absolute;
-    width: 60%;
-    height: 60%;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
-
-.map-element {
-    z-index: 10;
-    height: 100%;
-    display: inline-block;
-    position: relative;
-}
-
-.hold .facility-element {
-    border: solid 1px var(--frame-color);
-}
-
-.dragging * {
-    display: none;
-}
-
-.dragging .facility-element {
-    display: block;
-    background-color: var(--second-bg-color);
-    border: none;
-}
-
-.drag-line {
-    width: 5px;
-    height: 100%;
-    background-color: green;
-    position: absolute;
-}
-
 .invisible {
     display: none;
-}
-
-.map-element .facility-element {
-    height: 50px;
-    width: 50px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
 }
 
 .facility-element {
@@ -280,56 +152,6 @@
     -webkit-mask-box-image: url(../img/gates/Receiver-1000-blacked.png);
 }
 
-#table_box td {
-    height: 80px;
-}
-#table_box td, #table_box th {
-    border: 1px solid var(--main-bg-color);
-}
-
-#main_table {
-    border-collapse:collapse;
-}
-
-.grid-cell {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid var(--second-bg-color);
-}
-
-#table_box .facility-element {
-    z-index: 1;
-    position: relative;
-    width: 80px;
-    height: 80px;
-    left: calc(50% - 40px);
-}
-
-.state_display {
-    text-align: center;
-    outline: none;
-    position: relative;
-    background-color: #333;
-    border: none;
-    border-radius: 5px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-.state_display .facility-element {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-#reset_button {
-    display: none;
-}
-
 #helper {
     background-color: unset;
     border: 4px solid var(--additional-color);
@@ -338,17 +160,6 @@
     width:40px;
     height:40px;
 
-}
-
-.map-hint {
-    position: absolute;
-    width: auto;
-    height: auto;
-    background-color: var(--absolute-hint-color);
-    padding: 2px 3px;
-    border-radius: 10px;
-    z-index: 100;
-    box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
 }
 
 #helper > div {

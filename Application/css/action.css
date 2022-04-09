@@ -1,0 +1,70 @@
+
+#action_tabs>button {
+    margin: 10px;
+}
+
+#action_display {
+    height: 180px;
+}
+
+#action_display>.state_display {
+    margin: 10px;
+}
+
+#pickerBoxContainer {
+    display: none;
+}
+
+
+#pickerBox {
+    z-index: 10;
+    padding: 20px;
+    position: absolute;
+    top: 300px;
+    right: 70px;
+    width: 200px;
+    height: 270px;
+    transform: translate(-50%);
+    background-color: var(--absolute-hint-color);
+    box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
+}
+
+#pickerBox .button {
+    font-size: 20px;
+    margin: 5px;
+    padding: 7px 20px;
+}
+
+#picker_settting_img {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    top:50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+.state_display {
+    text-align: center;
+    outline: none;
+    position: relative;
+    background-color: #333;
+    border: none;
+    border-radius: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+.state_display .facility-element {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#reset_button {
+    display: none;
+}
