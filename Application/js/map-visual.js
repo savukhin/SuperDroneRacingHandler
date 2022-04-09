@@ -62,11 +62,13 @@
             div.ondragstart = function (event) {
                 this.className += ' hold';
                 row.draggingIndex = row.elements.indexOf(this);
-                setTimeout(() => (
+                setTimeout(() => {
+                    this.className += ' dragging';
+
                     row.dragZones.forEach(element => {
                         $(element).css('pointer-events', 'all');
-                    })
-                ), 0);
+                    });
+                }, 0);
             }
             div.ondragend = function (event) {
                 row.draggingIndex = -1;

@@ -198,8 +198,20 @@
     position: relative;
 }
 
-.map-element .hold {
-    border: solid 4px;
+.hold .facility-element {
+    border: solid 1px var(--frame-color);
+    /* display: ; */
+}
+
+.dragging * {
+    /* background-color: black; */
+    display: none;
+}
+
+.dragging .facility-element {
+    display: block;
+    background-color: var(--second-bg-color);
+    border: none;
 }
 
 .drag-line {
