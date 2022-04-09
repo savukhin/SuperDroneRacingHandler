@@ -45,7 +45,7 @@ const axios = require('axios');
     }
 
     Websockets.onLoad = function (event) {
-        // testAdd();
+        testAdd();
     }
 
     function addFacility(facility) {

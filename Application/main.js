@@ -7,13 +7,12 @@ let win
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 1900,
+        width: 900,
         height: 800,
         minWidth: 810,
         minHeight: 700,
         frame: false,
         backgroundColor: '#FFF',
-        fullscreen : true,
         webPreferences: {
             nodeIntegration: true,
             enableRemoteModule: true,
@@ -27,9 +26,10 @@ function createWindow() {
         slashes: true
     }))
 
-    // win.webContents.openDevTools();
+    win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
     win.setMenu(null)
+    win.maximize();
 
     require('@electron/remote/main').initialize()
     require("@electron/remote/main").enable(win.webContents)

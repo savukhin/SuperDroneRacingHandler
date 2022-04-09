@@ -9,6 +9,11 @@
     border-collapse:collapse;
 }
 
+.table-wrapper {
+    display: grid;
+    grid-template-columns: 80px 80px 80px;
+}
+
 .grid-cell {
     display: flex;
     justify-content: center;
