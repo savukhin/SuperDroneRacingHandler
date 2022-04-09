@@ -4,7 +4,6 @@ const { cp } = require("original-fs");
     Table.columns = [];
     Table.rows = [];
     Table.maxRows = 0;
-    // Table.facilities = {} // facility : [col, row]
     Table.facilities = []
 
     Table.load = function () {
@@ -35,27 +34,23 @@ const { cp } = require("original-fs");
             $(`#td_col_${col}_row_${i}`).html(
                 $(`#td_col_${col}_row_${i + 1}`).html()
             );
-            // $(`#td_col_${col}_row_${i}`).attr("id", `#td_col_${col}_row_${i - 1}`);
 
             Table.facilities[col][i] = Table.facilities[col][i + 1];
         }
 
         $(`#td_col_${col}_row_${Table.rows[col] - 1}`).html(``);
-        // $(`#td_col_${col}_row_${Table.rows[col] - 1}`).attr("id", `#td_col_${col}_row_${Table.rows[col] - 2}`);
         Table.facilities[col][Table.rows[col] - 1] = null;
 
         Table.rows[col]--;
 
         setTimeout(() => {
             for (var i = row; i < Table.rows[col]; i++) {
-                // Table.facilities[col][i].tableDiv = $(`#td_col_${col}_row_${i}`)
                 var cell = $(`#td_col_${col}_row_${i}`);
                 var query = cell
                     .find('.facility-element').children()
                     .not('.overlay').not('.drag-line').not('.drag-zone');
 
                 Table.facilities[col][i].tableDiv = query;
-                console.log(`new table div is ${$(Table.facilities[col][i].tableDiv).html()} cell is ${cell.attr("id")}`);
 
                 query = cell.find('.indicator');
                 Table.facilities[col][i].indicatorDiv = query;
@@ -153,16 +148,13 @@ const { cp } = require("original-fs");
         }
 
         var row = Table.rows[col];
-        // console.log(`Adding to row ${row} col ${col}`);
 
         while (Table.maxRows < row + 1)
             createRow();
 
         var cellDiv = generateCell(facility);
-        // console.log(`cell = ${cellDiv}`);
         getCell(col, row).append(cellDiv);
         Table.facilities[col][row] = facility;
-        // var elem = $(getCell(col, row)).children().children();
         var query = $(getCell(col, row))
             .find('.facility-element').children()
             .not('.overlay').not('.drag-line').not('.drag-zone');
@@ -185,7 +177,6 @@ const { cp } = require("original-fs");
 
         getCell(col, row).append(overlay);
         Table.facilities[facility.ip] = [col, row];
-        console.log(`adding to facilities len = ${Object.keys(Table.facilities).length}`)
     }
 
 }(window.Table = window.Table || {}, jQuery));

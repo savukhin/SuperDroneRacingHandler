@@ -52,7 +52,6 @@ const axios = require('axios');
     function addFacility(facility) {
         Table.addFacility(facility);
         Map.addFacility(facility);
-        // facilities.add(facility);
         facilities[facility.ip] = facility;
     }
 

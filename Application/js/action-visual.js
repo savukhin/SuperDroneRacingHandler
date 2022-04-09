@@ -1,5 +1,3 @@
-// const { Facility } = require("./facility");
-
 (function (Action, $, undefined) {
     var chosen = null;
 
@@ -122,7 +120,6 @@
         );
 
         Action.chosen = facility;
-        console.log(`choose element ${facility}`);
         if (facility.type == FacilityTypes.RECEIVER) {
             $(reset_button).css("display", "inline-block");
         } else {
@@ -175,7 +172,6 @@
     }
 
     Action.blink = function (event) {
-        // var color = getFinalColor();
         Websockets.blink(Action.chosen);
     }
 

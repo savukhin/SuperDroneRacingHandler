@@ -15,8 +15,6 @@ h2 {
 }
 
 .topnav {
-    /* overflow: hidden; */
-    /* background-color: #143642; */
     background-color: var(--second-bg-color);
     position: fixed;
     text-align: center;
@@ -94,7 +92,6 @@ body {
     text-align: center;
     outline: none;
     color: #fff;
-    /* background-color: #0f8b8d; */
     background-color: var(--additional-color);
     border: none;
     border-radius: 5px;
@@ -112,7 +109,6 @@ body {
 }
 
 .button:active:enabled {
-    /* background-color: #0f8b8d; */
     background-color: var(--frame-color);
     box-shadow: 2 2px #CDCDCD;
     transform: translateY(2px);
@@ -121,7 +117,6 @@ body {
 button:disabled,
 button[disabled] {
     border: none;
-    /* background-color: #cccccc; */
     background-color: var(--main-bg-color);
     color: #666666;
 }
@@ -141,7 +136,6 @@ input[type=range] {
 }
 
 input[type=range]::-webkit-slider-runnable-track {
-    /*background: #fafafa;*/
     background: var(--slider-color, #fafafa);
     border: 0.2px solid #010101;
     border-radius: 1.3px;

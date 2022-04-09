@@ -48,7 +48,6 @@ class Facility {
     }
 
     erase() {
-        // this.div.parentNode.removeChild(this.div)
         if (this.websocket != null)
             this.websocket.close()
     }

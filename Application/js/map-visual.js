@@ -35,7 +35,6 @@
         }
 
         highlightDragLine(beforeInd, state=true) {
-            // console.log(`highlight ${beforeInd} with state ${state}`);
             if (beforeInd < 0 || beforeInd > this.lines.length)
                 return false;
             this.lines[beforeInd].className = "drag-line";
@@ -132,16 +131,12 @@
         put(facility, index) {
             var element = this.generateElement(facility, index);
             $(element).css('width', this.singleWidth + 'px');
-            // if (index == 0)
-                // console.log("!!!!!!!!!!!!!!!!!")
-            // console.log(`elements ${this.elements}`);
             this.addZone(index + 1);
 
             $(this.div).append(element);
             this.elements[index] = element;
 
             var query = $(element).find('.facility-element').children().not('.overlay')
-            // console.log(`map DIV!!! find ${query.attr('class')}`);
             facility.mapDiv = query;
             this.facilities[index] = facility;
         }
