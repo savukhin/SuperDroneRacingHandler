@@ -152,21 +152,24 @@
 
         deleteFacility(facility) {
             var index = this.findFacility(facility);
-            // console.log(`index is ${index} len is ${fa}`);
             if (index == -1)
                 return false;
             
-            // $(facility.mapDiv).parent().parent();
-            // .css("background-color", "blue");
-            // $(this.elements[index]).css("background-color", "blue");
-            // $(this.dragZones[index]).css("background-color", "red");
-            // $(this.lines[index]).css("background-color", "black");
             $(this.elements[index]).remove();
             $(this.dragZones[index]).remove();
             $(this.lines[index]).remove();
-            delete this.elements[index];
-            delete this.dragZones[index];
-            delete this.lines[index];
+
+            for (var i = index + 1; i < this.dragZones.length; i++) {
+                $(this.dragZones[i]).css('left', (i - 1) * this.singleWidth + 'px');
+                $(this.lines[i]).css('left', (i - 1) * this.singleWidth + 'px');
+            }
+
+            this.elements.splice(index, 1);
+            this.dragZones.splice(index, 1);
+            this.lines.splice(index, 1);
+            
+            var newWidth = this.getMaxLen() - this.singleWidth;
+            $(this.div).css('width', newWidth + 'px');
         }
     }
 
@@ -199,8 +202,9 @@
 
     Map.deleteFacility = function (facility) {
         for (var i = 0; i < rows.length; i++) {
-            if (rows[i].deleteFacility(facility) == true)
+            if (rows[i].deleteFacility(facility) == true) {
                 break;
+            }
         }
     }
 

@@ -40,7 +40,9 @@ const axios = require('axios');
     }
 
     Websockets.testDelete = function () {
+        setTimeout( () => {
         Websockets.deleteFacility(facilities[5]);
+        }, 50);
     }
 
     Websockets.onLoad = function (event) {
