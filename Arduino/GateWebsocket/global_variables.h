@@ -18,7 +18,7 @@ int redCount = 0;
 int blueCount = 0;
 int greenCount = 0;
 
-const char* ssid = "HonorView10";
+const char  * ssid = "HonorView10";
 const char* password = "saveliythebest";
 
 //const char* ssid = "WS_Lab7";

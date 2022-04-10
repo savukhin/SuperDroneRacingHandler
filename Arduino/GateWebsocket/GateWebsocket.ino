@@ -15,10 +15,12 @@ enum FacilityType {
 };
 
 //FacilityType facilityType = FacilityType::RECEIVER;
-//FacilityType facilityType = FacilityType::FLAG;
+FacilityType facilityType = FacilityType::FLAG;
 //FacilityType facilityType = FacilityType::MAT;
-FacilityType facilityType = FacilityType::GATE;
-//FacilityType facilityType = FacilityType::MARKER;
+//FacilityType facilityType = FacilityType::GATE;
+//FacilityType facilityType = FaxcilityType::MARKER;
+
+bool connected = false;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -146,12 +148,59 @@ void setup(){
   
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
-  }
+//  while (WiFi.status() != WL_CONNECTED) {
+//    delay(1000);
+//  }
+//  int start = millis();
+//  for (int i = 0; i < 10 && WiFi.status() != WL_CONNECTED; i++) {
+//    startBlinking(1, 1, 0, 0, 255);
+//    while(blinking) {
+//      checkMode();
+//      checkAnimationEnd();
+//    }
+////    delay(1000);
+//  }
+  if (WiFi.status() == WL_CONNECTED)
+    connected = true;
+  else
+    connected = false;
 
   // Print ESP Local IP Address
 
+  if (connected) {
+    initWebSocket();
+   
+    server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest *request){
+  //    request->send(200, "text/html", String(char(facilityType)) + getFinalColor());
+      request->send(200, "text/html", String(char(facilityType)) + getAnswer());
+    });
+    
+    server.on("/STATE", HTTP_GET, [](AsyncWebServerRequest *request){
+  //    request->send(200, "text/html", getFinalColor());
+      request->send(200, "text/html", getAnswer());
+    });
+  
+    // Start server
+    server.begin();
+  }
+
+  if (facilityType == FacilityType::RECEIVER) {
+    receiverSetup();
+  } else {
+    buttonSetup();
+  }
+
+//  if (connected)
+//    startBlinking(5, 3, 0, 255, 0);
+//  else
+//    startBlinking(5, 3, 255, 0, 0);
+}
+
+bool tryConnect() {
+  if (WiFi.status() != WL_CONNECTED)
+    return false;
+    
+  connected = true;
   initWebSocket();
  
   server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -167,37 +216,38 @@ void setup(){
   // Start server
   server.begin();
 
-  if (facilityType == FacilityType::RECEIVER) {
-    receiverSetup();
-  } else {
-    buttonSetup();
-  }
+  startBlinking(5, 5, 0, 255, 0);
 
-  startBlinking(5, 3);
+  return true;
 }
 
 void loop() {
+  if (!connected)
+    tryConnect();
+    
   bool updated = false;
   if (facilityType == FacilityType::RECEIVER) {
     updated = receiverLoop();
   } else {
     updated = buttonLoop();
   }
-  if (updated)
+
+  if (updated && connected)
     notifyClients();
   if (offFlag != 1)
     checkMode();
-      
-  ws.cleanupClients();
+  if (connected) {
+    ws.cleanupClients();
+  }
 }
 
 void checkMode(){
   if (blinking) {
     float count = blinkFunctionColor();
     //ws.textAll(String("blinking with count " + String(count) + " And millis() " + String(millis()) + " End time is " + String(animationEndTime) + " Speed is" + String(animationSpeed) + " Start time = " + String(startAnimationTime)));
-    analogWrite(outputRed, count);
-    analogWrite(outputGreen, count);
-    analogWrite(outputBlue, count);
+    analogWrite(outputRed, redBlinking * count);
+    analogWrite(outputGreen, greenBlinking * count);
+    analogWrite(outputBlue, blueBlinking * count);
   } else {
     analogWrite(outputRed, redCount);
     analogWrite(outputGreen, greenCount);

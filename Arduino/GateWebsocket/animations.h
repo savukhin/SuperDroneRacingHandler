@@ -2,6 +2,9 @@
 #define ANIMATIONS_H
 
 bool blinking = false;
+int redBlinking = 0;
+int blueBlinking = 0;
+int greenBlinking = 0;
 float startAnimationTime = -1;
 float animationSpeed = 1;
 float animationEndTime = -1;
@@ -31,14 +34,17 @@ float blinkFunctionColor() {
   float x = (millis() - startAnimationTime) / 1000; // in seconds
   x *= PI;
   x *= animationSpeed;
-  return sin(abs(cos((float)x))*abs((float)x)/(float)x) * 255;
+  return sin(abs(cos((float)x))*abs((float)x)/(float)x);
 }
 
-void startBlinking(float count, float speed=1) {
+void startBlinking(float count, float speed=1, int red=255, int green=255, int blue=255) {
   blinking = true;
   startAnimationTime = millis();
   animationSpeed = speed;
   animationEndTime = startAnimationTime + count * 1000 / speed;
+  redBlinking = red;
+  greenBlinking = green;
+  blueBlinking = blue;
 }
 
 void checkAnimationEnd() {

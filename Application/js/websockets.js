@@ -139,6 +139,7 @@ const axios = require('axios');
             })
             .catch(error => {
                 isFacility = false;
+                console.log("~axious error " + error);
             })
         return isFacility;
     }
@@ -187,6 +188,7 @@ const axios = require('axios');
                 }
 
                 checkFacility(ip, 80).then(isFacility => {
+                    console.log(`is facility ${isFacility}`);
                     if (!isFacility[0])
                         return
 
