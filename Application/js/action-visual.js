@@ -51,7 +51,7 @@
             function (event) { Action.openColorPicker() });
 
         $(customColor).children().attr("id", "custom_color");
-        $(customColor).append(`
+        $(customColor).children().append(`
             <img id="picker_settting_img" src="img/icons/settings-black.png"/>
         `);
 

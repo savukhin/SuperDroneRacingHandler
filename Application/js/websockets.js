@@ -180,6 +180,7 @@ const axios = require('axios');
         find().then(devices => {
             devices.forEach(device => {
                 var ip = device.ip
+                console.log(` catch device ip ${ip}`);
                 if (gateways.includes(ip)) {
                     check_gateways.delete(ip)
                     return
@@ -205,7 +206,7 @@ const axios = require('axios');
             })
 
             check_gateways.forEach(elem => {
-                Websockets.deleteFacility(gateways.indexOf(elem))
+                Websockets.deleteFacility(facility[elem]);
             })
             refresh_button.disabled = false;
         })

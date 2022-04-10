@@ -54,6 +54,13 @@ body {
     height: 100%;
     border: black solid 1px;
     background-color: white;
+    cursor: pointer;
+}
+
+.color-pick:hover {
+    width: 120%;
+    height: 120%;
+    transform: translate(-10%, -10%);
 }
 
 .color-display {

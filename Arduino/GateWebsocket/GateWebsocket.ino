@@ -14,8 +14,11 @@ enum FacilityType {
   MAT = 't'
 };
 
-FacilityType facilityType = FacilityType::RECEIVER;
+//FacilityType facilityType = FacilityType::RECEIVER;
 //FacilityType facilityType = FacilityType::FLAG;
+//FacilityType facilityType = FacilityType::MAT;
+FacilityType facilityType = FacilityType::GATE;
+//FacilityType facilityType = FacilityType::MARKER;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
