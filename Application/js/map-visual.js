@@ -1,11 +1,4 @@
 (function (Map, $, undefined) {
-    class MapElement {
-        constructor(outline = false) {
-
-            this.outline = outline;
-        }
-    }
-
     class Row {
         facilities = []
         elements = [];
@@ -193,6 +186,8 @@
         new Row(100, initLineWidth, $(`#row_2`)), // Receivers
         new Row(100, initLineWidth, $(`#row_3`)), // Mats
     ];
+    var selectionPos = {x: 0, y: 0};
+    var isSelecting = false;
 
     Map.onLoad = function () {
     }
@@ -212,6 +207,63 @@
                 break;
             }
         }
+    }
+
+    Map.startSelection = function(event) {
+        console.log("Start");
+        if (isSelecting)
+            return;
+        
+        var pos = {x: event.pageX, 
+            y: event.pageY};
+        $("#selection").css("left", pos.x);
+        $("#selection").css("top", pos.y);
+        $("#selection").css("width", 0);
+        $("#selection").css("height", 0);
+        $("#selection").css("display", "block");
+        selectionPos.x = pos.x;
+        selectionPos.y = pos.y;
+        console.log(`start {${pos.x}, ${pos.y}}`);
+        isSelecting = true;
+    }
+
+    Map.handleSelection = function(event) {
+        if (!isSelecting)
+            return;
+        
+        var pos = {x: event.pageX, 
+            y: event.pageY};
+        var delta = {x: pos.x - selectionPos.x,
+            y: pos.y - selectionPos.y};
+            
+        if (delta.x < 0) 
+            $("#selection").css("left", pos.x);
+        else
+            $("#selection").css("left", selectionPos.x);
+
+        if (delta.y < 0)
+            $("#selection").css("top", pos.y);
+        else
+            $("#selection").css("top", selectionPos.y);
+        
+        $("#selection").css("width", Math.abs(delta.x));
+        $("#selection").css("height", Math.abs(delta.y));
+        console.log(`handle {${delta.x}, ${delta.y}}`);
+    }
+
+    Map.endSelection = function(event) {
+        console.log("END");
+        if (!isSelecting)
+            return;
+
+        $("#selection").css("display", "none");
+        var pos = {x: event.pageX, 
+            y: event.pageY};
+        var delta = {x: pos.x - selectionPos.x,
+            y: pos.y - selectionPos.y};
+
+        console.log(`end {${pos.x}, ${pos.y}}`);
+        isSelecting = false;
     }
 
 }(window.Map = window.Map || {}, jQuery));

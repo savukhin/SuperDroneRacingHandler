@@ -182,15 +182,20 @@ const axios = require('axios');
             devices.forEach(device => {
                 var ip = device.ip
                 console.log(` catch device ip ${ip}`);
-                if (gateways.includes(ip)) {
-                    check_gateways.delete(ip)
-                    return
-                }
-
+                
                 checkFacility(ip, 80).then(isFacility => {
                     console.log(`is facility ${isFacility}`);
                     if (!isFacility[0])
                         return
+
+                    if (gateways.includes(ip)) {
+                        check_gateways.delete(ip);
+
+                        // var facility = facilities[ip]
+                        // if (isFacility[0] != )
+
+                        return;
+                    }
 
                     var number = gateways.length + 1;
                     gateways.push(ip);
