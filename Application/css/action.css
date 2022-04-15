@@ -5,6 +5,7 @@
 
 #action_display {
     height: 180px;
+    position: relative;
 }
 
 #action_display>.state_display {
@@ -45,7 +46,15 @@
     pointer-events: none;
 }
 
+.state_display_container {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    padding: 10px;
+}
+
 .state_display {
+    height: 100%;
     text-align: center;
     outline: none;
     position: relative;
@@ -56,6 +65,13 @@
     -webkit-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: center;
+    align-items: baseline;
 }
 
 .state_display .facility-element {
@@ -63,6 +79,24 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.multiple-view {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.multiple-view .facility-element {
+    display: table-cell;
+    position: relative;
+    height: 30px;
+    width: 30px;
+    top: 0%;
+    left: 0%;
+    transform: none;
+    margin: 3px;
 }
 
 #reset_button {

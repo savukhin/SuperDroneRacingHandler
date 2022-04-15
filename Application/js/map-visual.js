@@ -37,17 +37,31 @@
 
         move(from, beforeInd) { // from - index
             var elem = this.elements[from];
-            var before = this.elements[beforeInd];
-            $(before).before($(elem));
+            var facility = this.facilities[from];
+            if (before < this.elements.length) {
+                var before = this.elements[beforeInd];
+                $(before).before($(elem));
 
-            this.elements.splice(from, 1);
-            this.elements.splice(beforeInd, 0, elem);
+                // this.facilities.splice(from, 1);
+                this.elements.splice(from, 1);
+                // this.facilities.splice(beforeInd, 0, facility);
+                this.elements.splice(beforeInd, 0, elem);
+            } else {
+                var afterInd = beforeInd - 1;
+                var after = this.elements[afterInd];
+                $(after).after($(elem));
+
+                // this.facilities.splice(from, 1);
+                this.elements.splice(from, 1);
+                // this.facilities.splice(afterInd, 0, facility);
+                this.elements.splice(afterInd, 0, elem);
+            }
         }
 
         generateElement(facility, index) {
             var div = document.createElement('div');
             div.innerHTML = generateFacilityElem(facility).trim();
-            div.className = "map-element";
+            div.className = "map-element selectable-zone";
             div.draggable = true;
             
             var row = this;
@@ -67,13 +81,13 @@
                 row.dragZones.forEach(element => {
                     $(element).css('pointer-events', 'none');
                 });
-                this.className = 'map-element';
+                this.className = 'map-element selectable-zone';
             }
     
             var overlay = document.createElement('div');
             overlay.className = "overlay";
             overlay.onclick = function (event) {
-                Action.chooseElement(facility);
+                Map.chooseElement(facility);
             }
             overlay.onmouseenter = function(event){
                 $(div).css("z-index", "100");
@@ -172,9 +186,13 @@
         }
 
         getObjectsBySelection(pos1, pos2) {
-            function belongs(pos) {
-                return pos.x > pos1.x && pos.x < pos2.x 
-                    && pos.y > pos1.y && pos.y < pos2.y;
+            function intersects(pos, shape) {
+                var leftX   = Math.max( pos1.x, pos.x );
+                var rightX  = Math.min( pos2.x, pos.x + shape.x );
+                var topY    = Math.max( pos1.y, pos.y );
+                var bottomY = Math.min( pos2.y, pos.y + shape.y );
+
+                return leftX <= rightX && topY <= bottomY;
             }
 
             var result = [];
@@ -182,7 +200,7 @@
                 var domElem = this.facilities[i].mapDiv[0];
                 var rect = domElem.getBoundingClientRect();
 
-                if (belongs({x: rect.x + rect.width / 2, y: rect.y + rect.height / 2})) {
+                if (intersects({x: rect.x, y: rect.y}, {x: rect.width, y: rect.height})) {
                     result.push(this.facilities[i]);
                 }
             }
@@ -234,22 +252,23 @@
         var x2 = Math.max(pos1.x, pos2.x);
         var y2 = Math.max(pos1.y, pos2.y);
 
-        console.log(`Result rect is ${x1},${y1} - ${x2},${y2}`);
-        
         var result = new Set();
         for (var i = 0; i < rows.length; i++) {
-            // result = result.concat(
-            //     rows[i].getObjectsBySelection({x: x1, y: y1}, {x: x2, y: y2})
-            // );
             var tmp = rows[i].getObjectsBySelection({x: x1, y: y1}, {x: x2, y: y2});
             result = new Set([...result, ...tmp]);
         }
         return result;
     }
 
+    Map.clearSelection = function() {
+        highlighFacilities(selectedItems, false);
+        selectedItems.clear();
+    }
+
     Map.startSelection = function(event) {
-        // selectedItems.clear();
-        if (isSelecting)
+        console.log(`start with ${event.target.className}`);
+
+        if (isSelecting || !event.target.classList.contains("selectable-zone"))
             return;
         
         var pos = {x: event.pageX, 
@@ -263,6 +282,36 @@
         selectionPos.y = pos.y;
         console.log(`start {${pos.x}, ${pos.y}}`);
         isSelecting = true;
+    }
+
+    var highlighFacilities = function(facilities, makeActive=true) {
+        facilities.forEach(facility => {
+            var overlayQuery = facility
+                .mapDiv.parent();
+
+            if (makeActive)
+                overlayQuery = overlayQuery.find(".overlay");
+            else
+                overlayQuery = overlayQuery.find(".overlay-active");
+            
+            if (overlayQuery[0] == undefined)
+                return;
+
+            if (makeActive)
+                overlayQuery[0].className = "overlay-active";
+            else
+                overlayQuery[0].className = "overlay";
+        });
+    }
+
+    var checkSelection = function(delta) {
+        var selected = getObjectsBySelection(selectionPos, {x: selectionPos.x + delta.x, y : selectionPos.y + delta.y});
+        highlighFacilities(selected);
+
+        var checker = new Set([...selectedItems].filter(x => !selected.has(x)));
+        highlighFacilities(checker, false);
+
+        selectedItems = selected;
     }
 
     Map.handleSelection = function(event) {
@@ -287,29 +336,7 @@
         $("#selection").css("width", Math.abs(delta.x));
         $("#selection").css("height", Math.abs(delta.y));
 
-        var selected = getObjectsBySelection(selectionPos, {x: selectionPos.x + delta.x, y : selectionPos.y + delta.y});
-        console.log(`selected len ${selected.size}`);
-
-        selected.forEach(facility => {
-            var overlayQuery = facility
-                .mapDiv.parent()
-                .find(".overlay");
-            
-            if (overlayQuery[0] != undefined)
-                overlayQuery[0].className = "overlay-active";
-        });
-
-        var checker = new Set([...selectedItems].filter(x => !selected.has(x)));
-        checker.forEach(facility => {
-            var overlayQuery = facility
-                .mapDiv.parent()
-                .find(".overlay-active");
-            
-            if (overlayQuery[0] != undefined)
-                overlayQuery[0].className = "overlay";
-        })
-
-        selectedItems = selected;
+        checkSelection(delta);
     }
 
     Map.endSelection = function(event) {
@@ -325,17 +352,16 @@
         console.log(`end {${pos.x}, ${pos.y}}`);
         isSelecting = false;
 
-        var selected = getObjectsBySelection(selectionPos, {x: selectionPos.x + delta.x, y : selectionPos.y + delta.y});
-        console.log(`selected len ${selected.size}`);
+        checkSelection(delta);
 
-        // selectedItems.forEach(facility => {
-        //     var overlayQuery = facility
-        //         .mapDiv.parent()
-        //         .find(".overlay-active");
+        Action.choseMultipleElements(selectedItems);
+    }
 
-        //     if (overlayQuery != undefined)
-        //         overlayQuery[0].className = "overlay";
-        // });
+    Map.chooseElement = function(facility) {
+        Action.chooseElement(facility);
+        Map.clearSelection();
+        selectedItems.add(facility);
+        highlighFacilities(selectedItems);
     }
 
 }(window.Map = window.Map || {}, jQuery));
