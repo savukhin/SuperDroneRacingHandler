@@ -98,8 +98,12 @@ const axios = require('axios');
         $(facility.indicatorDiv).css('background-color', newColor);
         facility.color = newColor;
 
-        if (Action.chosen == facility)
-            Action.chooseElement(facility);
+        if (Action.chosen != null) { 
+            if (Action.chosen == facility)
+                Action.chooseElement(Action.chosen);
+            else if (Action.chosen.has(facility))
+                Action.choseMultipleElements(Action.chosen);
+        }
     }
 
     async function checkFacility(ip, port) {
@@ -182,15 +186,20 @@ const axios = require('axios');
             devices.forEach(device => {
                 var ip = device.ip
                 console.log(` catch device ip ${ip}`);
-                if (gateways.includes(ip)) {
-                    check_gateways.delete(ip)
-                    return
-                }
-
+                
                 checkFacility(ip, 80).then(isFacility => {
                     console.log(`is facility ${isFacility}`);
                     if (!isFacility[0])
                         return
+
+                    if (gateways.includes(ip)) {
+                        check_gateways.delete(ip);
+
+                        // var facility = facilities[ip]
+                        // if (isFacility[0] != )
+
+                        return;
+                    }
 
                     var number = gateways.length + 1;
                     gateways.push(ip);
@@ -215,6 +224,7 @@ const axios = require('axios');
     }
 
     Websockets.toggle = function (facility, message) {
+        console.log(`send to ${facility.ip} message ${message}`);
         facility.websocket.send(message);
     }
 

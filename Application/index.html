@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/action.css">
 </head>
 
-<body>
+<body onmouseup="Map.endSelection(event)">
   <header id="titlebar">
     <div id="drag-region">
 
@@ -60,7 +60,7 @@
       <div class="button topnav-element" onmouseleave="$(this).children().css('display', 'none');"
         onmouseenter="$(this).children().css('display', 'block');" id="helper"> ?
         <div>
-          
+
         </div>
       </div>
     </div>
@@ -69,10 +69,12 @@
     <div id="content" class="content">
       <div class="content-wrapper">
 
-        <div id="map_box" class="box">
+        <div id="map_box" onmouseenter="Map.handleSelection(event)" onmouseup="Map.endSelection(event)"
+          onmousemove="Map.handleSelection(event)" onmousedown="Map.startSelection(event)" class="box">
+          <div id="selection"></div>
           <div class="block scrollable scrollable-x scrollable-y" style="padding: 10px">
-            <div id="map_grid">
-              <div id="map_line" style="position: relative; grid-row-start: 1; grid-column-start: 1"></div>
+            <div id="map_grid" class="selectable-zone">
+              <div id="map_line" class="selectable-zone" style="position: relative; grid-row-start: 1; grid-column-start: 1"></div>
               <div id="row_1" class="map-row"></div>
               <div id="row_2" style="grid-row-start: 2; grid-column-start: 1" class="map-row"></div>
               <div id="row_3" style="grid-row-start: 3; grid-column-start: 1" class="map-row"></div>
@@ -100,8 +102,12 @@
               <p>After</p>
             </div>
             <div id="action_display" class="grid-2col">
-              <div id="state_display_before" class="state_display"></div>
-              <div id="state_display_after" class="state_display"></div>
+              <div class="state_display_container">
+                <div id="state_display_before" class="state_display scrollable scrollable-y"></div>
+              </div>
+              <div class="state_display_container" style="left: 50%">
+                <div id="state_display_after" class="state_display scrollable scrollable-y"></div>
+              </div>
             </div>
             <br>
             <div class="tabcontent" id="action_colors">

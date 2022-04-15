@@ -92,3 +92,11 @@
     z-index: 100;
     box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
 }
+
+#selection {
+    position: absolute;
+    z-index: 10;
+    border: 1px solid var(--additional-color);
+    background-color: var(--additional-color);
+    opacity: 0.4;
+}

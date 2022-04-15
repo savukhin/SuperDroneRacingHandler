@@ -107,7 +107,7 @@
     background-color: var(--second-bg-color);
 }
 
-.overlay {
+.overlay, .overlay-active {
     border-radius: 5px;
     position: relative;
     top: -100%;
@@ -119,6 +119,10 @@
 
 .overlay:hover {
     background: rgba(255, 255, 255, 0.4);
+}
+
+.overlay-active {
+    background: rgba(106, 127, 169, 0.4);
 }
 
 .gate-element {

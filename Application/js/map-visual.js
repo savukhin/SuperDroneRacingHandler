@@ -1,11 +1,4 @@
 (function (Map, $, undefined) {
-    class MapElement {
-        constructor(outline = false) {
-
-            this.outline = outline;
-        }
-    }
-
     class Row {
         facilities = []
         elements = [];
@@ -44,17 +37,31 @@
 
         move(from, beforeInd) { // from - index
             var elem = this.elements[from];
-            var before = this.elements[beforeInd];
-            $(before).before($(elem));
+            var facility = this.facilities[from];
+            if (before < this.elements.length) {
+                var before = this.elements[beforeInd];
+                $(before).before($(elem));
 
-            this.elements.splice(from, 1);
-            this.elements.splice(beforeInd, 0, elem);
+                // this.facilities.splice(from, 1);
+                this.elements.splice(from, 1);
+                // this.facilities.splice(beforeInd, 0, facility);
+                this.elements.splice(beforeInd, 0, elem);
+            } else {
+                var afterInd = beforeInd - 1;
+                var after = this.elements[afterInd];
+                $(after).after($(elem));
+
+                // this.facilities.splice(from, 1);
+                this.elements.splice(from, 1);
+                // this.facilities.splice(afterInd, 0, facility);
+                this.elements.splice(afterInd, 0, elem);
+            }
         }
 
         generateElement(facility, index) {
             var div = document.createElement('div');
             div.innerHTML = generateFacilityElem(facility).trim();
-            div.className = "map-element";
+            div.className = "map-element selectable-zone";
             div.draggable = true;
             
             var row = this;
@@ -74,13 +81,13 @@
                 row.dragZones.forEach(element => {
                     $(element).css('pointer-events', 'none');
                 });
-                this.className = 'map-element';
+                this.className = 'map-element selectable-zone';
             }
     
             var overlay = document.createElement('div');
             overlay.className = "overlay";
             overlay.onclick = function (event) {
-                Action.chooseElement(facility);
+                Map.chooseElement(facility);
             }
             overlay.onmouseenter = function(event){
                 $(div).css("z-index", "100");
@@ -177,6 +184,28 @@
             var newWidth = this.getMaxLen() - this.singleWidth;
             $(this.div).css('width', newWidth + 'px');
         }
+
+        getObjectsBySelection(pos1, pos2) {
+            function intersects(pos, shape) {
+                var leftX   = Math.max( pos1.x, pos.x );
+                var rightX  = Math.min( pos2.x, pos.x + shape.x );
+                var topY    = Math.max( pos1.y, pos.y );
+                var bottomY = Math.min( pos2.y, pos.y + shape.y );
+
+                return leftX <= rightX && topY <= bottomY;
+            }
+
+            var result = [];
+            for (var i = 0; i < this.elements.length; i++) {
+                var domElem = this.facilities[i].mapDiv[0];
+                var rect = domElem.getBoundingClientRect();
+
+                if (intersects({x: rect.x, y: rect.y}, {x: rect.width, y: rect.height})) {
+                    result.push(this.facilities[i]);
+                }
+            }
+            return result;
+        }
     }
 
     const typeToRow = {
@@ -193,6 +222,9 @@
         new Row(100, initLineWidth, $(`#row_2`)), // Receivers
         new Row(100, initLineWidth, $(`#row_3`)), // Mats
     ];
+    var selectionPos = {x: 0, y: 0};
+    var isSelecting = false;
+    var selectedItems = new Set();
 
     Map.onLoad = function () {
     }
@@ -212,6 +244,124 @@
                 break;
             }
         }
+    }
+
+    var getObjectsBySelection = function(pos1, pos2) {
+        var x1 = Math.min(pos1.x, pos2.x);
+        var y1 = Math.min(pos1.y, pos2.y);
+        var x2 = Math.max(pos1.x, pos2.x);
+        var y2 = Math.max(pos1.y, pos2.y);
+
+        var result = new Set();
+        for (var i = 0; i < rows.length; i++) {
+            var tmp = rows[i].getObjectsBySelection({x: x1, y: y1}, {x: x2, y: y2});
+            result = new Set([...result, ...tmp]);
+        }
+        return result;
+    }
+
+    Map.clearSelection = function() {
+        highlighFacilities(selectedItems, false);
+        selectedItems.clear();
+    }
+
+    Map.startSelection = function(event) {
+        console.log(`start with ${event.target.className}`);
+
+        if (isSelecting || !event.target.classList.contains("selectable-zone"))
+            return;
+        
+        var pos = {x: event.pageX, 
+            y: event.pageY};
+        $("#selection").css("left", pos.x);
+        $("#selection").css("top", pos.y);
+        $("#selection").css("width", 0);
+        $("#selection").css("height", 0);
+        $("#selection").css("display", "block");
+        selectionPos.x = pos.x;
+        selectionPos.y = pos.y;
+        console.log(`start {${pos.x}, ${pos.y}}`);
+        isSelecting = true;
+    }
+
+    var highlighFacilities = function(facilities, makeActive=true) {
+        facilities.forEach(facility => {
+            var overlayQuery = facility
+                .mapDiv.parent();
+
+            if (makeActive)
+                overlayQuery = overlayQuery.find(".overlay");
+            else
+                overlayQuery = overlayQuery.find(".overlay-active");
+            
+            if (overlayQuery[0] == undefined)
+                return;
+
+            if (makeActive)
+                overlayQuery[0].className = "overlay-active";
+            else
+                overlayQuery[0].className = "overlay";
+        });
+    }
+
+    var checkSelection = function(delta) {
+        var selected = getObjectsBySelection(selectionPos, {x: selectionPos.x + delta.x, y : selectionPos.y + delta.y});
+        highlighFacilities(selected);
+
+        var checker = new Set([...selectedItems].filter(x => !selected.has(x)));
+        highlighFacilities(checker, false);
+
+        selectedItems = selected;
+    }
+
+    Map.handleSelection = function(event) {
+        if (!isSelecting)
+            return;
+        
+        var pos = {x: event.pageX, 
+            y: event.pageY};
+        var delta = {x: pos.x - selectionPos.x,
+            y: pos.y - selectionPos.y};
+            
+        if (delta.x < 0) 
+            $("#selection").css("left", pos.x);
+        else
+            $("#selection").css("left", selectionPos.x);
+
+        if (delta.y < 0)
+            $("#selection").css("top", pos.y);
+        else
+            $("#selection").css("top", selectionPos.y);
+        
+        $("#selection").css("width", Math.abs(delta.x));
+        $("#selection").css("height", Math.abs(delta.y));
+
+        checkSelection(delta);
+    }
+
+    Map.endSelection = function(event) {
+        if (!isSelecting)
+            return;
+
+        $("#selection").css("display", "none");
+        var pos = {x: event.pageX, 
+            y: event.pageY};
+        var delta = {x: pos.x - selectionPos.x,
+            y: pos.y - selectionPos.y};
+
+        console.log(`end {${pos.x}, ${pos.y}}`);
+        isSelecting = false;
+
+        checkSelection(delta);
+
+        Action.choseMultipleElements(selectedItems);
+    }
+
+    Map.chooseElement = function(facility) {
+        Action.chooseElement(facility);
+        Map.clearSelection();
+        selectedItems.add(facility);
+        highlighFacilities(selectedItems);
     }
 
 }(window.Map = window.Map || {}, jQuery));

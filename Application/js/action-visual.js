@@ -1,11 +1,15 @@
 (function (Action, $, undefined) {
-    var chosen = null;
+    var multiChose = false;
+    Action.chosen = null;
+    var finalColor = null;
+    var colorRegexp = '#[a-fA-F0-9]{6}';
 
     Action.colorPick = function (color) {
         if (Action.chosen == null)
             return;
 
-        $(`#state_display_after`).children().children().css(`background-color`, `${color}`);
+        $(`#state_display_after`).find('.facility-element').children().css(`background-color`, `${color}`);
+        finalColor = color;
     }
 
     function generateColors() {
@@ -105,6 +109,7 @@
     }
 
     Action.chooseElement = function (facility) {
+        multiChose = false;
         if (Action.chosen != null) {
             $(`#state_display_before`).html('');
             $(`#state_display_after`).html('');
@@ -127,13 +132,50 @@
         }
     }
 
+    Action.choseMultipleElements = function (facilities) {
+        multiChose = true;
+        if (Action.chosen != null) {
+            $(`#state_display_before`).html('');
+            $(`#state_display_after`).html('');
+        }
+
+        Action.chosen = facilities;
+        var hasReceiver = false;
+        var divBefore = document.createElement('div');
+        var divAfter = document.createElement('div');
+        // divBefore.id = "before_multiple";
+        // divAfter.id = "after_multiple";
+        divBefore.className = "multiple-view";
+        divAfter.className = "multiple-view";
+
+        Action.chosen.forEach(facility => {
+            var code = generateFacilityElem(facility);
+            $(divBefore).append(code);
+            $(divAfter).append(code);
+
+
+            if (facility.type == FacilityTypes.RECEIVER) {
+                hasReceiver = true;
+            }
+        });
+
+        $(`#state_display_before`).append(divBefore);
+        $(`#state_display_after`).append(divAfter);
+
+        if (hasReceiver) {
+            $(reset_button).css("display", "inline-block");
+        } else {
+            $(reset_button).css("display", "none");
+        }
+    }
+
     function getSlidersColor() {
         return parseColors(document.getElementById(`red`).value,
             document.getElementById(`lime`).value,
             document.getElementById(`blue`).value)
     }
 
-    Action.deleteFacility = function(facility) {
+    Action.deleteFacility = function (facility) {
 
     }
 
@@ -159,30 +201,59 @@
     }
 
     function getFinalColor() {
-        var raw_rgb = $(`#state_display_after`).children().children().css(`background-color`);
+        var match = finalColor.match(colorRegexp);
+        if (match != null && match.length == 1)
+            return finalColor;
+            
+        var raw_rgb = finalColor;
         var rgb = raw_rgb.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
 
-        return parseColors(rgb[0], rgb[1], rgb[2])
+        return parseColors(rgb[0], rgb[1], rgb[2]);
     }
 
     Action.toggle = function (event) {
-        if (Action.chosen == null)
+        console.log(`final color is ${finalColor} chosen ${Action.chosen}`);
+        if (Action.chosen == null || finalColor == null)
             return;
         var color = getFinalColor();
         $('#prev_color').css('background-color', color);
-        Websockets.toggle(Action.chosen, color);
+
+        if (multiChose) {
+            Action.chosen.forEach(facility => {
+                Websockets.toggle(facility, color);
+            });
+        } else {
+            Websockets.toggle(Action.chosen, color);
+        }
     }
 
     Action.blink = function (event) {
         if (Action.chosen == null)
             return;
-        Websockets.blink(Action.chosen);
+        // Websockets.blink(Action.chosen);
+
+        if (multiChose) {
+            Action.chosen.forEach(facility => {
+                Websockets.blink(facility);
+            });
+        } else {
+            Websockets.blink(Action.chosen);
+        }
     }
 
     Action.reset = function (event) {
         if (Action.chosen == null)
             return;
-        Websockets.reset(Action.chosen);
+        // Websockets.reset(Action.chosen);
+        if (multiChose) {
+            Action.chosen.forEach(facility => {
+                if (facility.type == FacilityTypes.RECEIVER)
+                    Websockets.reset(facility);
+            });
+        } else {
+            if (Action.chosen.type == FacilityTypes.RECEIVER)
+                Websockets.reset(Action.chosen);
+        }
     }
 
 }(window.Action = window.Action || {}, jQuery));
