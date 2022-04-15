@@ -39,42 +39,42 @@ void updateColorsButton() {
 //  workMode = newMode;
   if (offFlag != 1) {
     if (workMode == 1) {
-      redCount = 255;
-      blueCount = 255;
-      greenCount = 255;
+      globalColor.red = 255;
+      globalColor.blue = 255;
+      globalColor.green = 255;
     } else if (workMode == 2) {
-      greenCount = 255;
-      redCount = 0;
-      blueCount = 0;
+      globalColor.green = 255;
+      globalColor.red = 0;
+      globalColor.blue = 0;
     } else if (workMode == 3) {
-      greenCount = 0;
-      redCount = 255;
-      blueCount = 0;
+      globalColor.green = 0;
+      globalColor.red = 255;
+      globalColor.blue = 0;
     } else if (workMode == 4) {
-      greenCount = 0;
-      redCount = 0;
-      blueCount = 255;
+      globalColor.green = 0;
+      globalColor.red = 0;
+      globalColor.blue = 255;
     }
 
     else if (workMode == 5) {
-        greenCount = 0;
-        redCount = 255;
-        blueCount = 255;
+        globalColor.green = 0;
+        globalColor.red = 255;
+        globalColor.blue = 255;
     } else if (workMode == 6) {
-        greenCount = 255;
-        redCount = 255;
-        blueCount = 0;
+        globalColor.green = 255;
+        globalColor.red = 255;
+        globalColor.blue = 0;
     } else if (workMode == 7) {
-        greenCount = 255;
-        redCount = 0;
-        blueCount = 255;
+        globalColor.green = 255;
+        globalColor.red = 0;
+        globalColor.blue = 255;
     }
 
     else if (workMode >= 8) {
       workMode = 0;
-      greenCount = 0;
-      redCount = 0;
-      blueCount = 0;
+      globalColor.green = 0;
+      globalColor.red = 0;
+      globalColor.blue = 0;
     }
   }
 }

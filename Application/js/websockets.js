@@ -228,8 +228,10 @@ const axios = require('axios');
         facility.websocket.send(message);
     }
 
-    Websockets.blink = function (facility, count = 3) {
-        facility.websocket.send(`blink-${count}`);
+    Websockets.blink = function (facility, count=3, duration=3, color="#ffffff") { // duration in seconds
+        var message = `blink-${count}-${parseInt(duration*1000)}-${color}`;
+        console.log(`message is ${message}`);
+        facility.websocket.send(message);
     }
 
     Websockets.reset = function (facility) {

@@ -1,3 +1,4 @@
+
 #include <ESP8266WiFi.h>
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
@@ -27,7 +28,8 @@ AsyncWebServer server(80);
 AsyncWebSocket ws("/ws");
 
 String getFinalColor() {
-  return String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount));
+//  return String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount));
+  return globalColor.toString();
 }
 
 String getAnswer() {
@@ -45,56 +47,15 @@ void notifyClients() {
   ws.textAll(getAnswer());
 }
 
-bool isColor(uint8_t *data, int len) {
-  if (data[0] != '#' || len != 7) {
-    return false;
-  }
-  for (int i = 1; i < 7; i++) {
-    if ('0' <= data[i] && data[i] <= '9')
-      continue;
-    if ('a' <= data[i] && data[i] <= 'f')
-      continue;
-    return false;
-  }
-  return true;
-}
-
-int hexToDec(uint8_t data) {
-  if ('0' <= data && data <= '9')
-    return data - '0';
-  if ('a' <= data && data <= 'f')
-    return data - 'a' + 10;
-  return -1;
-}
-
-String decToHex(int number) {
-  if (number < 0 || number > 255)
-    return "00";
-  int a = number / 16;
-  int b = number % 16;
-  String answer = "ab";
-  if (a < 10)
-    answer[0] = '0' + a;
-  else
-    answer[0] = 'a' + a - 10;
-
-  if (b < 10)
-    answer[1] = '0' + b;
-  else
-    answer[1] = 'a' + b - 10;
-
-  return answer;
-}
-
 void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
   AwsFrameInfo *info = (AwsFrameInfo*)arg;
   if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT && !blinking) {
     data[len] = 0;
+    String str = toString(data, len);
 
-    int blink = isBlink(data, len);
-    if (blink != -1 ) {
-      startBlinking(blink, 1);
-
+    auto blink = isBlink(str);
+    if (blink.valid) {
+      startBlinking(blink.count, blink.getSpeed(), blink.color);
       return;
     }
 
@@ -104,14 +65,15 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
       return;
     }
 
-    if (!isColor(data, len)) {
+    if (!isColor(str)) {
       return;
     }
 
 
-    redCount = hexToDec(data[1]) * 16 + hexToDec(data[2]);
-    greenCount = hexToDec(data[3]) * 16 + hexToDec(data[4]);
-    blueCount = hexToDec(data[5]) * 16 + hexToDec(data[6]);
+//    redCount = hexToDec(data[1]) * 16 + hexToDec(data[2]);
+//    greenCount = hexToDec(data[3]) * 16 + hexToDec(data[4]);
+//    blueCount = hexToDec(data[5]) * 16 + hexToDec(data[6]);
+    globalColor = Color::fromString(str);
     notifyClients();
   }
 }
@@ -216,7 +178,7 @@ bool tryConnect() {
   // Start server
   server.begin();
 
-  startBlinking(5, 5, 0, 255, 0);
+  startBlinking(5, 5, Color { 0, 255, 0 } );
 
   return true;
 }
@@ -245,13 +207,13 @@ void checkMode() {
   if (blinking) {
     float count = blinkFunctionColor();
     //ws.textAll(String("blinking with count " + String(count) + " And millis() " + String(millis()) + " End time is " + String(animationEndTime) + " Speed is" + String(animationSpeed) + " Start time = " + String(startAnimationTime)));
-    analogWrite(outputRed, redBlinking * count);
-    analogWrite(outputGreen, greenBlinking * count);
-    analogWrite(outputBlue, blueBlinking * count);
+    analogWrite(outputRed, blinkingColor.red * count);
+    analogWrite(outputGreen, blinkingColor.green * count);
+    analogWrite(outputBlue, blinkingColor.blue * count);
   } else {
-    analogWrite(outputRed, redCount);
-    analogWrite(outputGreen, greenCount);
-    analogWrite(outputBlue, blueCount);
+    analogWrite(outputRed, globalColor.red);
+    analogWrite(outputGreen, globalColor.green);
+    analogWrite(outputBlue, globalColor.blue);
   }
   checkAnimationEnd();
 }
