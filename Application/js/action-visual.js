@@ -1,7 +1,8 @@
 (function (Action, $, undefined) {
     var multiChose = false;
-    var chosen = null;
+    Action.chosen = null;
     var finalColor = null;
+    var colorRegexp = '#[a-fA-F0-9]{6}';
 
     Action.colorPick = function (color) {
         if (Action.chosen == null)
@@ -200,16 +201,21 @@
     }
 
     function getFinalColor() {
-        var raw_rgb = $(`#state_display_after`).children().children().css(`background-color`);
+        var match = finalColor.match(colorRegexp);
+        if (match != null && match.length == 1)
+            return finalColor;
+            
+        var raw_rgb = finalColor;
         var rgb = raw_rgb.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
 
-        return parseColors(rgb[0], rgb[1], rgb[2])
+        return parseColors(rgb[0], rgb[1], rgb[2]);
     }
 
     Action.toggle = function (event) {
+        console.log(`final color is ${finalColor} chosen ${Action.chosen}`);
         if (Action.chosen == null || finalColor == null)
             return;
-        var color = finalColor;
+        var color = getFinalColor();
         $('#prev_color').css('background-color', color);
 
         if (multiChose) {
@@ -238,7 +244,16 @@
     Action.reset = function (event) {
         if (Action.chosen == null)
             return;
-        Websockets.reset(Action.chosen);
+        // Websockets.reset(Action.chosen);
+        if (multiChose) {
+            Action.chosen.forEach(facility => {
+                if (facility.type == FacilityTypes.RECEIVER)
+                    Websockets.reset(facility);
+            });
+        } else {
+            if (Action.chosen.type == FacilityTypes.RECEIVER)
+                Websockets.reset(Action.chosen);
+        }
     }
 
 }(window.Action = window.Action || {}, jQuery));

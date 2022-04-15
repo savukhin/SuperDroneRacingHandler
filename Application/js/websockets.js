@@ -43,7 +43,7 @@ const axios = require('axios');
     }
 
     Websockets.onLoad = function (event) {
-        testAdd();
+        // testAdd();
     }
 
     function addFacility(facility) {
@@ -98,8 +98,12 @@ const axios = require('axios');
         $(facility.indicatorDiv).css('background-color', newColor);
         facility.color = newColor;
 
-        if (Action.chosen == facility)
-            Action.chooseElement(facility);
+        if (Action.chosen != null) { 
+            if (Action.chosen == facility)
+                Action.chooseElement(Action.chosen);
+            else if (Action.chosen.has(facility))
+                Action.choseMultipleElements(Action.chosen);
+        }
     }
 
     async function checkFacility(ip, port) {
@@ -220,6 +224,7 @@ const axios = require('axios');
     }
 
     Websockets.toggle = function (facility, message) {
+        console.log(`send to ${facility.ip} message ${message}`);
         facility.websocket.send(message);
     }
 

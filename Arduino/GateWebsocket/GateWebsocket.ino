@@ -15,10 +15,10 @@ enum FacilityType {
 };
 
 //FacilityType facilityType = FacilityType::RECEIVER;
-FacilityType facilityType = FacilityType::FLAG;
+//FacilityType facilityType = FacilityType::FLAG;
 //FacilityType facilityType = FacilityType::MAT;
-//FacilityType facilityType = FacilityType::GATE;
-//FacilityType facilityType = FaxcilityType::MARKER;
+FacilityType facilityType = FacilityType::GATE;
+//FacilityType facilityType = FacilityType::MARKER;
 
 bool connected = false;
 
@@ -39,9 +39,9 @@ String getAnswer() {
 
 void notifyClients() {
   //ws.textAll(String("#" + decToHex(redCount) + decToHex(greenCount) + decToHex(blueCount)));
-//  String answer = getFinalColor();
-//   if (facilityType == FacilityType::RECEIVER)
-//    answer += "-" + String(num);
+  //  String answer = getFinalColor();
+  //   if (facilityType == FacilityType::RECEIVER)
+  //    answer += "-" + String(num);
   ws.textAll(getAnswer());
 }
 
@@ -94,11 +94,11 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
     int blink = isBlink(data, len);
     if (blink != -1 ) {
       startBlinking(blink, 1);
-      
-      return;
-   }
 
-   if (facilityType == FacilityType::RECEIVER && strcmp((char*)data, "reset") == 0) {
+      return;
+    }
+
+    if (facilityType == FacilityType::RECEIVER && strcmp((char*)data, "reset") == 0) {
       num = 0;
       notifyClients();
       return;
@@ -107,28 +107,28 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
     if (!isColor(data, len)) {
       return;
     }
-    
+
 
     redCount = hexToDec(data[1]) * 16 + hexToDec(data[2]);
     greenCount = hexToDec(data[3]) * 16 + hexToDec(data[4]);
-    blueCount = hexToDec(data[5]) * 16 + hexToDec(data[6]); 
+    blueCount = hexToDec(data[5]) * 16 + hexToDec(data[6]);
     notifyClients();
   }
 }
 
 void onEvent(AsyncWebSocket *server, AsyncWebSocketClient *client, AwsEventType type,
              void *arg, uint8_t *data, size_t len) {
-    switch (type) {
-      case WS_EVT_CONNECT:
-        break;
-      case WS_EVT_DISCONNECT:
-        break;
-      case WS_EVT_DATA:
-        handleWebSocketMessage(arg, data, len);
-        break;
-      case WS_EVT_PONG:
-      case WS_EVT_ERROR:
-        break;
+  switch (type) {
+    case WS_EVT_CONNECT:
+      break;
+    case WS_EVT_DISCONNECT:
+      break;
+    case WS_EVT_DATA:
+      handleWebSocketMessage(arg, data, len);
+      break;
+    case WS_EVT_PONG:
+    case WS_EVT_ERROR:
+      break;
   }
 }
 
@@ -137,29 +137,29 @@ void initWebSocket() {
   server.addHandler(&ws);
 }
 
-void setup(){
+void setup() {
   pinMode(outputRed, OUTPUT);
   pinMode(outputGreen, OUTPUT);
   pinMode(outputBlue, OUTPUT);
-//  checkMode();
+  //  checkMode();
 
   //pinMode(A0, INPUT);
-  
-  
+
+
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
-//  while (WiFi.status() != WL_CONNECTED) {
-//    delay(1000);
-//  }
-//  int start = millis();
-//  for (int i = 0; i < 10 && WiFi.status() != WL_CONNECTED; i++) {
-//    startBlinking(1, 1, 0, 0, 255);
-//    while(blinking) {
-//      checkMode();
-//      checkAnimationEnd();
-//    }
-////    delay(1000);
-//  }
+  //  while (WiFi.status() != WL_CONNECTED) {
+  //    delay(1000);
+  //  }
+  //  int start = millis();
+  //  for (int i = 0; i < 10 && WiFi.status() != WL_CONNECTED; i++) {
+  //    startBlinking(1, 1, 0, 0, 255);
+  //    while(blinking) {
+  //      checkMode();
+  //      checkAnimationEnd();
+  //    }
+  ////    delay(1000);
+  //  }
   if (WiFi.status() == WL_CONNECTED)
     connected = true;
   else
@@ -169,17 +169,17 @@ void setup(){
 
   if (connected) {
     initWebSocket();
-   
-    server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest *request){
-  //    request->send(200, "text/html", String(char(facilityType)) + getFinalColor());
+
+    server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest * request) {
+      //    request->send(200, "text/html", String(char(facilityType)) + getFinalColor());
       request->send(200, "text/html", String(char(facilityType)) + getAnswer());
     });
-    
-    server.on("/STATE", HTTP_GET, [](AsyncWebServerRequest *request){
-  //    request->send(200, "text/html", getFinalColor());
+
+    server.on("/STATE", HTTP_GET, [](AsyncWebServerRequest * request) {
+      //    request->send(200, "text/html", getFinalColor());
       request->send(200, "text/html", getAnswer());
     });
-  
+
     // Start server
     server.begin();
   }
@@ -190,26 +190,26 @@ void setup(){
     buttonSetup();
   }
 
-//  if (connected)
-//    startBlinking(5, 3, 0, 255, 0);
-//  else
-//    startBlinking(5, 3, 255, 0, 0);
+  //  if (connected)
+  //    startBlinking(5, 3, 0, 255, 0);
+  //  else
+  //    startBlinking(5, 3, 255, 0, 0);
 }
 
 bool tryConnect() {
   if (WiFi.status() != WL_CONNECTED)
     return false;
-    
+
   connected = true;
   initWebSocket();
- 
-  server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest *request){
-//    request->send(200, "text/html", String(char(facilityType)) + getFinalColor());
+
+  server.on("/DOYOUGATE", HTTP_GET, [](AsyncWebServerRequest * request) {
+    //    request->send(200, "text/html", String(char(facilityType)) + getFinalColor());
     request->send(200, "text/html", String(char(facilityType)) + getAnswer());
   });
-  
-  server.on("/STATE", HTTP_GET, [](AsyncWebServerRequest *request){
-//    request->send(200, "text/html", getFinalColor());
+
+  server.on("/STATE", HTTP_GET, [](AsyncWebServerRequest * request) {
+    //    request->send(200, "text/html", getFinalColor());
     request->send(200, "text/html", getAnswer());
   });
 
@@ -224,7 +224,7 @@ bool tryConnect() {
 void loop() {
   if (!connected)
     tryConnect();
-    
+
   bool updated = false;
   if (facilityType == FacilityType::RECEIVER) {
     updated = receiverLoop();
@@ -241,7 +241,7 @@ void loop() {
   }
 }
 
-void checkMode(){
+void checkMode() {
   if (blinking) {
     float count = blinkFunctionColor();
     //ws.textAll(String("blinking with count " + String(count) + " And millis() " + String(millis()) + " End time is " + String(animationEndTime) + " Speed is" + String(animationSpeed) + " Start time = " + String(startAnimationTime)));
@@ -255,4 +255,4 @@ void checkMode(){
   }
   checkAnimationEnd();
 }
- 
+
