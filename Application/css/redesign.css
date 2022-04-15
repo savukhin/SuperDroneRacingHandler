@@ -107,7 +107,7 @@
     background-color: var(--second-bg-color);
 }
 
-.overlay {
+.overlay, .overlay-active {
     border-radius: 5px;
     position: relative;
     top: -100%;
@@ -117,7 +117,7 @@
     cursor: pointer;
 }
 
-.overlay:hover {
+.overlay:hover, .overlay-active {
     background: rgba(255, 255, 255, 0.4);
 }
 

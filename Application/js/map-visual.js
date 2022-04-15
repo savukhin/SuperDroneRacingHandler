@@ -170,6 +170,24 @@
             var newWidth = this.getMaxLen() - this.singleWidth;
             $(this.div).css('width', newWidth + 'px');
         }
+
+        getObjectsBySelection(pos1, pos2) {
+            function belongs(pos) {
+                return pos.x > pos1.x && pos.x < pos2.x 
+                    && pos.y > pos1.y && pos.y < pos2.y;
+            }
+
+            var result = [];
+            for (var i = 0; i < this.elements.length; i++) {
+                var domElem = this.facilities[i].mapDiv[0];
+                var rect = domElem.getBoundingClientRect();
+
+                if (belongs({x: rect.x + rect.width / 2, y: rect.y + rect.height / 2})) {
+                    result.push(this.facilities[i]);
+                }
+            }
+            return result;
+        }
     }
 
     const typeToRow = {
@@ -188,6 +206,7 @@
     ];
     var selectionPos = {x: 0, y: 0};
     var isSelecting = false;
+    var selectedItems = new Set();
 
     Map.onLoad = function () {
     }
@@ -209,8 +228,27 @@
         }
     }
 
+    var getObjectsBySelection = function(pos1, pos2) {
+        var x1 = Math.min(pos1.x, pos2.x);
+        var y1 = Math.min(pos1.y, pos2.y);
+        var x2 = Math.max(pos1.x, pos2.x);
+        var y2 = Math.max(pos1.y, pos2.y);
+
+        console.log(`Result rect is ${x1},${y1} - ${x2},${y2}`);
+        
+        var result = new Set();
+        for (var i = 0; i < rows.length; i++) {
+            // result = result.concat(
+            //     rows[i].getObjectsBySelection({x: x1, y: y1}, {x: x2, y: y2})
+            // );
+            var tmp = rows[i].getObjectsBySelection({x: x1, y: y1}, {x: x2, y: y2});
+            result = new Set([...result, ...tmp]);
+        }
+        return result;
+    }
+
     Map.startSelection = function(event) {
-        console.log("Start");
+        // selectedItems.clear();
         if (isSelecting)
             return;
         
@@ -248,11 +286,33 @@
         
         $("#selection").css("width", Math.abs(delta.x));
         $("#selection").css("height", Math.abs(delta.y));
-        console.log(`handle {${delta.x}, ${delta.y}}`);
+
+        var selected = getObjectsBySelection(selectionPos, {x: selectionPos.x + delta.x, y : selectionPos.y + delta.y});
+        console.log(`selected len ${selected.size}`);
+
+        selected.forEach(facility => {
+            var overlayQuery = facility
+                .mapDiv.parent()
+                .find(".overlay");
+            
+            if (overlayQuery[0] != undefined)
+                overlayQuery[0].className = "overlay-active";
+        });
+
+        var checker = new Set([...selectedItems].filter(x => !selected.has(x)));
+        checker.forEach(facility => {
+            var overlayQuery = facility
+                .mapDiv.parent()
+                .find(".overlay-active");
+            
+            if (overlayQuery[0] != undefined)
+                overlayQuery[0].className = "overlay";
+        })
+
+        selectedItems = selected;
     }
 
     Map.endSelection = function(event) {
-        console.log("END");
         if (!isSelecting)
             return;
 
@@ -264,6 +324,18 @@
 
         console.log(`end {${pos.x}, ${pos.y}}`);
         isSelecting = false;
+
+        var selected = getObjectsBySelection(selectionPos, {x: selectionPos.x + delta.x, y : selectionPos.y + delta.y});
+        console.log(`selected len ${selected.size}`);
+
+        // selectedItems.forEach(facility => {
+        //     var overlayQuery = facility
+        //         .mapDiv.parent()
+        //         .find(".overlay-active");
+
+        //     if (overlayQuery != undefined)
+        //         overlayQuery[0].className = "overlay";
+        // });
     }
 
 }(window.Map = window.Map || {}, jQuery));
