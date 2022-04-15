@@ -6,9 +6,6 @@
 #include "queries.h"
 
 bool blinking = false;
-//int redBlinking = 0;
-//int blueBlinking = 0;
-//int greenBlinking = 0;
 Color blinkingColor = { 0, 0, 0 };
 float startAnimationTime = -1;
 float animationSpeed = 1;

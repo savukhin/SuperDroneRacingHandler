@@ -142,13 +142,6 @@
             </div>
             <div style="display:none" class="tabcontent" id="action_animations">
               <h3>Blink animation:</h3>
-              <!-- <label for="animation_color">Color:</label>
-              <select id="animation_color">
-                <option value="#ff0000">Red</option>
-                <option  value="#00ff00">Green</option>
-                <option value="#0000ff">Blue</option>
-              </select> -->
-              <!-- <br> -->
               <label for="animation_duration">Duration:</label>
               <input type="number" id="animation_duration" value="2" placeholder="in seconds" />
               <br>
@@ -156,7 +149,8 @@
               <input type="number" id="animation_count" value="4" placeholder="" />
 
               <br><br>
-              <button id="send_button" class="button" onClick="Action.animation(event)">Send</button>
+              <button id="animtaion_button" class="button" onClick="Action.animation(event)">Animate</button>
+              <button id="stop_animtaion_button" class="button" onClick="Action.stopAnimation(event)">Stop anim</button>
               <br><br>
               <button id="reset_button" class="button" onClick="Action.reset(event)">Reset</button>
             </div>

@@ -236,7 +236,7 @@
     Action.animation = function (event) {
         if (Action.chosen == null)
             return;
-        // var color = animation_color.value;
+
         var color = '#ffffff';
         if (finalColor != null)
             color = finalizeColor(finalColor);
@@ -249,6 +249,19 @@
             });
         } else {
             Websockets.blink(Action.chosen, count, duration, color);
+        }
+    }
+
+    Action.stopAnimation = function (event) {
+        if (Action.chosen == null)
+            return;
+
+        if (multiChose) {
+            Action.chosen.forEach(facility => {
+                Websockets.stopAnim(Action.chosen);
+            });
+        } else {
+            Websockets.stopAnim(Action.chosen);
         }
     }
 

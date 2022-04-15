@@ -224,14 +224,15 @@ const axios = require('axios');
     }
 
     Websockets.toggle = function (facility, message) {
-        console.log(`send to ${facility.ip} message ${message}`);
         facility.websocket.send(message);
     }
 
     Websockets.blink = function (facility, count=3, duration=3, color="#ffffff") { // duration in seconds
-        var message = `blink-${count}-${parseInt(duration*1000)}-${color}`;
-        console.log(`message is ${message}`);
-        facility.websocket.send(message);
+        facility.websocket.send(`blink-${count}-${parseInt(duration*1000)}-${color}`);
+    }
+
+    Websockets.stopAnim = function (facility) {
+        facility.websocket.send("stopAnimation");
     }
 
     Websockets.reset = function (facility) {
