@@ -3,6 +3,11 @@
     Action.chosen = null;
     var finalColor = null;
     var colorRegexp = '#[a-fA-F0-9]{6}';
+    var tabs = {
+        ANIMATION : "animation",
+        COLORS : "colors",
+    }
+    var currentTab = "action_colors";
 
     Action.colorPick = function (color) {
         if (Action.chosen == null)
@@ -76,6 +81,8 @@
         }
 
         document.getElementById(tabName).style.display = "block";
+        currentTab = tabName;
+        console.log(`change currentTab to ${currentTab}`);
     }
 
     var colorPicker = document.getElementById("pickerBoxContainer");
@@ -200,30 +207,61 @@
         $(`#color_display`).css("background-color", getSlidersColor());
     }
 
-    function getFinalColor() {
-        var match = finalColor.match(colorRegexp);
+    function finalizeColor(color) {
+        var match = color.match(colorRegexp);
         if (match != null && match.length == 1)
-            return finalColor;
-            
-        var raw_rgb = finalColor;
+            return color;
+        
+        var raw_rgb = color;
         var rgb = raw_rgb.replace(/^(rgb|rgba)\(/, '').replace(/\)$/, '').replace(/\s/g, '').split(',');
-
+        
         return parseColors(rgb[0], rgb[1], rgb[2]);
     }
 
     Action.toggle = function (event) {
-        console.log(`final color is ${finalColor} chosen ${Action.chosen}`);
         if (Action.chosen == null || finalColor == null)
             return;
-        var color = getFinalColor();
+        var color = finalizeColor(finalColor);
         $('#prev_color').css('background-color', color);
 
         if (multiChose) {
             Action.chosen.forEach(facility => {
-                Websockets.toggle(facility, color);
+                Websockets.toggle(Action.chosen, color);
             });
         } else {
             Websockets.toggle(Action.chosen, color);
+        }
+    }
+
+    Action.animation = function (event) {
+        if (Action.chosen == null)
+            return;
+
+        var color = '#ffffff';
+        if (finalColor != null)
+            color = finalizeColor(finalColor);
+        var count = animation_count.value;
+        var duration = animation_duration.value;
+
+        if (multiChose) {
+            Action.chosen.forEach(facility => {
+                Websockets.blink(Action.chosen, count, duration, color);
+            });
+        } else {
+            Websockets.blink(Action.chosen, count, duration, color);
+        }
+    }
+
+    Action.stopAnimation = function (event) {
+        if (Action.chosen == null)
+            return;
+
+        if (multiChose) {
+            Action.chosen.forEach(facility => {
+                Websockets.stopAnim(Action.chosen);
+            });
+        } else {
+            Websockets.stopAnim(Action.chosen);
         }
     }
 

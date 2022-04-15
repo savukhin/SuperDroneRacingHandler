@@ -14,9 +14,9 @@
 #define outputGreen 5
 #define outputBlue 3
 
-int redCount = 0;
-int blueCount = 0;
-int greenCount = 0;
+#include "colors.h"
+
+Color globalColor = { 0, 0, 0 };
 
 const char  * ssid = "HonorView10";
 const char* password = "saveliythebest";
