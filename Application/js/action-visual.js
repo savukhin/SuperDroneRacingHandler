@@ -242,13 +242,14 @@
             color = finalizeColor(finalColor);
         var count = animation_count.value;
         var duration = animation_duration.value;
+        var endless = animation_endless.checked;
 
         if (multiChose) {
             Action.chosen.forEach(facility => {
-                Websockets.blink(Action.chosen, count, duration, color);
+                Websockets.blink(Action.chosen, count, duration, color, endless);
             });
         } else {
-            Websockets.blink(Action.chosen, count, duration, color);
+            Websockets.blink(Action.chosen, count, duration, color, endless);
         }
     }
 

@@ -142,11 +142,14 @@
             </div>
             <div style="display:none" class="tabcontent" id="action_animations">
               <h3>Blink animation:</h3>
-              <label for="animation_duration">Duration:</label>
+              <label for="animation_duration">Duration of one:</label>
               <input type="number" id="animation_duration" value="2" placeholder="in seconds" />
               <br>
               <label for="animation_count">Count:</label>
               <input type="number" id="animation_count" value="4" placeholder="" />
+              <br>
+              <label for="animation_endless">IsEnldess</label>
+              <input type="checkbox" id="animation_endless" placeholder="" />
 
               <br><br>
               <button id="animtaion_button" class="button" onClick="Action.animation(event)">Animate</button>

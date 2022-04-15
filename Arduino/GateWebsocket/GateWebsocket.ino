@@ -49,7 +49,7 @@ void handleWebSocketMessage(void *arg, uint8_t *data, size_t len) {
 
     auto blink = isBlink(str);
     if (blink.valid) {
-      startBlinking(blink.count, blink.getSpeed(), blink.color);
+      startBlinking(blink.count, blink.getSpeed(), blink.color, blink.endless);
       return;
     }
 
