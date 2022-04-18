@@ -65,6 +65,12 @@ const axios = require('axios');
 
     function onClose(event) {
         console.log('Connection closed');
+        var address = event.origin.slice(5);
+        var facility = facilities[address];
+        if (facility == undefined)
+            return false;
+
+        Websockets.deleteFacility(facility);
     }
 
     function onMessage(event) {
@@ -128,10 +134,8 @@ const axios = require('axios');
                     return isFacility;
                 }
                 
-                console.log(`Res is ${res.data}`);
                 var conv = convertation[res.data[0]];
                 var color = res.data.slice(1,8);
-                console.log(`conv is ${conv}`);
                 if (conv == undefined)
                     return false;
                 
@@ -150,6 +154,7 @@ const axios = require('axios');
 
 
     Websockets.deleteFacility = function (facility) {
+        // console.log(`facility to delete`, facility, facility.ip)
         Action.deleteFacility(facility);
         Table.deleteFacility(facility);
         Map.deleteFacility(facility);
@@ -186,20 +191,24 @@ const axios = require('axios');
             devices.forEach(device => {
                 var ip = device.ip
                 console.log(` catch device ip ${ip}`);
+                if (gateways.includes(ip)) {
+                    check_gateways.delete(ip);
+                    var facility = facilities[ip]
+                    // if (isFacility[0] != )
+                    // if ()
+                    if (facility.websocket.readyState == WebSocket.CLOSED) {
+                        var socket = makeWebSocket(ip);
+                        facility.websocket = socket;
+                    }
+
+                    return;
+                }
                 
                 checkFacility(ip, 80).then(isFacility => {
                     console.log(`is facility ${isFacility}`);
                     if (!isFacility[0])
                         return
 
-                    if (gateways.includes(ip)) {
-                        check_gateways.delete(ip);
-
-                        // var facility = facilities[ip]
-                        // if (isFacility[0] != )
-
-                        return;
-                    }
 
                     var number = gateways.length + 1;
                     gateways.push(ip);
@@ -217,7 +226,7 @@ const axios = require('axios');
             })
 
             check_gateways.forEach(elem => {
-                Websockets.deleteFacility(facility[elem]);
+                Websockets.deleteFacility(facilities[elem]);
             })
             refresh_button.disabled = false;
         })

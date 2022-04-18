@@ -226,7 +226,7 @@
 
         if (multiChose) {
             Action.chosen.forEach(facility => {
-                Websockets.toggle(Action.chosen, color);
+                Websockets.toggle(facility, color);
             });
         } else {
             Websockets.toggle(Action.chosen, color);
@@ -246,7 +246,7 @@
 
         if (multiChose) {
             Action.chosen.forEach(facility => {
-                Websockets.blink(Action.chosen, count, duration, color, endless);
+                Websockets.blink(facility, count, duration, color, endless);
             });
         } else {
             Websockets.blink(Action.chosen, count, duration, color, endless);
@@ -259,7 +259,7 @@
 
         if (multiChose) {
             Action.chosen.forEach(facility => {
-                Websockets.stopAnim(Action.chosen);
+                Websockets.stopAnim(facility);
             });
         } else {
             Websockets.stopAnim(Action.chosen);

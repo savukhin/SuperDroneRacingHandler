@@ -15,9 +15,9 @@ enum FacilityType {
 };
 
 //FacilityType facilityType = FacilityType::RECEIVER;
-//FacilityType facilityType = FacilityType::FLAG;
+FacilityType facilityType = FacilityType::FLAG;
 //FacilityType facilityType = FacilityType::MAT;
-FacilityType facilityType = FacilityType::GATE;
+//FacilityType facilityType = FacilityType::GATE;
 //FacilityType facilityType = FacilityType::MARKER;
 
 bool connected = false;

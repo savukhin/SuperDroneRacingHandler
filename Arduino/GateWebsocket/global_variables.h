@@ -18,11 +18,14 @@
 
 Color globalColor = { 0, 0, 0 };
 
-const char  * ssid = "HonorView10";
-const char* password = "saveliythebest";
+//const char  * ssid = "HonorView10";
+//const char* password = "saveliythebest";
 
 //const char* ssid = "WS_Lab7";
 //const char* password = "ws2020ws";
+
+const char* ssid = "DroneRacing";
+const char* password = "45530005";
 
 int buttonState = 0;
 int lastButtonState = 0;
