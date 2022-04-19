@@ -136,6 +136,14 @@
     text-align: left;
 }
 
+#anim-params > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+}
+
 #action_animations table {
     width: 100%;
     text-align: left;
@@ -144,7 +152,6 @@
 
 #action_animations tr {
     background-color: var(--main-bg-color);
-    border-bottom: 3px solid var(--block-color);
 }
 
 #action_animations td {
@@ -152,5 +159,73 @@
 }
 
 #action_animations input {
-    width: 100%;
+    /* width: 100%; */
+    min-width: 20px;
+    height: 20px;
+}
+
+#endless_checkbox {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    /* position: relative; */
+    background-color: var(--text-color);
+    border: 1px solid var(--frame-color);
+    /* top: 1px; */
+    padding: 2px;
+}
+
+#endless_checkbox img {
+    /* height: 15px; */
+    display: block;
+    max-width: 100%;
+    pointer-events: none;
+}
+
+.flex-td {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#animation_duration {
+    /* width: 100%; */
+    flex: 1;
+}
+
+#animation_count {
+    width: 60px;
+    /* flex: 1; */
+}
+
+.infinity-symbol {
+    position: relative;
+    width: 178px;
+    height: 100px;
+}
+.infinity-symbol:before,
+.infinity-symbol:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    border: 10px solid black;
+    border-radius: 80% 0 55% 50% / 55% 0 80% 50%;
+    transform: rotate(45deg);
+}
+.infinity-symbol:after {
+    left: auto;
+    right: 0;
+    transform: rotate(-135deg);
+}
+
+
+#action_animations input::-webkit-outer-spin-button,
+#action_animations input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

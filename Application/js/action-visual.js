@@ -295,6 +295,20 @@
         }
     }
 
+    Action.endlessClick = function(event) {
+        var checked = animation_endless.checked;
+        var result = 'none';
+        if (!checked)
+            result = '';
+
+        $(event.target)
+            .find('img')
+            .css('display', result);
+
+        $(`#animation_count`).prop('disabled', !checked);
+        $(`#animation_endless`).prop('checked', !checked);
+    }
+
 }(window.Action = window.Action || {}, jQuery));
 
 window.addEventListener('load', Action.onLoad);

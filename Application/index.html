@@ -2,7 +2,8 @@
 <html>
 
 <head>
-  <title>Steiner's Super Tengen Toppa Neon Genesis DroneRacing Program X</title>
+  <!-- <title>Steiner's Super Tengen Toppa Neon Genesis DroneRacing Program X</title> -->
+  <title>TrackFox RaceControl</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/var-colors.css">
@@ -19,7 +20,7 @@
     <div id="drag-region">
 
       <div id="window-title">
-        <span>Steiner's Super Tengen Toppa Neon Genesis DroneRacing Program X</span>
+        <span>TrackFox RaceControl</span>
       </div>
 
       <div id="window-controls">
@@ -106,19 +107,21 @@
 
         <div id="action_box" class="box">
           <div class="block scrollable scrollable-y">
-            <div id="action_tabs" style="height:50px; font-size: 30px;" class="grid-2col">
+            <!-- <div id="action_tabs" style="height:50px; font-size: 30px;" class="grid-2col">
               <button class="button" onclick="Action.changeTab(event, 'buttons_color')">Color</button>
               <button class="button" onclick="Action.changeTab(event, 'action_animations')">Animate</button>
-            </div>
-            <div style="height:50px; font-size: 30px;" class="grid-2col">
+            </div> -->
+            <!-- <div style="height:50px; font-size: 30px;" class="grid-2col">
               <p>Before</p>
               <p>After</p>
-            </div>
-            <div id="action_display" class="grid-2col">
-              <div class="state_display_container">
+            </div> -->
+            <br>
+            <div id="action_display" class="grid-2col" style="height: 217px">
+              <div class="state_display_container" style="display: none">
                 <div id="state_display_before" class="state_display scrollable scrollable-y"></div>
               </div>
-              <div class="state_display_container" style="left: 50%">
+              <!-- <div class="state_display_container" style="left: 25%"> -->
+              <div class="state_display_container" style="left: 71px; width: 217px; height: 217px">
                 <div id="state_display_after" class="state_display scrollable scrollable-y"></div>
               </div>
             </div>
@@ -150,24 +153,53 @@
                 <button id="reset_button" class="button" onClick="Action.reset(event)">Reset</button>
               </div>
             </div>
-            <div style="display:none" class="tabcontent" id="action_animations">
+
+            <div style="position:relative; left: 5%; width: 90%; border: 1px solid var(--second-bg-color); border-radius: 3px; opacity: 0.4"></div>
+
+            <div class="tabcontent" id="action_animations">
               <h3>Blink animation:</h3>
 
-              <div style="padding: 10px;">
-                <table>
+              <div style="padding: 10px 50px;">
+                <table style="table-layout: fixed">
                   <tr>
-                    <td style="border-radius: 10px 0 0 0"><label for="animation_duration">Duration of one:</label></td>
-                    <td style="border-radius: 0 10px 0 0"><input type="number" id="animation_duration" value="2" placeholder="in seconds" /></td>
+                    <td><label for="animation_duration">Duration of one:</label></td>
+                    <td class="flex-td"><input type="number" id="animation_duration" value="2" placeholder="in seconds" /></td>
                   </tr>
                   <tr>
                     <td><label for="animation_count">Count:</label></td>
-                    <td><input type="number" id="animation_count" value="4" placeholder="" />            </td>
-                  </tr>
-                  <tr>
-                    <td style="border-radius: 0 0 0 10px"><label for="animation_endless">IsEndless:</label></td>
-                    <td style="border-radius: 0 0 10px 0"><input type="checkbox" id="animation_endless" placeholder="" /></td>
+                    <td class="flex-td"><input type="number" id="animation_count" value="4" placeholder="" />            
+                      <input type="checkbox" id="animation_endless" style="display: none">
+                      <button class="button" id="endless_checkbox" onclick="Action.endlessClick(event)">
+                        <img src="img/icons/infinity.png" style="display: none"/>
+                      </button>
+                    </td>
                   </tr>
                 </table>
+
+
+                <!-- <div id="endless_checkbox">
+                  <input type="checkbox" id="animation_endless" style="display: none"/>
+                  <label for="animation_endless"></label>
+                </div> -->
+
+                <!-- <div style="padding: 10px 50px;">
+                  <div class="grid-2col">
+                    <div style="text-align: left">
+                      <label for="animation_duration">Duration of one:</label>
+                      <br>
+                      <label for="animation_count">Count:</label>
+                    </div>
+                    <div>                    
+                      <input type="number" id="animation_duration" value="2" placeholder="in seconds" />
+                      <br>
+                      <input type="number" id="animation_count" value="4" placeholder="" />
+                      <div id="endless_checkbox">
+                        <input type="checkbox" id="animation_endless" style="display: none"/>
+                        <label for="animation_endless"></label>
+                      </div>
+                    </div>
+                  </div> -->
+                  <!-- <label for="animation_endless">IsEndless:</label> -->
             </div>
 
               <div class="buttons-line">
