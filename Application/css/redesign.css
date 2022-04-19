@@ -179,7 +179,8 @@
     transform: translateX(50px);
     padding: 10px 15px;
     border-radius: 10px;
-    box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);    
+    box-shadow: 2px 2px 12px 1px rgba(140, 140, 140, .5);
+    top: 50px;
 }
 
 #helper .facility-element {

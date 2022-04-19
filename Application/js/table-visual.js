@@ -9,6 +9,11 @@ const { cp } = require("original-fs");
     Table.load = function () {
     }
 
+    Table.updateType = function(facility, newType) {
+        $(facility.tableDiv).parent().attr('class', `${newType}-element`);
+
+    }
+
     Table.findFacility = function (facilitiy) {
         var col = 0;
         for (; Table.columns[col] != facilitiy.type && col < Table.columns.length; col++);
@@ -67,6 +72,9 @@ const { cp } = require("original-fs");
         }
 
         $(facility.tableDiv).css("background-color", "red");
+        if (Table.rows[col] == 0) {
+            Table.deleteColumn(col);
+        }
     }
 
     Table.popRow = function () {
@@ -75,6 +83,39 @@ const { cp } = require("original-fs");
 
         for (var i = 0; i < Table.columns.length; i++)
             Table.facilities[i].length--;
+    }
+
+    Table.deleteColumn = function(col) {
+        function removeCell(trow, tagName, number) {
+            trow.find(tagName).each(function() {
+                var td = $(this);
+
+                if (td.index() == number) {
+                    td.remove();
+                    return;
+                }
+            })
+        }
+
+        var row = 0;
+        // var col = Table.columns.length;
+        $('#main_table').find('tr').each(function () {
+            var trow = $(this);
+            if (trow.index() < 2) {
+                removeCell(trow, 'th', col);
+            } else {
+                removeCell(trow, 'td', col);
+                row++;
+            }
+        });
+
+        Table.facilities.splice(col, 1);
+        Table.columns.splice(col, 1);
+        Table.rows.splice(col, 1);
+    }
+
+    Table.updateDescription = function(facility, descr) {
+        $(facility.descrDiv).find('p').html(descr);
     }
 
     function createColumn(type) {

@@ -183,7 +183,9 @@
     }
 
     Action.deleteFacility = function (facility) {
-
+        $(`#state_display_before`).html('');
+        $(`#state_display_after`).html('');
+        Action.chosen = null;
     }
 
     Action.changeRangeColor = function (event, colorType, value) {

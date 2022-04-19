@@ -266,8 +266,6 @@
     }
 
     Map.startSelection = function(event) {
-        console.log(`start with ${event.target.className}`);
-
         if (isSelecting || !event.target.classList.contains("selectable-zone"))
             return;
         
@@ -280,7 +278,7 @@
         $("#selection").css("display", "block");
         selectionPos.x = pos.x;
         selectionPos.y = pos.y;
-        console.log(`start {${pos.x}, ${pos.y}}`);
+
         isSelecting = true;
     }
 
@@ -302,6 +300,11 @@
             else
                 overlayQuery[0].className = "overlay";
         });
+    }
+
+    Map.updateType = function(facility, newType) {
+        $(facility.mapDiv).attr('class', `${newType}-element`);
+        
     }
 
     var checkSelection = function(delta) {
@@ -349,7 +352,6 @@
         var delta = {x: pos.x - selectionPos.x,
             y: pos.y - selectionPos.y};
 
-        console.log(`end {${pos.x}, ${pos.y}}`);
         isSelecting = false;
 
         checkSelection(delta);

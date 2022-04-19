@@ -55,7 +55,7 @@ const axios = require('axios');
     function makeWebSocket(ip) {
         var socket = new WebSocket(`ws://${ip}/ws`);
         socket.onopen = onOpen;
-        socket.onclose = onClose;
+        // socket.onclose = onClose;
         socket.onmessage = onMessage;
         return socket
     }
@@ -64,13 +64,35 @@ const axios = require('axios');
     }
 
     function onClose(event) {
-        console.log('Connection closed');
-        var address = event.origin.slice(5);
+        console.log('Connection closed event', event.target.url.slice(5, -3));
+        var address = event.target.url.slice(5, -3);
         var facility = facilities[address];
         if (facility == undefined)
             return false;
 
         Websockets.deleteFacility(facility);
+    }
+
+    function updateColors(facility, newColor) {
+        var map = $(facility.mapDiv);
+        // console.log(`update color of`, facility, ' with ', newColor);
+        $(facility.mapDiv).css('background-color', newColor);
+        $(facility.tableDiv).css('background-color', newColor);
+        $(facility.indicatorDiv).css('background-color', newColor);
+        facility.color = newColor;
+
+        if (Action.chosen != null) { 
+            if (Action.chosen == facility)
+                Action.chooseElement(Action.chosen);
+            else if (Action.multiChose && Action.chosen.has(facility))
+                Action.choseMultipleElements(Action.chosen);
+        }
+    }
+
+    function updateType(facility, newType) {
+        Map.updateType(faciliy, newType);
+        Table.updateType(faciliy, newType);
+        facility.type = newType;
     }
 
     function onMessage(event) {
@@ -85,7 +107,7 @@ const axios = require('axios');
         regexp += '$';
 
         var match = event.data.match(regexp);
-        console.log(`match is ${match} regexp is ${regexp}`)
+        console.log(`match is ${match} regexp is ${regexp} on data ${event.data}`)
         if (match == null || match.length != 1) {
             console.log("Decline");
             return false;
@@ -93,23 +115,12 @@ const axios = require('axios');
 
         if (facility.type == FacilityTypes.RECEIVER) {
             var count = parseInt(event.data.slice(8));
-            $(facility.descrDiv).find('p').html(count);
+            Table.updateDescription(facility, count);
         }
 
         var newColor = event.data.slice(0, 7);
 
-        var map = $(facility.mapDiv);
-        $(facility.mapDiv).css('background-color', newColor);
-        $(facility.tableDiv).css('background-color', newColor);
-        $(facility.indicatorDiv).css('background-color', newColor);
-        facility.color = newColor;
-
-        if (Action.chosen != null) { 
-            if (Action.chosen == facility)
-                Action.chooseElement(Action.chosen);
-            else if (Action.chosen.has(facility))
-                Action.choseMultipleElements(Action.chosen);
-        }
+        updateColors(facility, newColor);
     }
 
     async function checkFacility(ip, port) {
@@ -127,8 +138,11 @@ const axios = require('axios');
                 console.log("~axios error " + error);
                 return ;
             })
-            
-        if (response == false || response.data.length < 1)
+
+        if (response == false || response == undefined)
+            return false;
+
+        if (response.data.length < 1)
             return false;
         
         if (response.data[0] == 'r')
@@ -147,8 +161,9 @@ const axios = require('axios');
         isFacility = [conv, color];
         if (conv == FacilityTypes.RECEIVER) {
             isFacility.push(parseInt(response.data.slice(9, )));
-            console.log("response isfacility is " + isFacility);
         }
+
+        isFacility.push(ip);
             
         return isFacility;
     }
@@ -185,11 +200,16 @@ const axios = require('axios');
         var check_gateways = new Set();
         gateways.forEach(elem => {
             check_gateways.add(elem);
+            // facilities[elem].websocket.close();
         });
+        console.log(`check gateways is `, check_gateways);
 
         Topnav.startRefreshAnim();
 
-        const devices = await find();
+        const devices = await find(null, true).then(result => {
+            console.log('result of find is ', result);
+            return result;
+        });
         console.log('devices is', devices);
 
         var promises = []
@@ -197,53 +217,65 @@ const axios = require('axios');
         for (const device of devices) {
             var ip = device.ip;
             console.log(` catch device ip ${ip}`);
-            if (gateways.includes(ip)) {
-                check_gateways.delete(ip);
-                var facility = facilities[ip]
-                
-                if (facility.websocket.readyState == WebSocket.CLOSED) {
-                    var socket = makeWebSocket(ip);
-                    facility.websocket = socket;
-                }
 
-                return;
-            }
-        
             var promise = new Promise( (resolve, reject) => {
-                checkFacility(ip, 80).then(isFacility => {
-                    // console.log(`is facility ${isFacility}`);
+                resolve(checkFacility(ip, 80))
                     
-                    if (!isFacility[0]) {
-                        resolve(`${ip} is not facility`);
-                        return;
-                    }
-
-                    var number = gateways.length + 1;
-                    gateways.push(ip);
-                    var socket = makeWebSocket(ip);
-
-                    var facility = new Facility(ip, socket, number,
-                        isFacility[1], undefined, isFacility[0]);
-                    addFacility(facility);
-
-                    if (facility.type == FacilityTypes.RECEIVER) {
-                        var count = parseInt(isFacility[2]);
-                        $(facility.descrDiv).find('p').html(count);
-                    }
-                    resolve(`${ip} is facility`);
-                });
             });
             promises.push(promise);
         }
 
         Promise.all(promises).then(value => {
+            value.forEach(isFacility => {
+                console.log(`is facility ${isFacility}`);
+                var ip = isFacility[isFacility.length - 1];
+                    
+                if (!isFacility[0]) {
+                    return;
+                }
+
+                if (gateways.includes(ip)) {
+                    check_gateways.delete(ip);
+                    var facility = facilities[ip]
+    
+                    if (facility.websocket.readyState == WebSocket.CLOSED) {
+                        var socket = makeWebSocket(ip);
+                        facility.websocket = socket;
+
+                        var count = parseInt(isFacility[2]);
+                        Table.updateDescription(facility, count);
+                    }
+
+                    if (facility.color != isFacility[1])
+                        updateColors(facility, isFacility[1]);
+                    
+                    if (facility.type != isFacility[0])
+                        updateType(facility, isFacility[0]);
+
+                    return;
+                }
+
+                var number = gateways.length + 1;
+                gateways.push(ip);
+                var socket = makeWebSocket(ip);
+
+                var facility = new Facility(ip, socket, number,
+                    isFacility[1], undefined, isFacility[0]);
+                addFacility(facility);
+
+                if (facility.type == FacilityTypes.RECEIVER) {
+                    var count = parseInt(isFacility[2]);
+                    Table.updateDescription(facility, count);
+                }
+            })
             check_gateways.forEach(elem => {
+                try {
                 Websockets.deleteFacility(facilities[elem]);
+                } catch {}
             })
             
             Topnav.endRefreshAnim();
         }, reason => {
-            console.log(`refresh ended because of reason ${reason}`);
             Topnav.endRefreshAnim();
         });
     }
