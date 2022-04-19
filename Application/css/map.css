@@ -27,6 +27,7 @@
     height: 50px;
     z-index: 0;
     display: flex;
+    width: 0;
 }
 
 #row_1 {

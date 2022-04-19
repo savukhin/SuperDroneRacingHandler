@@ -114,3 +114,43 @@
 #blue::-webkit-slider-runnable-track {
     background: linear-gradient(0.25turn, #000, blue);
 }
+
+.buttons-line {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+#action_animations label {
+    text-align: left;
+    border-radius: 5px;
+    flex: 1;
+}
+
+#anim-params > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: left;
+}
+
+#action_animations table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+#action_animations tr {
+    background-color: var(--main-bg-color);
+    border-bottom: 3px solid var(--block-color);
+}
+
+#action_animations td {
+    padding: 4px 14px;
+}
+
+#action_animations input {
+    width: 100%;
+}

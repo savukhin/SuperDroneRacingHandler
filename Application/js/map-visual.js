@@ -91,7 +91,7 @@
             }
             overlay.onmouseenter = function(event){
                 $(div).css("z-index", "100");
-                var code = `<div class="map-hint">type:${facility.type} #${facility.number}</div>`;
+                var code = `<div class="map-hint">${facility.type} #${facility.number}</div>`;
                 $(this).append(code);
             }
             overlay.onmouseleave = function(event){

@@ -105,10 +105,10 @@
         </div>
 
         <div id="action_box" class="box">
-          <div class="block">
+          <div class="block scrollable scrollable-y">
             <div id="action_tabs" style="height:50px; font-size: 30px;" class="grid-2col">
               <button class="button" onclick="Action.changeTab(event, 'buttons_color')">Color</button>
-              <button class="button" onclick="Action.changeTab(event, 'action_animations')">Anim</button>
+              <button class="button" onclick="Action.changeTab(event, 'action_animations')">Animate</button>
             </div>
             <div style="height:50px; font-size: 30px;" class="grid-2col">
               <p>Before</p>
@@ -144,32 +144,41 @@
               </div>
             </div>
             <div class="tabcontent" id="buttons_color">
-              <br>
-              <button id="send_button" class="button" onClick="Action.toggle(event)">Send</button>
-              <button id="blink_button" class="button" onClick="Action.blink(event)">Blink</button>
-              <br><br>
-              <button id="reset_button" class="button" onClick="Action.reset(event)">Reset</button>
+              <div class="buttons-line">
+                <button id="send_button" class="button" onClick="Action.toggle(event)">Send</button>
+                <button id="blink_button" class="button" onClick="Action.blink(event)">Blink</button>
+                <button id="reset_button" class="button" onClick="Action.reset(event)">Reset</button>
+              </div>
             </div>
             <div style="display:none" class="tabcontent" id="action_animations">
               <h3>Blink animation:</h3>
-              <label for="animation_duration">Duration of one:</label>
-              <input type="number" id="animation_duration" value="2" placeholder="in seconds" />
-              <br>
-              <label for="animation_count">Count:</label>
-              <input type="number" id="animation_count" value="4" placeholder="" />
-              <br>
-              <label for="animation_endless">IsEnldess</label>
-              <input type="checkbox" id="animation_endless" placeholder="" />
 
-              <br><br>
-              <button id="animtaion_button" class="button" onClick="Action.animation(event)">Animate</button>
-              <br><br>
-              <button id="stop_animtaion_button" class="button" onClick="Action.stopAnimation(event)">Stop anim</button>
-              <br><br>
-              <button id="reset_button" class="button" onClick="Action.reset(event)">Reset</button>
+              <div style="padding: 10px;">
+                <table>
+                  <tr>
+                    <td style="border-radius: 10px 0 0 0"><label for="animation_duration">Duration of one:</label></td>
+                    <td style="border-radius: 0 10px 0 0"><input type="number" id="animation_duration" value="2" placeholder="in seconds" /></td>
+                  </tr>
+                  <tr>
+                    <td><label for="animation_count">Count:</label></td>
+                    <td><input type="number" id="animation_count" value="4" placeholder="" />            </td>
+                  </tr>
+                  <tr>
+                    <td style="border-radius: 0 0 0 10px"><label for="animation_endless">IsEndless:</label></td>
+                    <td style="border-radius: 0 0 10px 0"><input type="checkbox" id="animation_endless" placeholder="" /></td>
+                  </tr>
+                </table>
             </div>
 
-            <!-- <button onClick="Websockets.testDelete()">DELETE!</button> -->
+              <div class="buttons-line">
+                <button id="animtaion_button" class="button" onClick="Action.animation(event)">Send</button>
+                <button id="stop_animtaion_button" class="button" onClick="Action.stopAnimation(event)">Stop</button>
+                <button id="reset_button" class="button" onClick="Action.reset(event)">Reset</button>
+              </div>
+            </div>
+
+            <!-- <button onClick="Websockets.testAdd()">ADD!</button>
+            <button onClick="Websockets.testDelete()">DELETE!</button> -->
           </div>
         </div>
       </div>

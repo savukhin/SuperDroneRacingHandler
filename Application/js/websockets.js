@@ -14,7 +14,7 @@ const axios = require('axios');
         't': FacilityTypes.MAT,
     }
 
-    function testAdd() {
+    Websockets.testAdd = function() {
         addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
         addFacility(new Facility("2", null, 2, '#00ff00', null, 'flag'));
         addFacility(new Facility("3", null, 3, '#000000', null, 'marker'));
@@ -120,69 +120,35 @@ const axios = require('axios');
         }
         regexp += ']' + colorRegexp;
         
-        try{
         const response = await axios
             .get(`http://${ip}:${port}/DOYOUGATE`)
-            .then(res => {
-                try {
-// if (response == false || response.data.length < 1)
-        //     return false;
-        
-        // if (response.data[0] == 'r')
-        //     regexp += '-\\d*';
-        // regexp += '$';
-
-        // if (response.data.match(regexp).length != 1) {
-        //     return isFacility;
-        // }
-        
-        // var conv = convertation[response.data[0]];
-        // var color = response.data.slice(1,8);
-        // if (conv == undefined)
-        //     return false;
-        
-        // isFacility = [conv, color];
-        // if (conv == FacilityTypes.RECEIVER) {
-        //     isFacility.push(parseInt(response.data.slice(9, )));
-        //     console.log("response isfacility is " + isFacility);
-        // }
-                } catch (error) {
-                    isFacility = false;
-                    return isFacility;
-                }
-                console.log(`unreacheble code`);
-            })
             .catch(error => {
                 isFacility = false;
                 console.log("~axios error " + error);
                 return ;
             })
-        } catch (error) {
-            // throw error;
-            console.log(`catch error ${error}`);
-        }
             
-        // if (response == false || response.data.length < 1)
-        //     return false;
+        if (response == false || response.data.length < 1)
+            return false;
         
-        // if (response.data[0] == 'r')
-        //     regexp += '-\\d*';
-        // regexp += '$';
+        if (response.data[0] == 'r')
+            regexp += '-\\d*';
+        regexp += '$';
 
-        // if (response.data.match(regexp).length != 1) {
-        //     return isFacility;
-        // }
+        if (response.data.match(regexp).length != 1) {
+            return isFacility;
+        }
         
-        // var conv = convertation[response.data[0]];
-        // var color = response.data.slice(1,8);
-        // if (conv == undefined)
-        //     return false;
+        var conv = convertation[response.data[0]];
+        var color = response.data.slice(1,8);
+        if (conv == undefined)
+            return false;
         
-        // isFacility = [conv, color];
-        // if (conv == FacilityTypes.RECEIVER) {
-        //     isFacility.push(parseInt(response.data.slice(9, )));
-        //     console.log("response isfacility is " + isFacility);
-        // }
+        isFacility = [conv, color];
+        if (conv == FacilityTypes.RECEIVER) {
+            isFacility.push(parseInt(response.data.slice(9, )));
+            console.log("response isfacility is " + isFacility);
+        }
             
         return isFacility;
     }
