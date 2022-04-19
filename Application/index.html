@@ -56,7 +56,17 @@
 
     <div class="topnav">
       <!-- <button class="button topnav-element" id="settings_button" onclick="settings()"> Settings </button> -->
-      <button class="button topnav-element" id="refresh_button" onclick="Websockets.refresh()"> Refresh </button>
+      
+      <button class="button topnav-element" id="refresh_button" onclick="Websockets.refreshClick()"> 
+        <span>Refresh</span>
+        <svg id="refreshLoad" style="display: none" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid meet">
+          <g id="arcs" transform=" translate(400 400) rotate(-90) scale(1 -1)"> 
+            <path d="M 0 0 L 300 0 A 300 300 0 1 0 -299.48843273842596 17.512243028274025 L 0 0" opacity="0.5"/>
+          </g>
+          <circle class="inner-circle" cx="400" cy="400" r="250"/>
+          
+        </svg>
+      </button>
       <div class="button topnav-element" onmouseleave="$(this).children().css('display', 'none');"
         onmouseenter="$(this).children().css('display', 'block');" id="helper"> ?
         <div>
@@ -171,6 +181,7 @@
     require('./render.js')
   </script>
   <script type="text/javascript" src="js/facility.js"> </script>
+  <script type="text/javascript" src="js/topnav-visual.js"> </script>
   <script type="text/javascript" src="js/table-visual.js"> </script>
   <script type="text/javascript" src="js/map-visual.js"> </script>
   <script type="text/javascript" src="js/action-visual.js"> </script>

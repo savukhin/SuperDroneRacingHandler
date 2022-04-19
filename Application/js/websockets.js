@@ -119,36 +119,71 @@ const axios = require('axios');
             regexp += key + ',';
         }
         regexp += ']' + colorRegexp;
-
+        
+        try{
         const response = await axios
             .get(`http://${ip}:${port}/DOYOUGATE`)
             .then(res => {
-                if (res.data.length < 1)
-                    return false;
-                
-                if (res.data[0] == 'r')
-                    regexp += '-\\d*';
-                regexp += '$';
+                try {
+// if (response == false || response.data.length < 1)
+        //     return false;
+        
+        // if (response.data[0] == 'r')
+        //     regexp += '-\\d*';
+        // regexp += '$';
 
-                if (res.data.match(regexp).length != 1) {
+        // if (response.data.match(regexp).length != 1) {
+        //     return isFacility;
+        // }
+        
+        // var conv = convertation[response.data[0]];
+        // var color = response.data.slice(1,8);
+        // if (conv == undefined)
+        //     return false;
+        
+        // isFacility = [conv, color];
+        // if (conv == FacilityTypes.RECEIVER) {
+        //     isFacility.push(parseInt(response.data.slice(9, )));
+        //     console.log("response isfacility is " + isFacility);
+        // }
+                } catch (error) {
+                    isFacility = false;
                     return isFacility;
                 }
-                
-                var conv = convertation[res.data[0]];
-                var color = res.data.slice(1,8);
-                if (conv == undefined)
-                    return false;
-                
-                isFacility = [conv, color];
-                if (conv == FacilityTypes.RECEIVER) {
-                    isFacility.push(parseInt(res.data.slice(9, )));
-                    console.log("Res isfacility is " + isFacility);
-                }
+                console.log(`unreacheble code`);
             })
             .catch(error => {
                 isFacility = false;
-                console.log("~axious error " + error);
+                console.log("~axios error " + error);
+                return ;
             })
+        } catch (error) {
+            // throw error;
+            console.log(`catch error ${error}`);
+        }
+            
+        // if (response == false || response.data.length < 1)
+        //     return false;
+        
+        // if (response.data[0] == 'r')
+        //     regexp += '-\\d*';
+        // regexp += '$';
+
+        // if (response.data.match(regexp).length != 1) {
+        //     return isFacility;
+        // }
+        
+        // var conv = convertation[response.data[0]];
+        // var color = response.data.slice(1,8);
+        // if (conv == undefined)
+        //     return false;
+        
+        // isFacility = [conv, color];
+        // if (conv == FacilityTypes.RECEIVER) {
+        //     isFacility.push(parseInt(response.data.slice(9, )));
+        //     console.log("response isfacility is " + isFacility);
+        // }
+            
         return isFacility;
     }
 
@@ -180,35 +215,42 @@ const axios = require('axios');
         delete facilities[ip];
     }
 
-    Websockets.refresh = function () {
+    Websockets.refresh = async function () {
         var check_gateways = new Set();
         gateways.forEach(elem => {
             check_gateways.add(elem);
         });
 
-        refresh_button.disabled = true
-        find().then(devices => {
-            devices.forEach(device => {
-                var ip = device.ip
-                console.log(` catch device ip ${ip}`);
-                if (gateways.includes(ip)) {
-                    check_gateways.delete(ip);
-                    var facility = facilities[ip]
-                    // if (isFacility[0] != )
-                    // if ()
-                    if (facility.websocket.readyState == WebSocket.CLOSED) {
-                        var socket = makeWebSocket(ip);
-                        facility.websocket = socket;
-                    }
+        Topnav.startRefreshAnim();
 
-                    return;
-                }
+        const devices = await find();
+        console.log('devices is', devices);
+
+        var promises = []
+
+        for (const device of devices) {
+            var ip = device.ip;
+            console.log(` catch device ip ${ip}`);
+            if (gateways.includes(ip)) {
+                check_gateways.delete(ip);
+                var facility = facilities[ip]
                 
-                checkFacility(ip, 80).then(isFacility => {
-                    console.log(`is facility ${isFacility}`);
-                    if (!isFacility[0])
-                        return
+                if (facility.websocket.readyState == WebSocket.CLOSED) {
+                    var socket = makeWebSocket(ip);
+                    facility.websocket = socket;
+                }
 
+                return;
+            }
+        
+            var promise = new Promise( (resolve, reject) => {
+                checkFacility(ip, 80).then(isFacility => {
+                    // console.log(`is facility ${isFacility}`);
+                    
+                    if (!isFacility[0]) {
+                        resolve(`${ip} is not facility`);
+                        return;
+                    }
 
                     var number = gateways.length + 1;
                     gateways.push(ip);
@@ -222,14 +264,26 @@ const axios = require('axios');
                         var count = parseInt(isFacility[2]);
                         $(facility.descrDiv).find('p').html(count);
                     }
-                })
-            })
+                    resolve(`${ip} is facility`);
+                });
+            });
+            promises.push(promise);
+        }
 
+        Promise.all(promises).then(value => {
             check_gateways.forEach(elem => {
                 Websockets.deleteFacility(facilities[elem]);
             })
-            refresh_button.disabled = false;
-        })
+            
+            Topnav.endRefreshAnim();
+        }, reason => {
+            console.log(`refresh ended because of reason ${reason}`);
+            Topnav.endRefreshAnim();
+        });
+    }
+
+    Websockets.refreshClick = function() {
+        Websockets.refresh();
     }
 
     Websockets.toggle = function (facility, message) {

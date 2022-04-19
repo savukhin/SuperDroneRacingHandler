@@ -185,4 +185,36 @@
 #helper .facility-element {
     width:50px;
     height:50px;
+    position: relative;
+}
+
+#refreshLoad {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    right: 0px;
+    animation: rotating 1s cubic-bezier(.35,.65,.63,.56) infinite;
+    display: block;
+}
+
+#refreshLoad #arcs {
+    fill: var(--text-color);
+}
+
+#refreshLoad .inner-circle {
+    fill: var(--main-bg-color);
+}
+
+
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+    from {
+      -webkit-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
 }
