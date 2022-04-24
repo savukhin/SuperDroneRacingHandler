@@ -30,6 +30,12 @@ const axios = require('axios');
         addFacility(new Facility("26", null, 13, '#000000', null, 'receiver'));
         addFacility(new Facility("36", null, 14, '#ff00ff', null, 'mat'));
 
+        // addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
+        // addFacility(new Facility("2", null, 2, '#00ff00', null, 'flag'));
+        // addFacility(new Facility("3", null, 3, '#000000', null, 'marker'));
+        // addFacility(new Facility("4", null, 4, '#ffffff', null, 'flag'));
+        // addFacility(new Facility("5", null, 5, '#aaffaa', null, 'gate'));
+
 
         for (const [key, value] of Object.entries(facilities)) {
             gateways.push(value.ip);
@@ -37,13 +43,17 @@ const axios = require('axios');
     }
 
     Websockets.testDelete = function () {
-        setTimeout( () => {
-        Websockets.deleteFacility(facilities[5]);
-        }, 50);
+        // setTimeout( () => {
+        // Websockets.deleteFacility(facilities[5]);
+        // }, 50);
+        let len = gateways.length;
+        for (let i = 0; i < len; i++) {
+            Websockets.deleteFacility(facilities[gateways[0]]);
+        }
     }
 
     Websockets.onLoad = function (event) {
-        // testAdd();
+        // Websockets.testAdd();
     }
 
     function addFacility(facility) {
@@ -177,9 +187,11 @@ const axios = require('axios');
 
         var number = facility.number - 1;
         var ip = facility.ip;
+        var index = gateways.indexOf(facility.ip);
 
         facility.erase()
-        gateways.splice(number, 1);
+        console.log(`splicing gateways at ${index}`);
+        gateways.splice(index, 1);
 
         setTimeout(() => {
             for (var [key, value] of Object.entries(facilities)) {

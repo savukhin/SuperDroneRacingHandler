@@ -180,9 +180,11 @@
             this.elements.splice(index, 1);
             this.dragZones.splice(index, 1);
             this.lines.splice(index, 1);
+            this.facilities.splice(index, 1);
             
             var newWidth = this.getMaxLen() - this.singleWidth;
             $(this.div).css('width', newWidth + 'px');
+            return true;
         }
 
         getObjectsBySelection(pos1, pos2) {
