@@ -9,6 +9,13 @@
     }
     var currentTab = "action_colors";
 
+    var clearChosen = () => {
+        $(`#state_display_before`).html('');
+        $(`#state_display_after`).html('');
+        multiChose = false;
+        chosen = null;
+    }
+
     Action.colorPick = function (color) {
         if (Action.chosen == null)
             return;
@@ -139,6 +146,32 @@
         }
     }
 
+    Action.addChosingElement = function(facility) {
+        if (Action.chosen == null)
+            Action.chooseElement(facility);
+        else if (!multiChose)
+            Action.choseMultipleElements(new Set([Action.chosen, facility]));
+        else
+            Action.choseMultipleElements(new Set([...Action.chosen, facility]));
+    }
+
+    Action.deleteChosingElement = function(facility) {
+        if (Action.chosen == null)
+            return;
+
+        if (!multiChose) {
+            if (Action.chosen == facility)
+                clearChosen();
+            return;
+        }
+        
+        // If multichosen and not null
+        if (!Action.chosen.has(facility))
+            return;
+        else
+            Action.choseMultipleElements(new Set([...Action.chosen].filter(x => x != facility)));
+    }
+
     Action.choseMultipleElements = function (facilities) {
         multiChose = true;
         if (Action.chosen != null) {
@@ -146,7 +179,7 @@
             $(`#state_display_after`).html('');
         }
 
-        Action.chosen = facilities;
+        Action.chosen = new Set([...facilities]);
         var hasReceiver = false;
         var divBefore = document.createElement('div');
         var divAfter = document.createElement('div');
