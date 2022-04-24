@@ -87,7 +87,14 @@
             var overlay = document.createElement('div');
             overlay.className = "overlay";
             overlay.onclick = function (event) {
-                Map.chooseElement(facility);
+                if (Keyboard.checkShift()) {
+                    if (selectedItems.has(facility))
+                        Map.deleteChosingElement(facility);
+                    else
+                        Map.addChosingElement(facility);
+                } else {
+                    Map.chooseElement(facility);
+                }
             }
             overlay.onmouseenter = function(event){
                 $(div).css("z-index", "100");
@@ -227,6 +234,7 @@
     var selectionPos = {x: 0, y: 0};
     var isSelecting = false;
     var selectedItems = new Set();
+    let shiftPressed 
 
     Map.onLoad = function () {
     }
@@ -309,14 +317,18 @@
         
     }
 
-    var checkSelection = function(delta) {
-        var selected = getObjectsBySelection(selectionPos, {x: selectionPos.x + delta.x, y : selectionPos.y + delta.y});
+    var checkSelection = function(delta, add=false) {
+        let selected = getObjectsBySelection(selectionPos, {x: selectionPos.x + delta.x, y : selectionPos.y + delta.y});
         highlighFacilities(selected);
 
-        var checker = new Set([...selectedItems].filter(x => !selected.has(x)));
-        highlighFacilities(checker, false);
+        if (!add) {
+            let checker = new Set([...selectedItems].filter(x => !selected.has(x)));
+            highlighFacilities(checker, false);
+            selectedItems = selected;
+        }
 
-        selectedItems = selected;
+        // selected = new Set([...selected, ...])
+        selectedItems = new Set([...selected, ...selectedItems]);
     }
 
     Map.handleSelection = function(event) {
@@ -341,7 +353,10 @@
         $("#selection").css("width", Math.abs(delta.x));
         $("#selection").css("height", Math.abs(delta.y));
 
-        checkSelection(delta);
+        let addiction = false;
+        if (Keyboard.checkShift())
+            addiction = true;
+        checkSelection(delta, addiction);
     }
 
     Map.endSelection = function(event) {
@@ -356,9 +371,27 @@
 
         isSelecting = false;
 
-        checkSelection(delta);
+        let addiction = false;
+        if (Keyboard.checkShift())
+            addiction = true;
+        checkSelection(delta, addiction);
 
         Action.choseMultipleElements(selectedItems);
+    }
+
+    Map.addChosingElement = function(facility) {
+        Action.addChosingElement(facility);
+        selectedItems.add(facility);
+        highlighFacilities(selectedItems);
+    }
+
+    Map.deleteChosingElement = function(facility) {
+        if (!selectedItems.has(facility))
+            return;
+
+        Action.deleteChosingElement(facility);
+        selectedItems.delete(facility);
+        highlighFacilities(new Set([facility]), false);
     }
 
     Map.chooseElement = function(facility) {
