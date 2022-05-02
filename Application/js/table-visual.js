@@ -14,12 +14,12 @@ const { cp } = require("original-fs");
 
     }
 
-    Table.findFacility = function (facilitiy) {
+    Table.findFacility = function (facility) {
         var col = 0;
-        for (; Table.columns[col] != facilitiy.type && col < Table.columns.length; col++);
+        for (; Table.columns[col] != facility.type && col < Table.columns.length; col++);
 
         for (var row = 0; row < Table.rows[col]; row++) {
-            if (Table.facilities[col][row] == facilitiy)
+            if (Table.facilities[col][row] == facility)
                 return [col, row];
         }
         return false;
@@ -87,12 +87,18 @@ const { cp } = require("original-fs");
 
     Table.deleteColumn = function(col) {
         function removeCell(trow, tagName, number) {
+            let deleted = false;
             trow.find(tagName).each(function() {
-                var td = $(this);
+                let td = $(this);
 
-                if (td.index() == number) {
+                if (td.index() == number && !deleted) {
                     td.remove();
-                    return;
+                    deleted = true;
+                } else if (td.index() >= number && deleted && tagName === 'th') {
+                    let index = td.index();
+                    this.onclick = () => {
+                        Table.choseColumn(index);
+                    };
                 }
             })
         }
@@ -121,9 +127,10 @@ const { cp } = require("original-fs");
     Table.choseColumn = function(col) {
         let elements = [];
         Table.facilities[col].forEach(facility => {
-            if (facility != null)
+            if (facility != null && facility != 0)
                 elements.push(facility);
         });
+
 
         Action.choseMultipleElements(elements);
     }
@@ -134,10 +141,7 @@ const { cp } = require("original-fs");
         $('#main_table').find('tr').each(function () {
             var trow = $(this);
             if (trow.index() === 0) {
-                // var th = document.createElement('th');
                 trow.append(`<th onClick=Table.choseColumn(${col})>${type}</th>`);
-                // $(th).onClick(
-                // trow.append(th);
             } else if (trow.index() == 1) {
                 var code = `<div class="table-wrapper">`;
                 code += `<div class="grid-cell">Type</div>`;
@@ -225,7 +229,7 @@ const { cp } = require("original-fs");
         }
 
         getCell(col, row).append(overlay);
-        Table.facilities[facility.ip] = [col, row];
+        // Table.facilities[facility.ip] = [col, row];
     }
 
 }(window.Table = window.Table || {}, jQuery));
