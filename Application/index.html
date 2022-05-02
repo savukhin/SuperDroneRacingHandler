@@ -84,6 +84,7 @@
           onmousemove="Map.handleSelection(event)" onmousedown="Map.startSelection(event)" class="box">
           <div id="selection"></div>
           <div class="block scrollable scrollable-x scrollable-y" style="padding: 10px">
+            <div style="width:fit-content; height:100%" class="selectable-zone">
             <div id="map_grid" class="selectable-zone">
               <div id="map_line" class="selectable-zone"
                 style="position: relative; grid-row-start: 1; grid-column-start: 1"></div>
@@ -91,6 +92,7 @@
               <div id="row_2" style="grid-row-start: 2; grid-column-start: 1" class="map-row"></div>
               <div id="row_3" style="grid-row-start: 3; grid-column-start: 1" class="map-row"></div>
             </div>
+          </div>
           </div>
         </div>
 
@@ -183,8 +185,8 @@
               </div>
             </div>
 
-            <!-- <button onClick="Websockets.testAdd()">ADD!</button>
-            <button onClick="Websockets.testDelete()">DELETE!</button> -->
+            <button onClick="Websockets.testAdd()">ADD!</button>
+            <button onClick="Websockets.testDelete()">DELETE!</button>
           </div>
         </div>
       </div>
