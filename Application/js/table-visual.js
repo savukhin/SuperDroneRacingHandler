@@ -118,21 +118,29 @@ const { cp } = require("original-fs");
         $(facility.descrDiv).find('p').html(descr);
     }
 
+    Table.choseColumn = function(col) {
+        let elements = [];
+        Table.facilities[col].forEach(facility => {
+            if (facility != null)
+                elements.push(facility);
+        });
+
+        Action.choseMultipleElements(elements);
+    }
+
     function createColumn(type) {
         var row = 0;
         var col = Table.columns.length;
         $('#main_table').find('tr').each(function () {
             var trow = $(this);
             if (trow.index() === 0) {
-                trow.append(`<th>${type}</th>`);
+                // var th = document.createElement('th');
+                trow.append(`<th onClick=Table.choseColumn(${col})>${type}</th>`);
+                // $(th).onClick(
+                // trow.append(th);
             } else if (trow.index() == 1) {
                 var code = `<div class="table-wrapper">`;
                 code += `<div class="grid-cell">Type</div>`;
-                if (NonDescriptionalFacilities.has(type))
-                    code += ` <div class="grid-cell" style="grid-column-start: 2; grid-column-end: 4;"> Color </div>`;
-                else
-                    code += ` <div class="grid-cell">${FacilityDesciptions[type]}</div>
-                        <div class="grid-cell indicator">Color</div>`;
                 code += `</div>`;
                 trow.append(`<th>${code}</th>`);
             } else {
@@ -152,11 +160,11 @@ const { cp } = require("original-fs");
         var img = generateFacilityElem(facility);
         code += `<div class="grid-cell">${img}</div>`;
 
-        if (NonDescriptionalFacilities.has(facility.type))
-            code += ` <div class="grid-cell indicator" style="grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
-        else
-            code += ` <div class="grid-cell description"><p>${facility.number}</p></div>
-                <div class="grid-cell indicator" style="background: ${facility.color}"></div>`;
+        // if (NonDescriptionalFacilities.has(facility.type))
+        //     code += ` <div class="grid-cell indicator" style="grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
+        // else
+        //     code += ` <div class="grid-cell description"><p>${facility.number}</p></div>
+        //         <div class="grid-cell indicator" style="background: ${facility.color}"></div>`;
 
         code += `</div>`;
 

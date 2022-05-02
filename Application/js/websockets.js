@@ -300,7 +300,7 @@ const axios = require('axios');
         facility.websocket.send(message);
     }
 
-    Websockets.blink = function (facility, count=3, duration=3, color="#ffffff", endless=false) { // duration in seconds
+    Websockets.blink = function (facility, count=2, duration=0.25, color="#ffffff", endless=false) { // duration in seconds
         var message = `blink-${count}-${parseInt(duration*1000)}-${color}`;
         if (endless)
             message += `-endless`;
