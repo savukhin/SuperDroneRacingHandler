@@ -2,7 +2,7 @@
     height: 80px;
 }
 #table_box td, #table_box th {
-    border: 1px solid var(--main-bg-color);
+    /* border: 1px solid var(--main-bg-color); */
 }
 
 #main_table {
@@ -12,6 +12,20 @@
 .table-wrapper {
     display: grid;
     grid-template-columns: 80px 80px 80px;
+}
+
+.table-card {
+    width: 100px;
+    background-color: var(--text-color);
+    border-radius: 5px;
+}
+
+.table-card h {
+    font-size: large;
+    background-color: var(--second-bg-color);
+    display: flex;
+    justify-content: center;
+    border-radius: 5px 5px 0px 0px;
 }
 
 .grid-cell {

@@ -142,11 +142,6 @@ const { cp } = require("original-fs");
             var trow = $(this);
             if (trow.index() === 0) {
                 trow.append(`<th onClick=Table.choseColumn(${col})>${type}</th>`);
-            } else if (trow.index() == 1) {
-                var code = `<div class="table-wrapper">`;
-                code += `<div class="grid-cell">Type</div>`;
-                code += `</div>`;
-                trow.append(`<th>${code}</th>`);
             } else {
                 trow.append(`<td id="td_col_${col}_row_${row}"></td>`);
                 row++;
@@ -158,17 +153,18 @@ const { cp } = require("original-fs");
         Table.rows.push(0);
     }
 
-    function generateCell(facility) {
-        var code = `<div class="table-wrapper">`;
-
+    function generateCard(facility) {
         var img = generateFacilityElem(facility);
-        code += `<div class="grid-cell">${img}</div>`;
+        var code = `<div class="table-card"><h>${facility.type} #${facility.number}</h>`
+        code += `<div style="padding: 5px">${img}</div>`;
+        code += `</div>`
+        return code;
+    }
 
-        // if (NonDescriptionalFacilities.has(facility.type))
-        //     code += ` <div class="grid-cell indicator" style="grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
-        // else
-        //     code += ` <div class="grid-cell description"><p>${facility.number}</p></div>
-        //         <div class="grid-cell indicator" style="background: ${facility.color}"></div>`;
+    function generateCell(facility) {
+        var code = `<div>`;
+
+        code += generateCard(facility);
 
         code += `</div>`;
 
