@@ -1,8 +1,12 @@
 #table_box td {
-    height: 80px;
+    /* height: 80px; */
 }
 #table_box td, #table_box th {
     /* border: 1px solid var(--main-bg-color); */
+}
+
+#table_box tr {
+    height : 0px;
 }
 
 #main_table {
@@ -18,6 +22,38 @@
     width: 100px;
     background-color: var(--text-color);
     border-radius: 5px;
+    overflow: hidden;
+    /* height: 20px; */
+    /* animation: hideCard 0.5s forwards; */
+}
+
+.table-card:hover {
+    /* animation: showCard 1s forwards; */
+}
+
+.table-card-opened {
+    /* height: 120px; */
+    animation: showCard 1s forwards;
+}
+
+@keyframes showCard {
+    from {
+        height: 28px;
+        background-color: blue;
+    }
+    to {
+        height: 110px;
+        background-color: brown;
+    }
+}
+
+@keyframes hideCard {
+    from {
+        height: 110px;
+    }
+    to {
+        height: 28px;
+    }
 }
 
 .table-card h {

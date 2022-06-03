@@ -143,7 +143,7 @@ const { cp } = require("original-fs");
             if (trow.index() === 0) {
                 trow.append(`<th onClick=Table.choseColumn(${col})>${type}</th>`);
             } else {
-                trow.append(`<td id="td_col_${col}_row_${row}"></td>`);
+                trow.append(`<td id="td_col_${col}"></td>`);
                 row++;
             }
         });
@@ -189,6 +189,52 @@ const { cp } = require("original-fs");
         return $(`#td_col_${col}_row_${row}`)
     }
 
+    function addToColumn(facility, col) {
+        var cellDiv = generateCell(facility);
+
+        $(`#td_col_${col}`)
+        .append(
+            `<div id='td_col_${col}_row_${Table.rows[col]}'>
+            ${cellDiv}
+            </div>
+            </div>`
+        );
+
+        if (Table.rows[col] >= 1)
+            $(`#td_col_${col}_row_${Table.rows[col] - 1}`)
+                .find(`.table-card`)
+                .css({'height': '20px'});
+
+        let card = $(`#td_col_${col}_row_${Table.rows[col]}`).find(`.table-card`);
+        card.css({'height': '120px'});
+        let row = Table.rows[col];
+
+        card
+            .on("click", (event) => {
+                Action.chooseElement(facility);
+            })
+            .on("mouseenter", (event) => {
+                if (row == Table.rows[col] - 1)
+                    return;
+
+                $(card).stop();
+                $(card).animate({
+                    height: "120px",
+                }, 300)
+            })
+            .on("mouseleave", (event) => {
+                if (row == Table.rows[col] - 1)
+                    return;
+                
+                $(card).stop();
+                isAnimating = true;
+                $(card).animate({
+                    height: "20px",
+                }, 300)
+            })
+        Table.rows[col]++;
+    }
+
     Table.addFacility = function (facility) {
         var col = Table.columns.indexOf(facility.type);
         if (col == -1) {
@@ -198,11 +244,10 @@ const { cp } = require("original-fs");
 
         var row = Table.rows[col];
 
-        while (Table.maxRows < row + 1)
-            createRow();
-
-        var cellDiv = generateCell(facility);
-        getCell(col, row).append(cellDiv);
+        // while (Table.maxRows < row + 1)
+        //     createRow();
+        // getCell(col, row).append(cellDiv);
+        addToColumn(facility, col);
         Table.facilities[col][row] = facility;
         var query = $(getCell(col, row))
             .find('.facility-element').children()
@@ -215,8 +260,6 @@ const { cp } = require("original-fs");
 
         query = $(getCell(col, row)).find('.description');
         facility.descrDiv = query;
-
-        Table.rows[col]++;
 
         var overlay = document.createElement('div');
         overlay.className = "overlay";
