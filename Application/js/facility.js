@@ -45,11 +45,30 @@ class Facility {
         this.tableDiv = null;
         this.indicatorDiv = null;
         this.descrDiv = null;
+        this.cardDiv = null;
+        this.count = 0;
     }
 
     erase() {
         if (this.websocket != null)
             this.websocket.close()
+    }
+
+    getDescription() {
+        let ans = this.type;
+        if (!NonDescriptionalFacilities.has(this.type)) {
+            switch (FacilityDesciptions[this.type]) {
+                case 'Number':
+                    ans += " #" + this.number;
+                    break;
+                case 'Count':
+                    // ans += " " + this.count;
+                    break;
+                default:
+                    break;
+            } 
+        }
+        return ans;
     }
 }
 

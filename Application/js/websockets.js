@@ -125,7 +125,8 @@ const axios = require('axios');
 
         if (facility.type == FacilityTypes.RECEIVER) {
             var count = parseInt(event.data.slice(8));
-            Table.updateDescription(facility, count);
+            facility.count = count;
+            Table.updateDescription(facility);
         }
 
         var newColor = event.data.slice(0, 7);

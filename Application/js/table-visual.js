@@ -120,8 +120,12 @@ const { cp } = require("original-fs");
         Table.rows.splice(col, 1);
     }
 
-    Table.updateDescription = function(facility, descr) {
-        $(facility.descrDiv).find('p').html(descr);
+    Table.updateDescription = function(facility) {
+        console.log(FacilityDesciptions[facility.type]);
+        $(facility.descrDiv).find('p').html(facility.getDescription());
+        if (FacilityDesciptions[facility.type] == "Count") {
+            // facility.tableDiv.after(`<h>${facility.count}</h>`);
+        }
     }
 
     Table.choseColumn = function(col) {
@@ -155,7 +159,7 @@ const { cp } = require("original-fs");
 
     function generateCard(facility) {
         var img = generateFacilityElem(facility);
-        var code = `<div class="table-card"><h>${facility.type} #${facility.number}</h>`
+        var code = `<div class="table-card"><h>${facility.getDescription()}</h>`
         code += `<div style="padding: 5px">${img}</div>`;
         code += `</div>`
         return code;
@@ -232,7 +236,10 @@ const { cp } = require("original-fs");
                     height: "20px",
                 }, 300)
             })
+
         Table.rows[col]++;
+
+        return card;
     }
 
     Table.addFacility = function (facility) {
@@ -244,11 +251,11 @@ const { cp } = require("original-fs");
 
         var row = Table.rows[col];
 
-        // while (Table.maxRows < row + 1)
-        //     createRow();
-        // getCell(col, row).append(cellDiv);
-        addToColumn(facility, col);
+        let card = addToColumn(facility, col);
         Table.facilities[col][row] = facility;
+
+        facility.cardDiv = card;
+
         var query = $(getCell(col, row))
             .find('.facility-element').children()
             .not('.overlay').not('.drag-line').not('.drag-zone');
@@ -269,6 +276,8 @@ const { cp } = require("original-fs");
 
         getCell(col, row).append(overlay);
         // Table.facilities[facility.ip] = [col, row];
+
+        Table.updateDescription(facility);
     }
 
 }(window.Table = window.Table || {}, jQuery));
