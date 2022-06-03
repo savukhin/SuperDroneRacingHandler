@@ -315,7 +315,7 @@
 
     Map.updateType = function(facility, newType) {
         $(facility.mapDiv).attr('class', `${newType}-element`);
-        
+        // TODO   
     }
 
     var checkSelection = function(delta, add=false) {
@@ -395,11 +395,28 @@
         highlighFacilities(new Set([facility]), false);
     }
 
+    Map.choseElements = function(facilities) {
+        Map.clearSelection();
+
+        facilities.forEach(facility => {
+            Map.addChosingElement(facility);
+        })
+    }
+
     Map.chooseElement = function(facility) {
         Action.chooseElement(facility);
         Map.clearSelection();
         selectedItems.add(facility);
         highlighFacilities(selectedItems);
+    }
+
+    Map.choseAll = function() {
+        let facilities = new Set();
+        for (var i = 0; i < rows.length; i++) {
+            var tmp = rows[i].facilities;
+            facilities = new Set([...facilities, ...tmp]);
+        }
+        return Map.choseElements(facilities);
     }
 
 }(window.Map = window.Map || {}, jQuery));

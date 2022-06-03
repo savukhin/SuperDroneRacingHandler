@@ -121,7 +121,6 @@ const { cp } = require("original-fs");
     }
 
     Table.updateDescription = function(facility) {
-        console.log(FacilityDesciptions[facility.type]);
         $(facility.descrDiv).find('p').html(facility.getDescription());
         if (FacilityDesciptions[facility.type] == "Count") {
             // facility.tableDiv.after(`<h>${facility.count}</h>`);
@@ -136,7 +135,8 @@ const { cp } = require("original-fs");
         });
 
 
-        Action.choseMultipleElements(elements);
+        // Action.choseMultipleElements(elements);
+        Map.choseElements(elements);
     }
 
     function createColumn(type) {
@@ -215,7 +215,7 @@ const { cp } = require("original-fs");
 
         card
             .on("click", (event) => {
-                Action.chooseElement(facility);
+                Map.chooseElement(facility);
             })
             .on("mouseenter", (event) => {
                 if (row == Table.rows[col] - 1)
