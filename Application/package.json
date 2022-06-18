@@ -1,5 +1,5 @@
 {
-  "name": "TrackFox RaceControl",
+  "name": "TrackFox-RaceControl",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -12,11 +12,12 @@
   "dependencies": {
     "@electron/remote": "^2.0.8",
     "axios": "^0.26.1",
-    "electron": "^18.0.1",
+    
     "jquery": "^3.6.0",
     "local-devices": "^3.0.0"
   },
   "devDependencies": {
-    "electron-packager": "^15.4.0"
+    "electron-packager": "^15.4.0",
+    "electron": "^18.0.1"
   }
 }
