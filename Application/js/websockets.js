@@ -44,7 +44,7 @@ const axios = require('axios');
 
     Websockets.testDelete = function () {
         // setTimeout( () => {
-        // Websockets.deleteFacility(facilities[5]);
+        //     Websockets.deleteFacility(facilities[6]);
         // }, 50);
         let len = gateways.length;
         for (let i = 0; i < len; i++) {
@@ -125,7 +125,8 @@ const axios = require('axios');
 
         if (facility.type == FacilityTypes.RECEIVER) {
             var count = parseInt(event.data.slice(8));
-            Table.updateDescription(facility, count);
+            facility.count = count;
+            Table.updateDescription(facility);
         }
 
         var newColor = event.data.slice(0, 7);
@@ -300,7 +301,7 @@ const axios = require('axios');
         facility.websocket.send(message);
     }
 
-    Websockets.blink = function (facility, count=3, duration=3, color="#ffffff", endless=false) { // duration in seconds
+    Websockets.blink = function (facility, count=2, duration=0.25, color="#ffffff", endless=false) { // duration in seconds
         var message = `blink-${count}-${parseInt(duration*1000)}-${color}`;
         if (endless)
             message += `-endless`;

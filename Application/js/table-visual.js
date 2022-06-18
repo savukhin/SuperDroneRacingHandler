@@ -14,12 +14,12 @@ const { cp } = require("original-fs");
 
     }
 
-    Table.findFacility = function (facilitiy) {
+    Table.findFacility = function (facility) {
         var col = 0;
-        for (; Table.columns[col] != facilitiy.type && col < Table.columns.length; col++);
+        for (; Table.columns[col] != facility.type && col < Table.columns.length; col++);
 
         for (var row = 0; row < Table.rows[col]; row++) {
-            if (Table.facilities[col][row] == facilitiy)
+            if (Table.facilities[col][row] == facility)
                 return [col, row];
         }
         return false;
@@ -87,35 +87,67 @@ const { cp } = require("original-fs");
 
     Table.deleteColumn = function(col) {
         function removeCell(trow, tagName, number) {
+            let deleted = false;
             trow.find(tagName).each(function() {
-                var td = $(this);
+                let td = $(this);
 
-                if (td.index() == number) {
+                if (td.index() == number && !deleted) {
                     td.remove();
-                    return;
+                    deleted = true;
+                } else if (td.index() >= number && deleted && tagName === 'th') {
+                    let index = td.index();
+                    this.onclick = () => {
+                        Table.choseColumn(index);
+                    };
                 }
             })
         }
 
         var row = 0;
         // var col = Table.columns.length;
-        $('#main_table').find('tr').each(function () {
-            var trow = $(this);
-            if (trow.index() < 2) {
-                removeCell(trow, 'th', col);
-            } else {
-                removeCell(trow, 'td', col);
-                row++;
-            }
-        });
+        // $('#main_table').find('tr').each(function () {
+        //     var trow = $(this);
+        //     if (trow.index() < 2) {
+        //         removeCell(trow, 'th', col);
+        //     } else {
+        //         removeCell(trow, 'td', col);
+        //         row++;
+        //     }
+        // });
 
         Table.facilities.splice(col, 1);
         Table.columns.splice(col, 1);
         Table.rows.splice(col, 1);
+
+        $(`#td_col_${col}`).remove();
+        $(`#th_col_${col}`).remove();
+
+        for (let c = col + 1; c <= Table.columns.length; c++) {
+            $(`#td_col_${c}`).attr(`id`, `td_col_${c - 1}`);
+            for (let r = 0; r < Table.rows[c]; r++) {
+                $(`#td_col_${c}_row_${r}`).attr(`id`, `td_col_${c - 1}_row_${r}`);
+            }
+            $(`#th_col_${c}`).attr(`id`, `th_col_${c - 1}`);
+        }
     }
 
-    Table.updateDescription = function(facility, descr) {
-        $(facility.descrDiv).find('p').html(descr);
+    Table.updateDescription = function(facility) {
+        $(facility.descrDiv).find('p').html(facility.getDescription());
+        if (FacilityDesciptions[facility.type] == "Count") {
+            // facility.tableDiv.after(`<h>${facility.count}</h>`);
+        }
+    }
+
+    Table.choseColumn = function(col) {
+        let elements = [];
+        Table.facilities[col].forEach(facility => {
+            if (facility != null && facility != 0)
+                elements.push(facility);
+        });
+
+
+        // Action.choseMultipleElements(elements);
+        Map.choseElements(elements);
     }
 
     function createColumn(type) {
@@ -124,19 +156,9 @@ const { cp } = require("original-fs");
         $('#main_table').find('tr').each(function () {
             var trow = $(this);
             if (trow.index() === 0) {
-                trow.append(`<th>${type}</th>`);
-            } else if (trow.index() == 1) {
-                var code = `<div class="table-wrapper">`;
-                code += `<div class="grid-cell">Type</div>`;
-                if (NonDescriptionalFacilities.has(type))
-                    code += ` <div class="grid-cell" style="grid-column-start: 2; grid-column-end: 4;"> Color </div>`;
-                else
-                    code += ` <div class="grid-cell">${FacilityDesciptions[type]}</div>
-                        <div class="grid-cell indicator">Color</div>`;
-                code += `</div>`;
-                trow.append(`<th>${code}</th>`);
+                trow.append(`<th id="th_col_${col}" onClick=Table.choseColumn(${col})>${type}</th>`);
             } else {
-                trow.append(`<td id="td_col_${col}_row_${row}"></td>`);
+                trow.append(`<td id="td_col_${col}"></td>`);
                 row++;
             }
         });
@@ -146,17 +168,18 @@ const { cp } = require("original-fs");
         Table.rows.push(0);
     }
 
-    function generateCell(facility) {
-        var code = `<div class="table-wrapper">`;
-
+    function generateCard(facility) {
         var img = generateFacilityElem(facility);
-        code += `<div class="grid-cell">${img}</div>`;
+        var code = `<div class="table-card"><h>${facility.getDescription()}</h>`
+        code += `<div style="padding: 5px">${img}</div>`;
+        code += `</div>`
+        return code;
+    }
 
-        if (NonDescriptionalFacilities.has(facility.type))
-            code += ` <div class="grid-cell indicator" style="grid-column-start: 2; grid-column-end: 4; background: ${facility.color}"></div>`;
-        else
-            code += ` <div class="grid-cell description"><p>${facility.number}</p></div>
-                <div class="grid-cell indicator" style="background: ${facility.color}"></div>`;
+    function generateCell(facility) {
+        var code = `<div>`;
+
+        code += generateCard(facility);
 
         code += `</div>`;
 
@@ -181,6 +204,55 @@ const { cp } = require("original-fs");
         return $(`#td_col_${col}_row_${row}`)
     }
 
+    function addToColumn(facility, col) {
+        var cellDiv = generateCell(facility);
+
+        $(`#td_col_${col}`)
+        .append(
+            `<div id='td_col_${col}_row_${Table.rows[col]}'>
+            ${cellDiv}
+            </div>
+            </div>`
+        );
+
+        if (Table.rows[col] >= 1)
+            $(`#td_col_${col}_row_${Table.rows[col] - 1}`)
+                .find(`.table-card`)
+                .css({'height': '20px'});
+
+        let card = $(`#td_col_${col}_row_${Table.rows[col]}`).find(`.table-card`);
+        card.css({'height': '120px'});
+        let row = Table.rows[col];
+
+        card
+            .on("click", (event) => {
+                Map.chooseElement(facility);
+            })
+            .on("mouseenter", (event) => {
+                if (row == Table.rows[col] - 1)
+                    return;
+
+                $(card).stop();
+                $(card).animate({
+                    height: "120px",
+                }, 300)
+            })
+            .on("mouseleave", (event) => {
+                if (row == Table.rows[col] - 1)
+                    return;
+                
+                $(card).stop();
+                isAnimating = true;
+                $(card).animate({
+                    height: "20px",
+                }, 300)
+            })
+
+        Table.rows[col]++;
+
+        return card;
+    }
+
     Table.addFacility = function (facility) {
         var col = Table.columns.indexOf(facility.type);
         if (col == -1) {
@@ -190,12 +262,11 @@ const { cp } = require("original-fs");
 
         var row = Table.rows[col];
 
-        while (Table.maxRows < row + 1)
-            createRow();
-
-        var cellDiv = generateCell(facility);
-        getCell(col, row).append(cellDiv);
+        let card = addToColumn(facility, col);
         Table.facilities[col][row] = facility;
+
+        facility.cardDiv = card;
+
         var query = $(getCell(col, row))
             .find('.facility-element').children()
             .not('.overlay').not('.drag-line').not('.drag-zone');
@@ -208,8 +279,6 @@ const { cp } = require("original-fs");
         query = $(getCell(col, row)).find('.description');
         facility.descrDiv = query;
 
-        Table.rows[col]++;
-
         var overlay = document.createElement('div');
         overlay.className = "overlay";
         overlay.onclick = function (event) {
@@ -217,7 +286,9 @@ const { cp } = require("original-fs");
         }
 
         getCell(col, row).append(overlay);
-        Table.facilities[facility.ip] = [col, row];
+        // Table.facilities[facility.ip] = [col, row];
+
+        Table.updateDescription(facility);
     }
 
 }(window.Table = window.Table || {}, jQuery));

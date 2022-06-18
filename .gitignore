@@ -56,6 +56,7 @@ TrackFox RaceControl-linux-x64/
 TrackFox RaceControl-linux-ia32/
 TrackFox RaceControl-linux-armv7l/
 TrackFox RaceControl-linux-arm64/
+TrackFox-RaceControl-linux-armv7l/
 
 Application.rar
 
@@ -140,6 +141,7 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+.vscode
 
 # yarn v2
 .yarn/cache
