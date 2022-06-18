@@ -26,10 +26,10 @@ function createWindow() {
         slashes: true
     }))
 
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
     win.setMenuBarVisibility(false);
     win.setMenu(null)
-    win.maximize();
+    // win.maximize();
 
     require('@electron/remote/main').initialize()
     require("@electron/remote/main").enable(win.webContents)

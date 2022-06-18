@@ -105,19 +105,30 @@ const { cp } = require("original-fs");
 
         var row = 0;
         // var col = Table.columns.length;
-        $('#main_table').find('tr').each(function () {
-            var trow = $(this);
-            if (trow.index() < 2) {
-                removeCell(trow, 'th', col);
-            } else {
-                removeCell(trow, 'td', col);
-                row++;
-            }
-        });
+        // $('#main_table').find('tr').each(function () {
+        //     var trow = $(this);
+        //     if (trow.index() < 2) {
+        //         removeCell(trow, 'th', col);
+        //     } else {
+        //         removeCell(trow, 'td', col);
+        //         row++;
+        //     }
+        // });
 
         Table.facilities.splice(col, 1);
         Table.columns.splice(col, 1);
         Table.rows.splice(col, 1);
+
+        $(`#td_col_${col}`).remove();
+        $(`#th_col_${col}`).remove();
+
+        for (let c = col + 1; c <= Table.columns.length; c++) {
+            $(`#td_col_${c}`).attr(`id`, `td_col_${c - 1}`);
+            for (let r = 0; r < Table.rows[c]; r++) {
+                $(`#td_col_${c}_row_${r}`).attr(`id`, `td_col_${c - 1}_row_${r}`);
+            }
+            $(`#th_col_${c}`).attr(`id`, `th_col_${c - 1}`);
+        }
     }
 
     Table.updateDescription = function(facility) {
@@ -145,7 +156,7 @@ const { cp } = require("original-fs");
         $('#main_table').find('tr').each(function () {
             var trow = $(this);
             if (trow.index() === 0) {
-                trow.append(`<th onClick=Table.choseColumn(${col})>${type}</th>`);
+                trow.append(`<th id="th_col_${col}" onClick=Table.choseColumn(${col})>${type}</th>`);
             } else {
                 trow.append(`<td id="td_col_${col}"></td>`);
                 row++;

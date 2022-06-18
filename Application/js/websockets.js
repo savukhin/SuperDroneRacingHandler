@@ -25,9 +25,9 @@ const axios = require('axios');
         addFacility(new Facility("14", null, 8, '#00fff0', null, 'marker'));
         addFacility(new Facility("15", null, 9, '#ffffff', null, 'marker'));
         addFacility(new Facility("10", null, 10, '#aaaaaa', null, 'gate'));
-        // addFacility(new Facility("16", null, 11, '#ff0000', null, 'receiver'));
+        addFacility(new Facility("16", null, 11, '#ff0000', null, 'receiver'));
         addFacility(new Facility("12", null, 12, '#ffff00', null, 'gate'));
-        // addFacility(new Facility("26", null, 13, '#000000', null, 'receiver'));
+        addFacility(new Facility("26", null, 13, '#000000', null, 'receiver'));
         addFacility(new Facility("36", null, 14, '#ff00ff', null, 'mat'));
 
         // addFacility(new Facility("1", null, 1, '#ff00ff', null, 'gate'));
@@ -43,17 +43,17 @@ const axios = require('axios');
     }
 
     Websockets.testDelete = function () {
-        setTimeout( () => {
-        Websockets.deleteFacility(facilities[6]);
-        }, 50);
-        // let len = gateways.length;
-        // for (let i = 0; i < len; i++) {
-        //     Websockets.deleteFacility(facilities[gateways[0]]);
-        // }
+        // setTimeout( () => {
+        //     Websockets.deleteFacility(facilities[6]);
+        // }, 50);
+        let len = gateways.length;
+        for (let i = 0; i < len; i++) {
+            Websockets.deleteFacility(facilities[gateways[0]]);
+        }
     }
 
     Websockets.onLoad = function (event) {
-        Websockets.testAdd();
+        // Websockets.testAdd();
     }
 
     function addFacility(facility) {
