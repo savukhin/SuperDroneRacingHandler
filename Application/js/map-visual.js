@@ -386,6 +386,10 @@
         highlighFacilities(selectedItems);
     }
 
+    Map.deleteAllChosingElements = function(facility) {
+        Action.deleteAllElements();
+    }
+
     Map.deleteChosingElement = function(facility) {
         if (!selectedItems.has(facility))
             return;
@@ -394,13 +398,18 @@
         selectedItems.delete(facility);
         highlighFacilities(new Set([facility]), false);
     }
-
-    Map.choseElements = function(facilities) {
-        Map.clearSelection();
-
+    
+    Map.addToChosing = function(facilities) {
         facilities.forEach(facility => {
             Map.addChosingElement(facility);
         })
+    }
+
+    Map.choseElements = function(facilities) {
+        Map.clearSelection();
+        Action.deleteAllElements();
+
+        Map.addToChosing(facilities);
     }
 
     Map.chooseElement = function(facility) {

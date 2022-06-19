@@ -145,9 +145,10 @@ const { cp } = require("original-fs");
                 elements.push(facility);
         });
 
-
-        // Action.choseMultipleElements(elements);
-        Map.choseElements(elements);
+        if (Keyboard.checkShift())
+            Map.addToChosing(elements);
+        else
+            Map.choseElements(elements);
     }
 
     function createColumn(type) {
