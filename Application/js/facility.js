@@ -34,7 +34,7 @@ let FacilityMasks = {
 };
 
 class Facility {
-    constructor(ip, websocket, number, color, div, type) {
+    constructor(ip, websocket, number, color, div, type, count=0) {
         this.ip = ip
         this.websocket = websocket
         this.number = number
@@ -46,7 +46,7 @@ class Facility {
         this.indicatorDiv = null;
         this.descrDiv = null;
         this.cardDiv = null;
-        this.count = 0;
+        this.count = count;
     }
 
     erase() {
