@@ -1,8 +1,6 @@
 #table_box td {
-    /* height: 80px; */
 }
 #table_box td, #table_box th {
-    /* border: 1px solid var(--main-bg-color); */
 }
 
 #table_box th .button {
@@ -25,54 +23,20 @@
 
 .table-card {
     width: 100px;
-    /* background-color: var(--text-color); */
     background-color: var(--second-bg-color);
     border-radius: 5px;
     overflow: hidden;
     position: relative;
-    /* height: 20px; */
-    /* animation: hideCard 0.5s forwards; */
-}
-
-.table-card:hover {
-    /* animation: showCard 1s forwards; */
-}
-
-.table-card-opened {
-    /* height: 120px; */
-    animation: showCard 1s forwards;
-}
-
-@keyframes showCard {
-    from {
-        height: 28px;
-        background-color: blue;
-    }
-    to {
-        height: 110px;
-        background-color: brown;
-    }
-}
-
-@keyframes hideCard {
-    from {
-        height: 110px;
-    }
-    to {
-        height: 28px;
-    }
+    display: table;
+    border: 1px solid var(--main-bg-color);
+    cursor: pointer;
 }
 
 .table-card h {
     font-size: 70px;
-    /* background-color: var(--second-bg-color); */
-    /* display: flex; */
-    /* justify-content: center; */
-    /* border-radius: 5px 5px 0px 0px; */
     position: absolute;
     left: 5px;
     top: 5px;
-    cursor: pointer;
 }
 
 .grid-cell {
