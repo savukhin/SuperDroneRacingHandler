@@ -53,10 +53,19 @@ function getDisplayColor(number) {
     return parseColors(rgb[0], rgb[1], rgb[2])
 }
 
-function generateFacilityElem(facility) {
-    var code = `
-    <div class="block facility-element">
-        <div class="${facility.type}-element" style="background-color: ${facility.color}"></div>
+function generateMaskElem(facility, classes="") {
+    return `<div class="${facility.type}-element ${classes}" style="background-color: ${facility.color}"></div>`
+}
+
+function generateFacilityElem(facility, params) {
+    let styles = ``;
+    if (params) {
+        styles += `${params.transparent_block ? "background-color: rgba(0, 0, 0, 0);" : ""}`;
+        styles += `${params.alternate_position ? "left: 0px;" : ""}`;
+    }
+    let code = `
+    <div class="block facility-element" style='${styles}'>
+        ${generateMaskElem(facility)}
     </div>
     `
     return code;

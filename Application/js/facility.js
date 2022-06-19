@@ -54,20 +54,27 @@ class Facility {
             this.websocket.close()
     }
 
-    getDescription() {
-        let ans = this.type;
+    getNumber() {
+        let ans = "";
         if (!NonDescriptionalFacilities.has(this.type)) {
             switch (FacilityDesciptions[this.type]) {
                 case 'Number':
-                    ans += " #" + this.number;
+                    ans += this.number;
                     break;
                 case 'Count':
-                    // ans += " " + this.count;
+                    ans += this.count;
                     break;
                 default:
                     break;
             } 
+        } else {
+            ans += this.number;
         }
+        return ans;
+    }
+
+    getDescription() {
+        let ans = this.type + " #" + this.getNumber();
         return ans;
     }
 }
