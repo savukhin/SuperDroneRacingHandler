@@ -156,7 +156,7 @@ const { cp } = require("original-fs");
         $('#main_table').find('tr').each(function () {
             var trow = $(this);
             if (trow.index() === 0) {
-                trow.append(`<th id="th_col_${col}" onClick=Table.choseColumn(${col})>${type}</th>`);
+                trow.append(`<th id="th_col_${col}" onClick=Table.choseColumn(${col})><button class='button'>${type}</button></th>`);
             } else {
                 trow.append(`<td id="td_col_${col}"></td>`);
                 row++;
