@@ -169,9 +169,11 @@ const { cp } = require("original-fs");
     }
 
     function generateCard(facility) {
-        var img = generateFacilityElem(facility);
-        var code = `<div class="table-card"><h>${facility.getDescription()}</h>`
-        code += `<div style="padding: 5px">${img}</div>`;
+        let alternate = (facility.type == FacilityTypes.RECEIVER);
+        let img = generateFacilityElem(facility, { transparent_block: true, alternate_position: alternate});
+        let code = `<div class="table-card"><h ${alternate ? "style='right:0px'" : ""}>${facility.getNumber()}</h>`
+        // code += `<div style="padding: 5px">${img}</div>`;
+        code += img;
         code += `</div>`
         return code;
     }
@@ -221,7 +223,7 @@ const { cp } = require("original-fs");
                 .css({'height': '20px'});
 
         let card = $(`#td_col_${col}_row_${Table.rows[col]}`).find(`.table-card`);
-        card.css({'height': '120px'});
+        card.css({'height': '100px'});
         let row = Table.rows[col];
 
         card
@@ -234,7 +236,7 @@ const { cp } = require("original-fs");
 
                 $(card).stop();
                 $(card).animate({
-                    height: "120px",
+                    height: "100px",
                 }, 300)
             })
             .on("mouseleave", (event) => {
