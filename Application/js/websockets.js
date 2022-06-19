@@ -20,7 +20,7 @@ const axios = require('axios');
         addFacility(new Facility("3", null, 3, '#000000', null, 'marker'));
         addFacility(new Facility("4", null, 4, '#ffffff', null, 'flag'));
         addFacility(new Facility("5", null, 5, '#aaffaa', null, 'gate'));
-        addFacility(new Facility("6", null, 6, '#0000ff', null, 'receiver'));
+        addFacility(new Facility("6", null, 6, '#0000ff', null, 'receiver', 4));
         addFacility(new Facility("7", null, 7, '#00ffff', null, 'mat'));
         addFacility(new Facility("14", null, 8, '#00fff0', null, 'marker'));
         addFacility(new Facility("15", null, 9, '#ffffff', null, 'marker'));

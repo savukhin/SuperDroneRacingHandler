@@ -86,35 +86,6 @@ const { cp } = require("original-fs");
     }
 
     Table.deleteColumn = function(col) {
-        function removeCell(trow, tagName, number) {
-            let deleted = false;
-            trow.find(tagName).each(function() {
-                let td = $(this);
-
-                if (td.index() == number && !deleted) {
-                    td.remove();
-                    deleted = true;
-                } else if (td.index() >= number && deleted && tagName === 'th') {
-                    let index = td.index();
-                    this.onclick = () => {
-                        Table.choseColumn(index);
-                    };
-                }
-            })
-        }
-
-        var row = 0;
-        // var col = Table.columns.length;
-        // $('#main_table').find('tr').each(function () {
-        //     var trow = $(this);
-        //     if (trow.index() < 2) {
-        //         removeCell(trow, 'th', col);
-        //     } else {
-        //         removeCell(trow, 'td', col);
-        //         row++;
-        //     }
-        // });
-
         Table.facilities.splice(col, 1);
         Table.columns.splice(col, 1);
         Table.rows.splice(col, 1);
@@ -132,10 +103,7 @@ const { cp } = require("original-fs");
     }
 
     Table.updateDescription = function(facility) {
-        $(facility.descrDiv).find('p').html(facility.getDescription());
-        if (FacilityDesciptions[facility.type] == "Count") {
-            // facility.tableDiv.after(`<h>${facility.count}</h>`);
-        }
+        facility.descrDiv.html(facility.getNumber());
     }
 
     Table.choseColumn = function(col) {
@@ -172,8 +140,7 @@ const { cp } = require("original-fs");
     function generateCard(facility) {
         let alternate = (facility.type == FacilityTypes.RECEIVER);
         let img = generateFacilityElem(facility, { transparent_block: true, alternate_position: alternate});
-        let code = `<div class="table-card"><h ${alternate ? "style='right:0px'" : ""}>${facility.getNumber()}</h>`
-        // code += `<div style="padding: 5px">${img}</div>`;
+        let code = `<div class="table-card"><h class='description' ${alternate ? "style='right:0px'" : ""}>${facility.getNumber()}</h>`
         code += img;
         code += `</div>`
         return code;
@@ -279,7 +246,7 @@ const { cp } = require("original-fs");
         query = $(getCell(col, row)).find('.indicator');
         facility.indicatorDiv = query;
 
-        query = $(getCell(col, row)).find('.description');
+        query = $(card).find('.description');
         facility.descrDiv = query;
 
         var overlay = document.createElement('div');
@@ -289,7 +256,6 @@ const { cp } = require("original-fs");
         }
 
         getCell(col, row).append(overlay);
-        // Table.facilities[facility.ip] = [col, row];
 
         Table.updateDescription(facility);
     }
