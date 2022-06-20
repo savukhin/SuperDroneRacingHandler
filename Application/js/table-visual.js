@@ -140,7 +140,8 @@ const { cp } = require("original-fs");
     function generateCard(facility) {
         let alternate = (facility.type == FacilityTypes.RECEIVER);
         let img = generateFacilityElem(facility, { transparent_block: true, alternate_position: alternate});
-        let code = `<div class="table-card"><h class='description' ${alternate ? "style='right:0px'" : ""}>${facility.getNumber()}</h>`
+        let code = `<div class="table-card" ${alternate ? "style='text-align: right;'" : ""}>
+            <h class='description' ${alternate ? "style='right:0px'" : ""}>${facility.getNumber()}</h>`
         code += img;
         code += `</div>`
         return code;
