@@ -33,10 +33,10 @@
 }
 
 .table-card h {
-    font-size: 70px;
+    font-size: 80px;
     position: absolute;
     left: 5px;
-    top: 5px;
+    top: -10px;
 }
 
 .grid-cell {
@@ -49,8 +49,8 @@
 #table_box .facility-element {
     z-index: 1;
     position: absolute;
-    top: 50px;
-    right: 5px;
+    top: 60px;
+    right: 6px;
     width: 50px;
     height: 50px;
 }

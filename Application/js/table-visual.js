@@ -192,7 +192,7 @@ const { cp } = require("original-fs");
                 .css({'height': '20px'});
 
         let card = $(`#td_col_${col}_row_${Table.rows[col]}`).find(`.table-card`);
-        card.css({'height': '100px'});
+        card.css({'height': '130px'});
         let row = Table.rows[col];
 
         card
@@ -205,7 +205,7 @@ const { cp } = require("original-fs");
 
                 $(card).stop();
                 $(card).animate({
-                    height: "100px",
+                    height: "130px",
                 }, 300)
             })
             .on("mouseleave", (event) => {
