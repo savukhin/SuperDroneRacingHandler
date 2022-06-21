@@ -2,9 +2,10 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include "animations.h"
+#include "global_variables.h"
 #include "button_actions.h"
 #include "receiver.h"
-#include "global_variables.h"
+//#include "global_variables.h"
 
 enum FacilityType {
   GATE = 'g',
@@ -99,6 +100,8 @@ void setup() {
   pinMode(outputGreen, OUTPUT);
   pinMode(outputBlue, OUTPUT);
 
+  Serial.begin(9600);
+
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
 
@@ -134,7 +137,7 @@ bool tryConnect() {
 }
 
 void loop() {
-  if (!connected)
+  if (!connected && offFlag != 1)
     tryConnect();
 
   bool updated = false;

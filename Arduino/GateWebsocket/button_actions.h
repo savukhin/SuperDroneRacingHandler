@@ -14,7 +14,8 @@ int a = 0;
 void buttonSetup() {
   pinMode(buttonPin, INPUT);
 
-  if (debug == 1) Serial.begin(9600);
+//  if (debug == 1) Serial.begin(9600);
+  
   pinMode(A0, INPUT);
 
   //Define cells number
@@ -117,13 +118,13 @@ bool checkButtonMode() {
 }
 
 void telemetryOut(){
-  if (debug == 1) Serial.print("cells   ");
-  if (debug == 1) Serial.println(cells);
-  if (debug == 1) Serial.print("Max   ");
-  if (debug == 1) Serial.println(maxVal);
-  if (debug == 1) Serial.print("MIN   ");
-  if (debug == 1) Serial.println(minVal);
-  if (offFlag == 1 && debug == 1) Serial.print("Flag triggered");
+  if (debug) Serial.print("cells   ");
+  if (debug) Serial.println(cells);
+  if (debug) Serial.print("Max   ");
+  if (debug) Serial.println(maxVal);
+  if (debug) Serial.print("MIN   ");
+  if (debug) Serial.println(minVal);
+  if (offFlag == 1 && debug) Serial.print("Flag triggered");
 }
 
 void cellOffAnim(int index) {
@@ -141,7 +142,7 @@ void cellOffAnim(int index) {
 bool buttonLoop() {
   bool updated = checkButtonMode();
   
-  if (debug == 1) telemetryOut();
+  if (debug) telemetryOut();
 
   // End of the button script
 
