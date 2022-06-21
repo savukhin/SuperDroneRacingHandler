@@ -349,6 +349,7 @@ bool checkReceiverMode() {
     holdFlagMode = true;
     tensFlag = false;
     num = 0; //Annulate workmode
+    startBlinking(3, 5);
     updated = true;
   }
 

@@ -15,10 +15,10 @@ enum FacilityType {
 };
 
 //FacilityType facilityType = FacilityType::RECEIVER;
-FacilityType facilityType = FacilityType::FLAG;
+//FacilityType facilityType = FacilityType::FLAG;
 //FacilityType facilityType = FacilityType::MAT;
 //FacilityType facilityType = FacilityType::GATE;
-//FacilityType facilityType = FacilityType::MARKER;
+FacilityType facilityType = FacilityType::MARKER;
 
 bool connected = false;
 
@@ -105,8 +105,8 @@ void setup() {
   if (facilityType == FacilityType::RECEIVER) {
     receiverSetup();
   } else {
-//    buttonSetup();
-receiverSetup();
+    buttonSetup();
+//receiverSetup();
   }
 }
 
@@ -141,8 +141,8 @@ void loop() {
   if (facilityType == FacilityType::RECEIVER) {
     updated = receiverLoop();
   } else {
-    updated = receiverLoop();
-//    updated = buttonLoop();
+//    updated = receiverLoop();
+    updated = buttonLoop();
   }
 
   if (updated && connected)
