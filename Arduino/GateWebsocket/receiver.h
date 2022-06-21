@@ -313,7 +313,7 @@ void receiverSetup() {
   pinMode(clk, OUTPUT);
   pinMode(Wr, OUTPUT);
   pinMode(Baton, INPUT);
-  if (debug) Serial.begin(9600);
+//  if (debug) Serial.begin(9600);
   digitalWrite(clk, LOW);
   resetInd();
   updateIndRegState(num);

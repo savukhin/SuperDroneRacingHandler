@@ -3,7 +3,7 @@
 
 #define corrector 10
 #define delayCorrection 300
-#define debug false  //true for debug
+//#define debug false  //true for debug
 #define CapLoss 20
 #define bDelay 50
 #define hDelay 1250
@@ -15,6 +15,8 @@
 #define outputBlue 3
 
 #include "colors.h"
+
+bool debug = true;   //true for debug
 
 Color globalColor = { 0, 0, 0 };
 
