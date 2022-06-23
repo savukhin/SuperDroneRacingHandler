@@ -22,14 +22,7 @@
 }
 
 .table-card {
-    width: 100px;
-    background-color: var(--second-bg-color);
-    border-radius: 5px;
-    overflow: hidden;
-    position: relative;
-    display: table;
-    border: 1px solid var(--main-bg-color);
-    cursor: pointer;
+
 }
 
 .table-card h {
@@ -37,6 +30,18 @@
     position: absolute;
     left: 5px;
     top: -10px;
+}
+
+.table-card > div {
+    z-index: 1;
+    width: 100px;
+    height: 130px;
+    background-color: var(--second-bg-color);
+    border-radius: 5px;
+    border: 1px solid var(--main-bg-color);
+    position: relative;
+    display: table;
+    cursor: pointer;
 }
 
 .grid-cell {
