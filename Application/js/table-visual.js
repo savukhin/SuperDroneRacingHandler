@@ -88,6 +88,7 @@ const { cp } = require("original-fs");
     Table.deleteColumn = function(col) {
         Table.facilities.splice(col, 1);
         Table.columns.splice(col, 1);
+        Table.rows.splice(col, 1);
 
         $(`#td_col_${col}`).remove();
         $(`#th_col_${col}`).remove();
