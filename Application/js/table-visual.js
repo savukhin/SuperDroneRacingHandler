@@ -104,6 +104,30 @@ const { cp } = require("original-fs");
                 Table.facilities[c - 1].forEach((facility, row) => {
                     let card = $(`#td_col_${c - 1}_row_${row}`).find(".table-card");
                     Table.linkCardToFacility(card, facility);
+                    card.unbind();
+                    card
+                        .on("click", (event) => {
+                            Map.chooseElement(facility);
+                        })
+                        .on("mouseenter", (event) => {
+                            if (row == Table.rows[c - 1] - 1)
+                                return;
+
+                            $(card).stop();
+                            $(card).animate({
+                                height: "130px",
+                            }, 300)
+                        })
+                        .on("mouseleave", (event) => {
+                            if (row == Table.rows[c - 1] - 1)
+                                return;
+                            
+                            $(card).stop();
+                            isAnimating = true;
+                            $(card).animate({
+                                height: "20px",
+                            }, 300)
+                        })
                 });
             }, 0)
         }
