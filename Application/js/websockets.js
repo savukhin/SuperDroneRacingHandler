@@ -48,7 +48,8 @@ const axios = require('axios');
         // }, 50);
         let len = gateways.length;
         for (let i = 0; i < len; i++) {
-            Websockets.deleteFacility(facilities[gateways[0]]);
+            // Websockets.deleteFacility(facilities[gateways[0]]);
+            Websockets.deleteFacility(facilities[gateways[Math.floor(Math.random()*gateways.length)]]);
         }
     }
 
