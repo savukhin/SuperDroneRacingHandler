@@ -88,17 +88,23 @@ const { cp } = require("original-fs");
     Table.deleteColumn = function(col) {
         Table.facilities.splice(col, 1);
         Table.columns.splice(col, 1);
-        Table.rows.splice(col, 1);
 
         $(`#td_col_${col}`).remove();
         $(`#th_col_${col}`).remove();
 
         for (let c = col + 1; c <= Table.columns.length; c++) {
             $(`#td_col_${c}`).attr(`id`, `td_col_${c - 1}`);
-            for (let r = 0; r < Table.rows[c]; r++) {
+            for (let r = 0; r < Table.rows[c - 1]; r++) {
                 $(`#td_col_${c}_row_${r}`).attr(`id`, `td_col_${c - 1}_row_${r}`);
             }
             $(`#th_col_${c}`).attr(`id`, `th_col_${c - 1}`);
+
+            setTimeout(() => {
+                Table.facilities[c - 1].forEach((facility, row) => {
+                    let card = $(`#td_col_${c - 1}_row_${row}`).find(".table-card");
+                    Table.linkCardToFacility(card, facility);
+                });
+            }, 0)
         }
     }
 
@@ -227,6 +233,13 @@ const { cp } = require("original-fs");
         return card;
     }
 
+    Table.linkCardToFacility = function(cardJQ, facility) {
+        facility.cardDiv = cardJQ;
+
+        query = $(cardJQ).find('.description');
+        facility.descrDiv = query;
+    }
+
     Table.addFacility = function (facility) {
         var col = Table.columns.indexOf(facility.type);
         if (col == -1) {
@@ -239,19 +252,7 @@ const { cp } = require("original-fs");
         let card = addToColumn(facility, col);
         Table.facilities[col][row] = facility;
 
-        facility.cardDiv = card;
-
-        var query = $(getCell(col, row))
-            .find('.facility-element').children()
-            .not('.overlay').not('.drag-line').not('.drag-zone');
-
-        facility.tableDiv = query;
-
-        query = $(getCell(col, row)).find('.indicator');
-        facility.indicatorDiv = query;
-
-        query = $(card).find('.description');
-        facility.descrDiv = query;
+        Table.linkCardToFacility(card, facility);
 
         var overlay = document.createElement('div');
         overlay.className = "overlay";
