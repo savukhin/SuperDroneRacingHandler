@@ -19,10 +19,11 @@ const FacilityDesciptions = {
     "flag" : 'Number',
     "marker" : 'Number',
     "receiver" : 'Count',
+    "mat" : 'Number',
 }
 
 const NonDescriptionalFacilities = new Set([
-    FacilityTypes.MAT,
+    // FacilityTypes.MAT,
 ]);
 
 let FacilityMasks = {
@@ -43,7 +44,6 @@ class Facility {
         this.type = type
         this.mapDiv = null;
         this.tableDiv = null;
-        this.indicatorDiv = null;
         this.descrDiv = null;
         this.cardDiv = null;
         this.count = count;
