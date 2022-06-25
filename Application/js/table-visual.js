@@ -174,7 +174,6 @@ const { cp } = require("original-fs");
         $(`#td_col_${col}`).off();
         $(`#td_col_${col}`)
         .on("mouseenter", (event) => {
-            console.log("Column = ", col);
             for (let r = 0; r < Table.rows[col] - 1; r++) {
                 card = $(`#td_col_${col}_row_${r}`).find(".table-card");
                 $(card).stop();

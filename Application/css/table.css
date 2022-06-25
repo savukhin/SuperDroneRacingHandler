@@ -27,7 +27,7 @@
 }
 
 .card-top {
-    background-color: black;
+    background-color: var(--main-bg-color);
     height: 5px;
     position: absolute;
     top: -1px;
@@ -54,6 +54,7 @@
     display: table;
     cursor: pointer;
     overflow: hidden;
+    /* box-shadow: 0px -3.5px 2.4px var(--main-bg-color); */
 }
 
 .grid-cell {
