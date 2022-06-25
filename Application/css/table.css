@@ -1,6 +1,7 @@
 #table_box td {
 }
 #table_box td, #table_box th {
+    padding: 4px 15px;
 }
 
 #table_box th .button {
@@ -13,7 +14,7 @@
 
 #main_table {
     border-collapse:separate;
-    gap: 4px;
+    gap: 10px;
 }
 
 .table-wrapper {
