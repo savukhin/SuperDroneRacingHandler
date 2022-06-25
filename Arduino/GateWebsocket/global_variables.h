@@ -20,15 +20,8 @@ bool debug = true;   //true for debug
 
 Color globalColor = { 0, 0, 0 };
 
-//const char  * ssid = "HonorView10";
-//const char* password = "saveliythebest";
-
-const char* ssid = "WS_Lab7";
-const char* password = "ws2020ws";
-
-//const char* ssid = "DroneRacing";
-//const char* ssid = "FoxTrack";
-//const char* password = "45530005";
+const char* ssid = "Your_wifi_ssid";
+const char* password = "Your_wifi_password";
 
 int buttonState = 0;
 int lastButtonState = 0;
