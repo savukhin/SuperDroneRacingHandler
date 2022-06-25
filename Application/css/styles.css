@@ -44,6 +44,7 @@ body {
     margin: 0;
     border: 1px solid #48545c;
     overflow-y: hidden;
+    color: var(--text-color);
 }
 
 .content {
@@ -156,6 +157,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+
+    cursor: pointer;
 }
 
 .button:hover:enabled {

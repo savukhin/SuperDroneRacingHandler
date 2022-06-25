@@ -20,7 +20,7 @@ const axios = require('axios');
         addFacility(new Facility("3", null, 3, '#000000', null, 'marker'));
         addFacility(new Facility("4", null, 4, '#ffffff', null, 'flag'));
         addFacility(new Facility("5", null, 5, '#aaffaa', null, 'gate'));
-        addFacility(new Facility("6", null, 6, '#0000ff', null, 'receiver'));
+        addFacility(new Facility("6", null, 6, '#0000ff', null, 'receiver', 4));
         addFacility(new Facility("7", null, 7, '#00ffff', null, 'mat'));
         addFacility(new Facility("14", null, 8, '#00fff0', null, 'marker'));
         addFacility(new Facility("15", null, 9, '#ffffff', null, 'marker'));
@@ -48,7 +48,8 @@ const axios = require('axios');
         // }, 50);
         let len = gateways.length;
         for (let i = 0; i < len; i++) {
-            Websockets.deleteFacility(facilities[gateways[0]]);
+            // Websockets.deleteFacility(facilities[gateways[0]]);
+            Websockets.deleteFacility(facilities[gateways[Math.floor(Math.random()*gateways.length)]]);
         }
     }
 
@@ -88,7 +89,6 @@ const axios = require('axios');
         // console.log(`update color of`, facility, ' with ', newColor);
         $(facility.mapDiv).css('background-color', newColor);
         $(facility.tableDiv).css('background-color', newColor);
-        $(facility.indicatorDiv).css('background-color', newColor);
         facility.color = newColor;
 
         if (Action.chosen != null) { 
@@ -146,7 +146,9 @@ const axios = require('axios');
             .get(`http://${ip}:${port}/DOYOUGATE`)
             .catch(error => {
                 isFacility = false;
-                console.log("~axios error " + error);
+                console.log("~axios error " + error + " on ip " + ip);
+                if (gateways.includes(ip))
+                    Websockets.deleteFacility(facilities[ip]);
                 return ;
             })
 
@@ -199,11 +201,8 @@ const axios = require('axios');
                 if (parseInt(value.number) <= parseInt(number))
                     continue;
 
-                    value.number--;
-                if (!NonDescriptionalFacilities.has(value.type) && value.type != FacilityTypes.RECEIVER) {
-                    var query = $(value.tableDiv).parent().parent().parent().find(".description");
-                    query.html(`<p>${value.number}</p>`);
-                }
+                value.number--;
+                Table.updateDescription(value);
             }
         }, 0);
         delete facilities[ip];
@@ -223,12 +222,17 @@ const axios = require('axios');
             console.log('result of find is ', result);
             return result;
         });
-        console.log('devices is', devices);
+
+        const ips = new Set([
+            ...devices.map(device => device.ip),
+            ...gateways
+        ]) // plural form ip
+
+        console.log('ips is', ips); 
 
         var promises = []
 
-        for (const device of devices) {
-            var ip = device.ip;
+        for (const ip of ips) {
             console.log(` catch device ip ${ip}`);
 
             var promise = new Promise( (resolve, reject) => {
@@ -278,7 +282,8 @@ const axios = require('axios');
 
                 if (facility.type == FacilityTypes.RECEIVER) {
                     var count = parseInt(isFacility[2]);
-                    Table.updateDescription(facility, count);
+                    facility.count = count;
+                    Table.updateDescription(facility);
                 }
             })
             check_gateways.forEach(elem => {

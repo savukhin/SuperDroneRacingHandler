@@ -38,22 +38,25 @@
         move(from, beforeInd) { // from - index
             var elem = this.elements[from];
             var facility = this.facilities[from];
-            if (before < this.elements.length) {
+            if (beforeInd < this.elements.length) {
                 var before = this.elements[beforeInd];
                 $(before).before($(elem));
 
-                // this.facilities.splice(from, 1);
+                this.facilities.splice(from, 1);
                 this.elements.splice(from, 1);
-                // this.facilities.splice(beforeInd, 0, facility);
-                this.elements.splice(beforeInd, 0, elem);
+                let splicingIndex = (beforeInd <= from ? beforeInd : beforeInd - 1);
+                this.facilities.splice(splicingIndex, 0, facility);
+                this.elements.splice(splicingIndex, 0, elem);
+
+                
             } else {
                 var afterInd = beforeInd - 1;
                 var after = this.elements[afterInd];
                 $(after).after($(elem));
 
-                // this.facilities.splice(from, 1);
+                this.facilities.splice(from, 1);
                 this.elements.splice(from, 1);
-                // this.facilities.splice(afterInd, 0, facility);
+                this.facilities.splice(afterInd, 0, facility);
                 this.elements.splice(afterInd, 0, elem);
             }
         }
@@ -386,6 +389,10 @@
         highlighFacilities(selectedItems);
     }
 
+    Map.deleteAllChosingElements = function(facility) {
+        Action.deleteAllElements();
+    }
+
     Map.deleteChosingElement = function(facility) {
         if (!selectedItems.has(facility))
             return;
@@ -394,13 +401,18 @@
         selectedItems.delete(facility);
         highlighFacilities(new Set([facility]), false);
     }
-
-    Map.choseElements = function(facilities) {
-        Map.clearSelection();
-
+    
+    Map.addToChosing = function(facilities) {
         facilities.forEach(facility => {
             Map.addChosingElement(facility);
         })
+    }
+
+    Map.choseElements = function(facilities) {
+        Map.clearSelection();
+        Action.deleteAllElements();
+
+        Map.addToChosing(facilities);
     }
 
     Map.chooseElement = function(facility) {

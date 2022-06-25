@@ -313,7 +313,7 @@ void receiverSetup() {
   pinMode(clk, OUTPUT);
   pinMode(Wr, OUTPUT);
   pinMode(Baton, INPUT);
-  if (debug) Serial.begin(9600);
+//  if (debug) Serial.begin(9600);
   digitalWrite(clk, LOW);
   resetInd();
   updateIndRegState(num);
@@ -349,6 +349,7 @@ bool checkReceiverMode() {
     holdFlagMode = true;
     tensFlag = false;
     num = 0; //Annulate workmode
+    startBlinking(3, 5);
     updated = true;
   }
 

@@ -86,35 +86,6 @@ const { cp } = require("original-fs");
     }
 
     Table.deleteColumn = function(col) {
-        function removeCell(trow, tagName, number) {
-            let deleted = false;
-            trow.find(tagName).each(function() {
-                let td = $(this);
-
-                if (td.index() == number && !deleted) {
-                    td.remove();
-                    deleted = true;
-                } else if (td.index() >= number && deleted && tagName === 'th') {
-                    let index = td.index();
-                    this.onclick = () => {
-                        Table.choseColumn(index);
-                    };
-                }
-            })
-        }
-
-        var row = 0;
-        // var col = Table.columns.length;
-        // $('#main_table').find('tr').each(function () {
-        //     var trow = $(this);
-        //     if (trow.index() < 2) {
-        //         removeCell(trow, 'th', col);
-        //     } else {
-        //         removeCell(trow, 'td', col);
-        //         row++;
-        //     }
-        // });
-
         Table.facilities.splice(col, 1);
         Table.columns.splice(col, 1);
         Table.rows.splice(col, 1);
@@ -124,18 +95,47 @@ const { cp } = require("original-fs");
 
         for (let c = col + 1; c <= Table.columns.length; c++) {
             $(`#td_col_${c}`).attr(`id`, `td_col_${c - 1}`);
-            for (let r = 0; r < Table.rows[c]; r++) {
+            for (let r = 0; r < Table.rows[c - 1]; r++) {
                 $(`#td_col_${c}_row_${r}`).attr(`id`, `td_col_${c - 1}_row_${r}`);
             }
             $(`#th_col_${c}`).attr(`id`, `th_col_${c - 1}`);
+
+            setTimeout(() => {
+                Table.facilities[c - 1].forEach((facility, row) => {
+                    let card = $(`#td_col_${c - 1}_row_${row}`).find(".table-card");
+                    Table.linkCardToFacility(card, facility);
+                    card.unbind();
+                    card
+                        .on("click", (event) => {
+                            Map.chooseElement(facility);
+                        })
+                    bindColumnExpand(c - 1);
+                    //     .on("mouseenter", (event) => {
+                    //         if (row == Table.rows[c - 1] - 1)
+                    //             return;
+
+                    //         $(card).stop();
+                    //         $(card).animate({
+                    //             height: "130px",
+                    //         }, 300)
+                    //     })
+                    //     .on("mouseleave", (event) => {
+                    //         if (row == Table.rows[c - 1] - 1)
+                    //             return;
+                            
+                    //         $(card).stop();
+                    //         isAnimating = true;
+                    //         $(card).animate({
+                    //             height: "20px",
+                    //         }, 300)
+                    //     })
+                });
+            }, 0)
         }
     }
 
     Table.updateDescription = function(facility) {
-        $(facility.descrDiv).find('p').html(facility.getDescription());
-        if (FacilityDesciptions[facility.type] == "Count") {
-            // facility.tableDiv.after(`<h>${facility.count}</h>`);
-        }
+        facility.descrDiv.html(facility.getNumber());
     }
 
     Table.choseColumn = function(col) {
@@ -145,9 +145,10 @@ const { cp } = require("original-fs");
                 elements.push(facility);
         });
 
-
-        // Action.choseMultipleElements(elements);
-        Map.choseElements(elements);
+        if (Keyboard.checkShift())
+            Map.addToChosing(elements);
+        else
+            Map.choseElements(elements);
     }
 
     function createColumn(type) {
@@ -156,9 +157,10 @@ const { cp } = require("original-fs");
         $('#main_table').find('tr').each(function () {
             var trow = $(this);
             if (trow.index() === 0) {
-                trow.append(`<th id="th_col_${col}" onClick=Table.choseColumn(${col})>${type}</th>`);
+                trow.append(`<th id="th_col_${col}" onClick=Table.choseColumn(${col})><button class='button'>${type}</button></th>`);
             } else {
                 trow.append(`<td id="td_col_${col}"></td>`);
+                bindColumnExpand(col);
                 row++;
             }
         });
@@ -168,11 +170,40 @@ const { cp } = require("original-fs");
         Table.rows.push(0);
     }
 
+    function bindColumnExpand(col) {
+        $(`#td_col_${col}`).off();
+        $(`#td_col_${col}`)
+        .on("mouseenter", (event) => {
+            for (let r = 0; r < Table.rows[col] - 1; r++) {
+                card = $(`#td_col_${col}_row_${r}`).find(".table-card");
+                $(card).stop();
+                $(card).animate({
+                    height: "130px",
+                }, 300)
+            }
+        })
+        .on("mouseleave", (event) => {
+            for (let r = 0; r < Table.rows[col] - 1; r++) {
+                card = $(`#td_col_${col}_row_${r}`).find(".table-card");   
+                $(card).stop();
+                $(card).animate({
+                    height: "20px",
+                }, 300)
+            }
+        })
+    }
+
     function generateCard(facility) {
-        var img = generateFacilityElem(facility);
-        var code = `<div class="table-card"><h>${facility.getDescription()}</h>`
-        code += `<div style="padding: 5px">${img}</div>`;
-        code += `</div>`
+        let alternate = (facility.type == FacilityTypes.RECEIVER);
+        let img = generateFacilityElem(facility, { transparent_block: true, alternate_position: alternate});
+        let code = `
+        <div class="table-card" ${alternate ? "style='text-align: right;'" : ""}>
+            <div>
+                <div class="card-top"></div>
+                <h class='description' ${alternate ? "style='right:0px'" : ""}>${facility.getNumber()}</h>
+                ${img}
+            </div>
+        </div>`
         return code;
     }
 
@@ -221,36 +252,43 @@ const { cp } = require("original-fs");
                 .css({'height': '20px'});
 
         let card = $(`#td_col_${col}_row_${Table.rows[col]}`).find(`.table-card`);
-        card.css({'height': '120px'});
+        card.css({'height': '130px'});
         let row = Table.rows[col];
 
         card
             .on("click", (event) => {
                 Map.chooseElement(facility);
             })
-            .on("mouseenter", (event) => {
-                if (row == Table.rows[col] - 1)
-                    return;
+        //     .on("mouseenter", (event) => {
+        //         if (row == Table.rows[col] - 1)
+        //             return;
 
-                $(card).stop();
-                $(card).animate({
-                    height: "120px",
-                }, 300)
-            })
-            .on("mouseleave", (event) => {
-                if (row == Table.rows[col] - 1)
-                    return;
+        //         $(card).stop();
+        //         $(card).animate({
+        //             height: "130px",
+        //         }, 300)
+        //     })
+        //     .on("mouseleave", (event) => {
+        //         if (row == Table.rows[col] - 1)
+        //             return;
                 
-                $(card).stop();
-                isAnimating = true;
-                $(card).animate({
-                    height: "20px",
-                }, 300)
-            })
+        //         $(card).stop();
+        //         isAnimating = true;
+        //         $(card).animate({
+        //             height: "20px",
+        //         }, 300)
+        //     })
 
         Table.rows[col]++;
 
         return card;
+    }
+
+    Table.linkCardToFacility = function(cardJQ, facility) {
+        facility.cardDiv = cardJQ;
+
+        query = $(cardJQ).find('.description');
+        facility.descrDiv = query;
     }
 
     Table.addFacility = function (facility) {
@@ -265,19 +303,7 @@ const { cp } = require("original-fs");
         let card = addToColumn(facility, col);
         Table.facilities[col][row] = facility;
 
-        facility.cardDiv = card;
-
-        var query = $(getCell(col, row))
-            .find('.facility-element').children()
-            .not('.overlay').not('.drag-line').not('.drag-zone');
-
-        facility.tableDiv = query;
-
-        query = $(getCell(col, row)).find('.indicator');
-        facility.indicatorDiv = query;
-
-        query = $(getCell(col, row)).find('.description');
-        facility.descrDiv = query;
+        Table.linkCardToFacility(card, facility);
 
         var overlay = document.createElement('div');
         overlay.className = "overlay";
@@ -286,7 +312,6 @@ const { cp } = require("original-fs");
         }
 
         getCell(col, row).append(overlay);
-        // Table.facilities[facility.ip] = [col, row];
 
         Table.updateDescription(facility);
     }

@@ -19,10 +19,11 @@ const FacilityDesciptions = {
     "flag" : 'Number',
     "marker" : 'Number',
     "receiver" : 'Count',
+    "mat" : 'Number',
 }
 
 const NonDescriptionalFacilities = new Set([
-    FacilityTypes.MAT,
+    // FacilityTypes.MAT,
 ]);
 
 let FacilityMasks = {
@@ -34,7 +35,7 @@ let FacilityMasks = {
 };
 
 class Facility {
-    constructor(ip, websocket, number, color, div, type) {
+    constructor(ip, websocket, number, color, div, type, count=0) {
         this.ip = ip
         this.websocket = websocket
         this.number = number
@@ -43,10 +44,9 @@ class Facility {
         this.type = type
         this.mapDiv = null;
         this.tableDiv = null;
-        this.indicatorDiv = null;
         this.descrDiv = null;
         this.cardDiv = null;
-        this.count = 0;
+        this.count = count;
     }
 
     erase() {
@@ -54,20 +54,27 @@ class Facility {
             this.websocket.close()
     }
 
-    getDescription() {
-        let ans = this.type;
+    getNumber() {
+        let ans = "";
         if (!NonDescriptionalFacilities.has(this.type)) {
             switch (FacilityDesciptions[this.type]) {
                 case 'Number':
-                    ans += " #" + this.number;
+                    ans += this.number;
                     break;
                 case 'Count':
-                    // ans += " " + this.count;
+                    ans += this.count;
                     break;
                 default:
                     break;
             } 
+        } else {
+            ans += this.number;
         }
+        return ans;
+    }
+
+    getDescription() {
+        let ans = this.type + " #" + this.getNumber();
         return ans;
     }
 }

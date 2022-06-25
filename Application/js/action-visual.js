@@ -13,7 +13,7 @@
         $(`#state_display_before`).html('');
         $(`#state_display_after`).html('');
         multiChose = false;
-        chosen = null;
+        Action.chosen = null;
     }
 
     Action.colorPick = function (color) {
@@ -153,6 +153,10 @@
             Action.choseMultipleElements(new Set([Action.chosen, facility]));
         else
             Action.choseMultipleElements(new Set([...Action.chosen, facility]));
+    }
+
+    Action.deleteAllElements = function() {
+        return clearChosen();
     }
 
     Action.deleteChosingElement = function(facility) {

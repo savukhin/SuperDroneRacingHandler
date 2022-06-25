@@ -2,9 +2,10 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include "animations.h"
+#include "global_variables.h"
 #include "button_actions.h"
 #include "receiver.h"
-#include "global_variables.h"
+//#include "global_variables.h"
 
 enum FacilityType {
   GATE = 'g',
@@ -14,8 +15,8 @@ enum FacilityType {
   MAT = 't'
 };
 
-//FacilityType facilityType = FacilityType::RECEIVER;
-FacilityType facilityType = FacilityType::FLAG;
+FacilityType facilityType = FacilityType::RECEIVER;
+//FacilityType facilityType = FacilityType::FLAG;
 //FacilityType facilityType = FacilityType::MAT;
 //FacilityType facilityType = FacilityType::GATE;
 //FacilityType facilityType = FacilityType::MARKER;
@@ -99,14 +100,16 @@ void setup() {
   pinMode(outputGreen, OUTPUT);
   pinMode(outputBlue, OUTPUT);
 
+  Serial.begin(9600);
+
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
 
   if (facilityType == FacilityType::RECEIVER) {
     receiverSetup();
   } else {
-//    buttonSetup();
-receiverSetup();
+    buttonSetup();
+//receiverSetup();
   }
 }
 
@@ -134,15 +137,15 @@ bool tryConnect() {
 }
 
 void loop() {
-  if (!connected)
+  if (!connected && offFlag != 1)
     tryConnect();
 
   bool updated = false;
   if (facilityType == FacilityType::RECEIVER) {
     updated = receiverLoop();
   } else {
-    updated = receiverLoop();
-//    updated = buttonLoop();
+//    updated = receiverLoop();
+    updated = buttonLoop();
   }
 
   if (updated && connected)

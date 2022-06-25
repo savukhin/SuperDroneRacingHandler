@@ -3,7 +3,7 @@
 
 #define corrector 10
 #define delayCorrection 300
-#define debug false  //true for debug
+//#define debug false  //true for debug
 #define CapLoss 20
 #define bDelay 50
 #define hDelay 1250
@@ -16,17 +16,19 @@
 
 #include "colors.h"
 
+bool debug = true;   //true for debug
+
 Color globalColor = { 0, 0, 0 };
 
 //const char  * ssid = "HonorView10";
 //const char* password = "saveliythebest";
 
-//const char* ssid = "WS_Lab7";
-//const char* password = "ws2020ws";
+const char* ssid = "WS_Lab7";
+const char* password = "ws2020ws";
 
 //const char* ssid = "DroneRacing";
-const char* ssid = "FoxTrack";
-const char* password = "45530005";
+//const char* ssid = "FoxTrack";
+//const char* password = "45530005";
 
 int buttonState = 0;
 int lastButtonState = 0;
