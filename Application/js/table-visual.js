@@ -109,25 +109,26 @@ const { cp } = require("original-fs");
                         .on("click", (event) => {
                             Map.chooseElement(facility);
                         })
-                        .on("mouseenter", (event) => {
-                            if (row == Table.rows[c - 1] - 1)
-                                return;
+                    bindColumnExpand(c - 1);
+                    //     .on("mouseenter", (event) => {
+                    //         if (row == Table.rows[c - 1] - 1)
+                    //             return;
 
-                            $(card).stop();
-                            $(card).animate({
-                                height: "130px",
-                            }, 300)
-                        })
-                        .on("mouseleave", (event) => {
-                            if (row == Table.rows[c - 1] - 1)
-                                return;
+                    //         $(card).stop();
+                    //         $(card).animate({
+                    //             height: "130px",
+                    //         }, 300)
+                    //     })
+                    //     .on("mouseleave", (event) => {
+                    //         if (row == Table.rows[c - 1] - 1)
+                    //             return;
                             
-                            $(card).stop();
-                            isAnimating = true;
-                            $(card).animate({
-                                height: "20px",
-                            }, 300)
-                        })
+                    //         $(card).stop();
+                    //         isAnimating = true;
+                    //         $(card).animate({
+                    //             height: "20px",
+                    //         }, 300)
+                    //     })
                 });
             }, 0)
         }
@@ -159,6 +160,7 @@ const { cp } = require("original-fs");
                 trow.append(`<th id="th_col_${col}" onClick=Table.choseColumn(${col})><button class='button'>${type}</button></th>`);
             } else {
                 trow.append(`<td id="td_col_${col}"></td>`);
+                bindColumnExpand(col);
                 row++;
             }
         });
@@ -168,12 +170,37 @@ const { cp } = require("original-fs");
         Table.rows.push(0);
     }
 
+    function bindColumnExpand(col) {
+        $(`#td_col_${col}`).off();
+        $(`#td_col_${col}`)
+        .on("mouseenter", (event) => {
+            console.log("Column = ", col);
+            for (let r = 0; r < Table.rows[col] - 1; r++) {
+                card = $(`#td_col_${col}_row_${r}`).find(".table-card");
+                $(card).stop();
+                $(card).animate({
+                    height: "130px",
+                }, 300)
+            }
+        })
+        .on("mouseleave", (event) => {
+            for (let r = 0; r < Table.rows[col] - 1; r++) {
+                card = $(`#td_col_${col}_row_${r}`).find(".table-card");   
+                $(card).stop();
+                $(card).animate({
+                    height: "20px",
+                }, 300)
+            }
+        })
+    }
+
     function generateCard(facility) {
         let alternate = (facility.type == FacilityTypes.RECEIVER);
         let img = generateFacilityElem(facility, { transparent_block: true, alternate_position: alternate});
         let code = `
         <div class="table-card" ${alternate ? "style='text-align: right;'" : ""}>
             <div>
+                <div class="card-top"></div>
                 <h class='description' ${alternate ? "style='right:0px'" : ""}>${facility.getNumber()}</h>
                 ${img}
             </div>
@@ -233,25 +260,25 @@ const { cp } = require("original-fs");
             .on("click", (event) => {
                 Map.chooseElement(facility);
             })
-            .on("mouseenter", (event) => {
-                if (row == Table.rows[col] - 1)
-                    return;
+        //     .on("mouseenter", (event) => {
+        //         if (row == Table.rows[col] - 1)
+        //             return;
 
-                $(card).stop();
-                $(card).animate({
-                    height: "130px",
-                }, 300)
-            })
-            .on("mouseleave", (event) => {
-                if (row == Table.rows[col] - 1)
-                    return;
+        //         $(card).stop();
+        //         $(card).animate({
+        //             height: "130px",
+        //         }, 300)
+        //     })
+        //     .on("mouseleave", (event) => {
+        //         if (row == Table.rows[col] - 1)
+        //             return;
                 
-                $(card).stop();
-                isAnimating = true;
-                $(card).animate({
-                    height: "20px",
-                }, 300)
-            })
+        //         $(card).stop();
+        //         isAnimating = true;
+        //         $(card).animate({
+        //             height: "20px",
+        //         }, 300)
+        //     })
 
         Table.rows[col]++;
 

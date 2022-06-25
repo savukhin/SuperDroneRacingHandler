@@ -26,11 +26,21 @@
 
 }
 
+.card-top {
+    background-color: black;
+    height: 5px;
+    position: absolute;
+    top: -1px;
+    left: -5px;
+    width: 120%;
+}
+
 .table-card h {
     font-size: 80px;
     position: absolute;
     left: 5px;
     top: -10px;
+    /* width: 150%; */
 }
 
 .table-card > div {
@@ -43,6 +53,7 @@
     position: relative;
     display: table;
     cursor: pointer;
+    overflow: hidden;
 }
 
 .grid-cell {
