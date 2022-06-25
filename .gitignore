@@ -57,6 +57,13 @@ TrackFox RaceControl-linux-ia32/
 TrackFox RaceControl-linux-armv7l/
 TrackFox RaceControl-linux-arm64/
 TrackFox-RaceControl-linux-armv7l/
+TrackFox-RaceControl-win32-x64/
+TrackFox-RaceControl-win32-ia32/
+TrackFox-RaceControl-win32-arm64/
+TrackFox-RaceControl-linux-x64/
+TrackFox-RaceControl-linux-ia32/
+TrackFox-RaceControl-linux-armv7l/
+TrackFox-RaceControl-linux-arm64/
 
 Application.rar
 
