@@ -34,7 +34,7 @@ As you see, there is different colors of map objects:
 2) RGB LED Strip Light
 
 ### My setup for tests
-<img src="./Readme files/setup.jpg" title="My setup for testing">
+<img src="./Readme files/Setup.jpg" title="My setup for testing" width="500px">
 In clockwise direction:
 
 1) Battery (10-15V) and tool for voltage check; it shows 10.9V.
@@ -100,10 +100,12 @@ FacilityType facilityType = FacilityType::RECEIVER;
 4) Actions (Right panel):
     - Program shows chosen elements in the top square.
     - User can chose new color by clicking color pick.
-    <img src="./Readme files/Color picker.png" title="Color Picker">
+    <img src="./Readme files/Color picker.png" title="Color Picker" width="300px">
+    
     - <b>Top Send button.</b> Send new color.
     - <b>Blink button.</b> Send usual blink (2 blinks 0.25 second each).
-    <img src="./Readme files/Blink animation section.png" title="Blink animation section">
+    <img src="./Readme files/Blink animation section.png" title="Blink animation section" width="300px">
+    
     - <b>Duration of one.</b> Duration of each blink
     - <b>Count.</b> Count of blinks.
     - <b>Flag.</b> Put if you want endless blinking.
@@ -112,15 +114,20 @@ FacilityType facilityType = FacilityType::RECEIVER;
 
 ## Element description
 1) Gate - Drone must fly through the gate
-<img src="./Readme files/Gate.jpg" title="Gate">
+
+<img src="./Readme files/Gate.jpg" title="Gate" width="300px">
 2) Flag - Drone must fly around the flag
-<img src="./Readme files/Flag.jpg" title="Flag">
+
+<img src="./Readme files/Flag.jpg" title="Flag" width="300px">
 3) Marker - Drone must fly above the marker
-<img src="./Readme files/Marker.jpg" title="Marker">
+
+<img src="./Readme files/Marker.jpg" title="Marker" width="300px">
 4) Receiver - Drone must take up load (tennis ball, for example) and throw off this to the top of receiver
-<img src="./Readme files/Receiver.jpg" title="Receiver">
+
+<img src="./Readme files/Receiver.jpg" title="Receiver" width="300px">
 5) Mat - Just decoration
-<img src="./Readme files/Mat.jpg" title="Mat">
+
+<img src="./Readme files/Mat.jpg" title="Mat" width="300px">
 
 ## Working example
 <img src="./Readme files/Working example.gif" title="example">
