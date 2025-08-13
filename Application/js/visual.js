@@ -1,3 +1,5 @@
+const FacilityTypes = require('./facility')
+
 window.addEventListener('load', visualLoad);
 
 function visualLoad(event) {

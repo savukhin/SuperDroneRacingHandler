@@ -13,6 +13,8 @@ const FacilityTypes = {
     RECEIVER : "receiver",
     MAT : "mat",
 };
+console.log("define FacilityTypes", FacilityTypes)
+
 
 const FacilityDesciptions = {
     "gate" : 'Number',
@@ -79,4 +81,4 @@ class Facility {
     }
 }
 
-module.exports = { Facility, Color }
+module.exports = { Facility, FacilityTypes, Color }

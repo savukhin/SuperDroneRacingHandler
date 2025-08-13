@@ -3,6 +3,7 @@ const axios = require('axios');
 
 
 (function (Websockets, $, undefined) {
+    const { FacilityTypes } = require('./facility')
     var gateways = [];
     let facilities = {};
     var colorRegexp = '#[a-fA-F0-9]{6}';
@@ -323,4 +324,4 @@ const axios = require('axios');
 
 }(window.Websockets = window.Websockets || {}, jQuery));
 
-window.addEventListener('load', Websockets.onLoad);
+// window.addEventListener('load', Websockets.onLoad);

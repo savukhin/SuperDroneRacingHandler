@@ -1,5 +1,3 @@
-const { cp } = require("original-fs");
-
 (function (Table, $, undefined) {
     Table.columns = [];
     Table.rows = [];
